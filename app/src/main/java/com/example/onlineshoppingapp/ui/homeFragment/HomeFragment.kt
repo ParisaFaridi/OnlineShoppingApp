@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import com.example.onlineshoppingapp.data.Product
 import com.example.onlineshoppingapp.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     //private val viewModelHome : HomeViewModel by viewModel()
