@@ -1,11 +1,12 @@
 package com.example.onlineshoppingapp.ui.homeFragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.onlineshoppingapp.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +24,6 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        setHasOptionsMenu(true)
         binding =FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -51,14 +51,18 @@ class HomeFragment : Fragment() {
     }
 
     private fun setRecyclerViews(){
-        bestProductsAdapter = ProductAdapter{}
-        newProductsAdapter = ProductAdapter{}
-        mostViewedProductsAdapter = ProductAdapter{}
+        bestProductsAdapter = ProductAdapter{ product -> product.id?.let { it -> goToDetailFragment(it) } }
+        newProductsAdapter = ProductAdapter{product -> product.id?.let { it -> goToDetailFragment(it) }}
+        mostViewedProductsAdapter = ProductAdapter{product -> product.id?.let { it -> goToDetailFragment(it) }}
 
         binding.apply {
             rvBestProducts.adapter = bestProductsAdapter
             rvNewProducts.adapter = newProductsAdapter
             rvMostViewedProducts.adapter = mostViewedProductsAdapter
         }
+    }
+    private fun goToDetailFragment(id:Int){
+        val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(id)
+        findNavController().navigate(action)
     }
 }
