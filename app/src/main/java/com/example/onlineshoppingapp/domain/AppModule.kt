@@ -13,9 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-private const val BASE_URL = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/"
-private const val CONSUMER_KEY = "ck_33d507c4632f7d97ff70b4f3bae877a94375b177"
-private const val CONSUMER_SECRET = "cs_d172173de2ce65486fe0921aa1b9044e9b37535f"
+const val BASE_URL = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/"
 
 @Module
 @InstallIn(SingletonComponent::class)
