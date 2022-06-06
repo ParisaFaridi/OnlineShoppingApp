@@ -5,4 +5,7 @@ import javax.inject.Inject
 class Repository @Inject constructor(private val remoteDataSource: RemoteDataSource) {
 
     suspend fun getProducts(orderBy: String) = remoteDataSource.getProducts(orderBy = orderBy)
+
+    suspend fun getProductById(id:Int) = remoteDataSource.getProductById(id)
+
 }
