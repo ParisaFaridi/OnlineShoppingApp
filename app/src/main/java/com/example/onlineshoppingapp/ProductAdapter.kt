@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.onlineshoppingapp.databinding.ProductItemBinding
 import com.example.onlineshoppingapp.data.model.Product
 
@@ -36,9 +37,8 @@ class ProductAdapter(private val clickHandler: ClickHandler):
     }
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.binding.product = getItem(position)
-//        Glide.with(holder.binding.imageView.context).load(POSTER_PATH + getItem(position).poster_path)
-//            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-//            .into(holder.binding.imageView)
+        Glide.with(holder.binding.image.context).load(getItem(position).images?.get(0)?.src)
+            .into(holder.binding.image)
 //        holder.binding.image.setOnClickListener {
 //            clickHandler.invoke(getItem(position))
 //        }
