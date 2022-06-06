@@ -6,8 +6,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.onlineshoppingapp.data.Product
 import com.example.onlineshoppingapp.databinding.ProductItemBinding
+import com.example.onlineshoppingapp.data.model.Product
 
 typealias ClickHandler = (Product) -> Unit
 
@@ -39,8 +39,8 @@ class ProductAdapter(private val clickHandler: ClickHandler):
 //        Glide.with(holder.binding.imageView.context).load(POSTER_PATH + getItem(position).poster_path)
 //            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
 //            .into(holder.binding.imageView)
-        holder.binding.image.setOnClickListener {
-            clickHandler.invoke(getItem(position))
-        }
+//        holder.binding.image.setOnClickListener {
+//            clickHandler.invoke(getItem(position))
+//        }
     }
 }

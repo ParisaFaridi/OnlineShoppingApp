@@ -1,6 +1,6 @@
 package com.example.onlineshoppingapp.network
 
-import com.example.onlineshoppingapp.data.Product
+import com.example.onlineshoppingapp.data.model.Product
 import retrofit2.http.GET
 import retrofit2.http.Query
 
