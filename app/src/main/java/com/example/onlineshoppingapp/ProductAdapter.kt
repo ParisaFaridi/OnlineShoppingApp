@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.onlineshoppingapp.data.Product
 import com.example.onlineshoppingapp.databinding.ProductItemBinding
 
 typealias ClickHandler = (Product) -> Unit

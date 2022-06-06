@@ -1,10 +1,11 @@
-package com.example.onlineshoppingapp
+package com.example.onlineshoppingapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

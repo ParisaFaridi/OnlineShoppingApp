@@ -5,9 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.onlineshoppingapp.Product
+import com.example.onlineshoppingapp.data.Product
 import com.example.onlineshoppingapp.ProductAdapter
-import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
