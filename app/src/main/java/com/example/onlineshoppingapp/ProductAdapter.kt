@@ -39,8 +39,8 @@ class ProductAdapter(private val clickHandler: ClickHandler):
         holder.binding.product = getItem(position)
         Glide.with(holder.binding.image.context).load(getItem(position).images?.get(0)?.src)
             .into(holder.binding.image)
-//        holder.binding.image.setOnClickListener {
-//            clickHandler.invoke(getItem(position))
-//        }
+        holder.binding.image.setOnClickListener {
+            clickHandler.invoke(getItem(position))
+        }
     }
 }
