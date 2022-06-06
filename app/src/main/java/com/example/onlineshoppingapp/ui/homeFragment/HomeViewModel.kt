@@ -1,6 +1,5 @@
 package com.example.onlineshoppingapp.ui.homeFragment
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,25 +12,29 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: Repository):ViewModel() {
 
-    fun getBestProducts():LiveData<List<Product>>{
-        val bestProducts = MutableLiveData<List<Product>>()
+    val bestProducts = MutableLiveData<List<Product>>()
+    val newProducts = MutableLiveData<List<Product>>()
+    val mostViewedProducts = MutableLiveData<List<Product>>()
+
+    init {
+        getBestProducts()
+        getNewProducts()
+        getMostViewedProducts()
+    }
+
+    private fun getBestProducts(){
         viewModelScope.launch {
             bestProducts.value = repository.getProducts("rating")
         }
-        return bestProducts
     }
-    fun getNewProducts():LiveData<List<Product>>{
-        val newProducts = MutableLiveData<List<Product>>()
+    private fun getNewProducts(){
         viewModelScope.launch {
             newProducts.value = repository.getProducts("date")
         }
-        return newProducts
     }
-    fun getMostViewedProducts():LiveData<List<Product>>{
-        val mostViewedProducts = MutableLiveData<List<Product>>()
+    private fun getMostViewedProducts(){
         viewModelScope.launch {
             mostViewedProducts.value = repository.getProducts("popularity")
         }
-        return mostViewedProducts
     }
 }

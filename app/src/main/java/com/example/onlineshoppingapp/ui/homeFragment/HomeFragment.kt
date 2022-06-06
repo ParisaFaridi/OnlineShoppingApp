@@ -15,9 +15,9 @@ class HomeFragment : Fragment() {
 
     private val viewModelHome : HomeViewModel by viewModels()
     private lateinit var binding : FragmentHomeBinding
-    lateinit var bestProductsAdapter : ProductAdapter
-    lateinit var newProductsAdapter : ProductAdapter
-    lateinit var mostViewedProductsAdapter : ProductAdapter
+    private lateinit var bestProductsAdapter : ProductAdapter
+    private lateinit var newProductsAdapter : ProductAdapter
+    private lateinit var mostViewedProductsAdapter : ProductAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,17 +32,17 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerViews()
 
-        viewModelHome.getBestProducts().observe(viewLifecycleOwner){
+        viewModelHome.bestProducts.observe(viewLifecycleOwner){
             it?.let {
                 bestProductsAdapter.submitList(it)
             }
         }
-        viewModelHome.getNewProducts().observe(viewLifecycleOwner){
+        viewModelHome.newProducts.observe(viewLifecycleOwner){
             it?.let {
                 newProductsAdapter.submitList(it)
             }
         }
-        viewModelHome.getMostViewedProducts().observe(viewLifecycleOwner){
+        viewModelHome.mostViewedProducts.observe(viewLifecycleOwner){
             it?.let {
                 mostViewedProductsAdapter.submitList(it)
             }
