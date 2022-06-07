@@ -30,4 +30,10 @@ interface ApiService {
 
     @GET("products/categories?$CONSUMER_KEY_AND_SECRET")
     suspend fun getCategories():List<Category>
+
+    @GET("products?$CONSUMER_KEY_AND_SECRET")
+    suspend fun getProductsByCategory(
+        @Query(value = "category")
+        categoryId:Int
+    ):List<Product>
 }

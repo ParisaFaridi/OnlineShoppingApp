@@ -10,4 +10,5 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
 
     suspend fun getCategories() = remoteDataSource.getCategories()
 
+    suspend fun getProductsByCategory(categoryId:Int) = remoteDataSource.getProductsByCategory(categoryId)
 }
