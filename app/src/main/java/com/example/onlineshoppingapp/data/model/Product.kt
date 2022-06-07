@@ -18,7 +18,7 @@ data class Product(
     @Json(name = "catalog_visibility")
     val catalogVisibility: String?,
     @Json(name = "categories")
-    val categories: List<Category>?,
+    val productCategories: List<Category>?,
     @Json(name = "cross_sell_ids")
     val crossSellIds: List<Any>?,
     @Json(name = "date_created")
