@@ -1,10 +1,13 @@
 package com.example.onlineshoppingapp.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
+import android.view.Menu
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupWithNavController
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -12,42 +15,24 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    lateinit var toggle: ActionBarDrawerToggle
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var  appBarConfiguration : AppBarConfiguration
+    private lateinit var navController : NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
-        binding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.navView.setNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.item1 -> {
-                    Toast.makeText(applicationContext, "item1clicked", Toast.LENGTH_SHORT).show()
-                    return@setNavigationItemSelectedListener true
-                }
-                R.id.item2 -> {
-                    Toast.makeText(applicationContext, "item1clicked", Toast.LENGTH_SHORT).show()
-                    return@setNavigationItemSelectedListener true
-                }
-                R.id.item3 -> {
-                    Toast.makeText(applicationContext, "item1clicked", Toast.LENGTH_SHORT).show()
-                    return@setNavigationItemSelectedListener true
-                }
-                else -> return@setNavigationItemSelectedListener true
-            }
-        }
+        val navHostFragment =supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        binding.bottomNavigationView.setupWithNavController(navController)
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
