@@ -1,5 +1,6 @@
 package com.example.onlineshoppingapp.network
 
+import com.example.onlineshoppingapp.data.model.Category
 import com.example.onlineshoppingapp.data.model.Product
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -26,4 +27,7 @@ interface ApiService {
         @Path(value = "id")
         productId:Int
     ):Product
+
+    @GET("products/categories?$CONSUMER_KEY_AND_SECRET")
+    suspend fun getCategories():List<Category>
 }
