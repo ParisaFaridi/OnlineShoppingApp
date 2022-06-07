@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.example.onlineshoppingapp.CategoriesFragment"
+        android:name="com.example.onlineshoppingapp.ui.categoriesfragment.CategoriesFragment"
         android:label="fragment_categories"
         tools:layout="@layout/fragment_categories" />
 </navigation>
