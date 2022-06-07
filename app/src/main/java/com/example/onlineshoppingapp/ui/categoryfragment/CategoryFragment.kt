@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.onlineshoppingapp.adapters.ProductAdapter
@@ -30,7 +31,14 @@ class CategoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
-        val productsAdapter = ProductAdapter{}
+        val productsAdapter = ProductAdapter{ product ->
+            val action = product.id?.let { id ->
+                CategoryFragmentDirections.actionCategoryFragmentToDetailFragment(id)
+            }
+            if (action != null) {
+                findNavController().navigate(action)
+            }
+        }
         binding.rvProducts.adapter = productsAdapter
         categoryViewModel.getCategoryById(args.categoryId).observe(viewLifecycleOwner){
             productsAdapter.submitList(it)
