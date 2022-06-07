@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Category
+import com.example.onlineshoppingapp.data.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -13,11 +14,11 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoryViewModel @Inject constructor(private val repository: Repository):ViewModel(){
 
-    fun getCategoryById(id: Int): LiveData<Category> {
-        val category = MutableLiveData<Category>()
+    fun getCategoryById(categoryId :Int): LiveData<List<Product>> {
+        val products = MutableLiveData<List<Product>>()
         viewModelScope.launch {
-            //category.value = repository.getCategoryById(id)
+            products.value = repository.getProductsByCategory(categoryId)
         }
-        return category
+        return products
     }
 }
