@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.onlineshoppingapp.R
+import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ProductAdapter
+import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,22 +35,66 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerViews()
 
-        viewModelHome.bestProducts.observe(viewLifecycleOwner){
-            it?.let {
-                bestProductsAdapter.submitList(it)
+        viewModelHome.hasInternetConnection.observe(viewLifecycleOwner){
+            if (it){
+                viewModelHome.apply {
+                    getBestProducts()
+                    getMostViewedProducts()
+                    getNewProducts()
+                }
+            }else
+                showNoInternetConnection()
+        }
+        viewModelHome.bestProducts.observe(viewLifecycleOwner) { response ->
+            when(response){
+                is Resource.Success ->{
+                    response.data?.let { data ->
+                        showData(bestProductsAdapter,data)
+                    }
+                }
+                is Resource.Error->showError()
             }
         }
-        viewModelHome.newProducts.observe(viewLifecycleOwner){
-            it?.let {
-                newProductsAdapter.submitList(it)
+        viewModelHome.newProducts.observe(viewLifecycleOwner) { response ->
+            when(response){
+                is Resource.Success ->{
+                    response.data?.let { data ->
+                        binding.layout.visibility = View.VISIBLE
+                        binding.lottie.visibility = View.GONE
+                        mostViewedProductsAdapter.submitList(data)
+                    }
+                }
+                is Resource.Error->showError()
             }
         }
-        viewModelHome.mostViewedProducts.observe(viewLifecycleOwner){
-            it?.let {
-                mostViewedProductsAdapter.submitList(it)
+        viewModelHome.mostViewedProducts.observe(viewLifecycleOwner) { response ->
+            when(response){
+                is Resource.Success ->{
+                    response.data?.let { data ->
+                        newProductsAdapter.submitList(data)
+                        binding.layout.visibility = View.VISIBLE
+                        binding.lottie.visibility = View.GONE
+                    }
+                }
+                is Resource.Error->showError()
             }
         }
+    }
+    fun showError(){
+        binding.lottie.setAnimation(R.raw.error)
+        binding.layout.visibility = View.GONE
+    }
 
+    private fun showData(adapter: ProductAdapter,data: List<Product>) {
+        binding.layout.visibility = View.VISIBLE
+        binding.lottie.visibility = View.GONE
+        adapter.submitList(data)
+    }
+
+    private fun showNoInternetConnection() {
+        binding.layout.visibility = View.GONE
+        binding.lottie.setAnimation(R.raw.no_internet)
+        binding.lottie.visibility = View.VISIBLE
     }
 
     private fun setRecyclerViews(){
