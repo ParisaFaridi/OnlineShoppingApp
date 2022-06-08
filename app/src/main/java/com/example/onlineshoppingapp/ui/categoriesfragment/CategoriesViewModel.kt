@@ -1,8 +1,11 @@
 package com.example.onlineshoppingapp.ui.categoriesfragment
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.onlineshoppingapp.ConnectionLiveData
+import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,15 +13,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CategoriesViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class CategoriesViewModel @Inject constructor(private val repository: Repository,app:Application)
+    : AndroidViewModel(app) {
 
-    val categories = MutableLiveData<List<Category>>()
+    val categories = MutableLiveData<Resource<List<Category>>>()
+    val hasInternetConnection = ConnectionLiveData(app)
 
     init {
         getCategories()
     }
 
-    private fun getCategories() = viewModelScope.launch {
-        categories.value = repository.getCategories()
+    fun getCategories() = viewModelScope.launch {
+        if (hasInternetConnection.value == true)
+            categories.value = repository.getCategories()
     }
 }

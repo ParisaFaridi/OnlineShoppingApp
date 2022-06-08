@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.onlineshoppingapp.R
+import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.CategoryAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCategoriesBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,8 +49,32 @@ class CategoriesFragment : Fragment() {
         }
         binding.rvCategories.adapter = categoriesAdapter
 
-        categoriesViewModel.categories.observe(viewLifecycleOwner){
-            categoriesAdapter.submitList(it)
+        categoriesViewModel.hasInternetConnection.observe(viewLifecycleOwner){
+            if (it){
+                categoriesViewModel.getCategories()
+                binding.rvCategories.visibility = View.VISIBLE
+                binding.lottie.visibility = View.GONE
+            }else
+                showNoInternetConnection()
         }
+        categoriesViewModel.categories.observe(viewLifecycleOwner) { response ->
+            when(response){
+                is Resource.Success ->{
+                    response.data?.let { data ->
+                        categoriesAdapter.submitList(data)
+                    }
+                }
+                is Resource.Error->showError()
+            }
+        }
+    }
+    private fun showNoInternetConnection() {
+        binding.rvCategories.visibility = View.GONE
+        binding.lottie.setAnimation(R.raw.no_internet)
+        binding.lottie.visibility = View.VISIBLE
+    }
+    fun showError(){
+        binding.lottie.setAnimation(R.raw.error)
+        binding.rvCategories.visibility = View.GONE
     }
 }

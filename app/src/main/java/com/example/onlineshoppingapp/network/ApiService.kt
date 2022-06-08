@@ -27,14 +27,14 @@ interface ApiService {
     suspend fun getProductById(
         @Path(value = "id")
         productId:Int
-    ):Product
+    ):Response<Product>
 
     @GET("products/categories?$CONSUMER_KEY_AND_SECRET")
-    suspend fun getCategories():List<Category>
+    suspend fun getCategories():Response<List<Category>>
 
     @GET("products?$CONSUMER_KEY_AND_SECRET")
     suspend fun getProductsByCategory(
         @Query(value = "category")
         categoryId:Int
-    ):List<Product>
+    ):Response<List<Product>>
 }

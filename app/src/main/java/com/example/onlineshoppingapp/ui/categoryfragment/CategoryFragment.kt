@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.onlineshoppingapp.R
+import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCategoryBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +39,14 @@ class CategoryFragment : Fragment() {
         } else {
             binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
         }
+        categoryViewModel.hasInternetConnection.observe(viewLifecycleOwner){
+            if (it){
+                categoryViewModel.getProductsByCategoryId(args.categoryId)
+                binding.rvProducts.visibility = View.VISIBLE
+                binding.lottie.visibility = View.GONE
+            }else
+                showNoInternetConnection()
+        }
         val productsAdapter = ProductAdapter{ product ->
             val action = product.id?.let { id ->
                 CategoryFragmentDirections.actionCategoryFragmentToDetailFragment(id)
@@ -46,8 +56,24 @@ class CategoryFragment : Fragment() {
             }
         }
         binding.rvProducts.adapter = productsAdapter
-        categoryViewModel.getCategoryById(args.categoryId).observe(viewLifecycleOwner){
-            productsAdapter.submitList(it)
+        categoryViewModel.products.observe(viewLifecycleOwner){ response ->
+            when(response){
+                is Resource.Success ->{
+                    response.data?.let { data ->
+                        productsAdapter.submitList(data)
+                    }
+                }
+                is Resource.Error->showError()
+            }
         }
+    }
+    private fun showNoInternetConnection() {
+        binding.rvProducts.visibility = View.GONE
+        binding.lottie.setAnimation(R.raw.no_internet)
+        binding.lottie.visibility = View.VISIBLE
+    }
+    fun showError(){
+        binding.lottie.setAnimation(R.raw.error)
+        binding.rvProducts.visibility = View.GONE
     }
 }

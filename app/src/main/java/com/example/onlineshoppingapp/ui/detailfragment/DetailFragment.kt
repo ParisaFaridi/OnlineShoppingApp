@@ -1,15 +1,14 @@
 package com.example.onlineshoppingapp.ui.detailfragment
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RatingBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
+import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ImageViewPagerAdapter
 import com.example.onlineshoppingapp.databinding.FragmentDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,16 +34,30 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        detailViewModel.getProduct(args.productId).observe(viewLifecycleOwner){
-            binding.product = it
-            imageViewPagerAdapter = it.images?.let { it1 -> ImageViewPagerAdapter(it1) }!!
-            setUpViewPager()
-            binding.tvDescription.text = it.description?.replace("</p>","")
-            ?.replace("<p>","")?.replace("<br />","\n")
-            binding.ratingbar.rating = it?.averageRating?.toFloat()!!
-            binding.tvPrice.text = NumberFormat.getNumberInstance(Locale.US).format(it.price?.toLong());
+        detailViewModel.hasInternetConnection.observe(viewLifecycleOwner){
+            if (it)
+                detailViewModel.getProduct(args.productId)
+            else
+                showNoInternetConnection()
         }
-
+        detailViewModel.product.observe(viewLifecycleOwner){ response ->
+            when(response){
+                is Resource.Success ->{
+                    response.data?.let { data ->
+                        binding.layout.visibility = View.VISIBLE
+                        binding.lottie.visibility = View.GONE
+                        binding.product = data
+                        imageViewPagerAdapter = data.images?.let { it1 -> ImageViewPagerAdapter(it1) }!!
+                        setUpViewPager()
+                        binding.tvDescription.text = data.description?.replace("</p>","")
+                            ?.replace("<p>","")?.replace("<br />","\n")
+                        binding.ratingbar.rating = data.averageRating?.toFloat()!!
+                        binding.tvPrice.text = NumberFormat.getNumberInstance(Locale.US).format(data.price?.toLong())
+                    }
+                }
+                is Resource.Error->showError()
+            }
+        }
     }
     private fun setUpViewPager() {
 
@@ -61,5 +74,14 @@ class DetailFragment : Fragment() {
         binding.viewPager.unregisterOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {}
         )
+    }
+    fun showError(){
+        binding.lottie.setAnimation(com.example.onlineshoppingapp.R.raw.error)
+        binding.layout.visibility = View.GONE
+    }
+    private fun showNoInternetConnection() {
+        binding.layout.visibility = View.GONE
+        binding.lottie.setAnimation(com.example.onlineshoppingapp.R.raw.no_internet)
+        binding.lottie.visibility = View.VISIBLE
     }
 }
