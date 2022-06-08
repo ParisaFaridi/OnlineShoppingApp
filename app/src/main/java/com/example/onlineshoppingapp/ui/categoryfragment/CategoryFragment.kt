@@ -1,5 +1,6 @@
 package com.example.onlineshoppingapp.ui.categoryfragment
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +31,12 @@ class CategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),3)
+        } else {
+            binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
+        }
         val productsAdapter = ProductAdapter{ product ->
             val action = product.id?.let { id ->
                 CategoryFragmentDirections.actionCategoryFragmentToDetailFragment(id)
