@@ -1,8 +1,9 @@
 package com.example.onlineshoppingapp.ui.homeFragment
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
+import com.example.onlineshoppingapp.ConnectionLiveData
+import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,11 +11,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: Repository):ViewModel() {
+class HomeViewModel @Inject constructor(private val repository: Repository, app: Application) :
+    AndroidViewModel(app) {
 
-    val bestProducts = MutableLiveData<List<Product>>()
-    val newProducts = MutableLiveData<List<Product>>()
-    val mostViewedProducts = MutableLiveData<List<Product>>()
+    val bestProducts = MutableLiveData<Resource<List<Product>>>()
+    val newProducts = MutableLiveData<Resource<List<Product>>>()
+    val mostViewedProducts = MutableLiveData<Resource<List<Product>>>()
+    val hasInternetConnection = ConnectionLiveData(app)
 
     init {
         getBestProducts()
@@ -22,19 +25,19 @@ class HomeViewModel @Inject constructor(private val repository: Repository):View
         getMostViewedProducts()
     }
 
-    private fun getBestProducts(){
-        viewModelScope.launch {
-            bestProducts.value = repository.getProducts("rating")
-        }
+    fun getBestProducts() = viewModelScope.launch {
+        if (hasInternetConnection.value == true)
+            bestProducts.postValue(repository.getProducts("rating"))
     }
-    private fun getNewProducts(){
-        viewModelScope.launch {
+
+    fun getNewProducts() = viewModelScope.launch {
+        if (hasInternetConnection.value == true)
             newProducts.value = repository.getProducts("date")
-        }
     }
-    private fun getMostViewedProducts(){
-        viewModelScope.launch {
+
+    fun getMostViewedProducts() = viewModelScope.launch {
+        if (hasInternetConnection.value == true)
             mostViewedProducts.value = repository.getProducts("popularity")
-        }
     }
+
 }

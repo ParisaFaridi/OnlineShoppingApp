@@ -2,6 +2,7 @@ package com.example.onlineshoppingapp.network
 
 import com.example.onlineshoppingapp.data.model.Category
 import com.example.onlineshoppingapp.data.model.Product
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -20,7 +21,7 @@ interface ApiService {
         pages:Int =1,
         @Query("orderby")
         orderBy:String
-    ):List<Product>
+    ): Response<List<Product>>
 
     @GET("products/{id}?$CONSUMER_KEY_AND_SECRET")
     suspend fun getProductById(
