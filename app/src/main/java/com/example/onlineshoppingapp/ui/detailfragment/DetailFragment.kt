@@ -1,9 +1,11 @@
 package com.example.onlineshoppingapp.ui.detailfragment
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RatingBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -11,7 +13,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.onlineshoppingapp.adapters.ImageViewPagerAdapter
 import com.example.onlineshoppingapp.databinding.FragmentDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
-import me.relex.circleindicator.CircleIndicator3
+import java.text.NumberFormat
+import java.util.*
+
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
@@ -35,7 +39,12 @@ class DetailFragment : Fragment() {
             binding.product = it
             imageViewPagerAdapter = it.images?.let { it1 -> ImageViewPagerAdapter(it1) }!!
             setUpViewPager()
+            binding.tvDescription.text = it.description?.replace("</p>","")
+            ?.replace("<p>","")?.replace("<br />","\n")
+            binding.ratingbar.rating = it?.averageRating?.toFloat()!!
+            binding.tvPrice.text = NumberFormat.getNumberInstance(Locale.US).format(it.price?.toLong());
         }
+
     }
     private fun setUpViewPager() {
 
@@ -46,15 +55,6 @@ class DetailFragment : Fragment() {
         val currentPageIndex = 0
         binding.viewPager.currentItem = currentPageIndex
 
-        // registering for page change callback
-//        binding.viewPager.registerOnPageChangeCallback(
-//            object : ViewPager2.OnPageChangeCallback() {
-//                override fun onPageSelected(position: Int) {
-//                    super.onPageSelected(position)
-//                    //update the image number textview
-//                }
-//            }
-//        )
     }
     override fun onDestroy() {
         super.onDestroy()
