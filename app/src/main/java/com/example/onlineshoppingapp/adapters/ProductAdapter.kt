@@ -38,8 +38,13 @@ class ProductAdapter(private val clickHandler: ClickHandler):
     }
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.binding.product = getItem(position)
-        Glide.with(holder.binding.image.context).load(getItem(position).images?.get(0)?.src)
-            .into(holder.binding.image)
+        if (getItem(position).images?.firstOrNull()?.src == null){
+            Glide.with(holder.binding.image.context).load(R.drawable.ic_baseline_error_24)
+                .into(holder.binding.image)
+        }else{
+            Glide.with(holder.binding.image.context).load(getItem(position).images?.get(0)?.src)
+                .into(holder.binding.image)
+        }
         holder.binding.image.setOnClickListener {
             clickHandler.invoke(getItem(position))
         }
