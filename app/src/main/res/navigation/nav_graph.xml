@@ -41,5 +41,8 @@
             app:destination="@id/detailFragment" />
         <argument android:name="categoryId"
             app:argType="integer" />
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -34,10 +34,12 @@ class CategoriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        activity?.title = "دسته بندی ها"
         categoriesAdapter = CategoryAdapter{ category ->
             val action = category.id?.let { id ->
-                CategoriesFragmentDirections.actionCategoriesFragmentToCategoryFragment(id)
+                category.name?.let { name ->
+                    CategoriesFragmentDirections.actionCategoriesFragmentToCategoryFragment(id,name)
+                }
             }
             if (action != null) {
                 findNavController().navigate(action)

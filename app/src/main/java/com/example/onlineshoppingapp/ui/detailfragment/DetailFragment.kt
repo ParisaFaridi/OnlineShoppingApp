@@ -36,6 +36,7 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.title ="فروشگاه آنلاین"
         if (detailViewModel.product.value == null)
             detailViewModel.getProduct(args.productId)
 

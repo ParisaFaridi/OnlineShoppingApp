@@ -34,6 +34,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.title ="صفحه اصلی"
         setRecyclerViews()
         if (viewModelHome.bestProducts.value == null) {
             getLists()
@@ -81,6 +82,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showProgressBar() {
+        binding.layout.visibility = View.GONE
         binding.lottie.setAnimation(R.raw.loading)
         binding.lottie.visibility = View.VISIBLE
         binding.lottie.playAnimation()
