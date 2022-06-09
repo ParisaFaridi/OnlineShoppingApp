@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.onlineshoppingapp.ConnectionLiveData
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Category
+import com.example.onlineshoppingapp.hasInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,10 +17,18 @@ class CategoriesViewModel @Inject constructor(private val repository: Repository
     : AndroidViewModel(app) {
 
     val categories = MutableLiveData<Resource<List<Category>>>()
-    val hasInternetConnection = ConnectionLiveData(app)
 
-    fun getCategories() = viewModelScope.launch {
-        if (hasInternetConnection.value == true)
-            categories.value = repository.getCategories()
+    fun getCategories(){
+        categories.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()){
+                viewModelScope.launch {
+                    categories.postValue(repository.getCategories())
+                }
+            }else
+                categories.postValue(Resource.Error("خطا در اتصال به اینترنت"))
+        }catch (t :Throwable){
+            categories.postValue(Resource.Error("خطا در اتصال به سرور"))
+        }
     }
 }

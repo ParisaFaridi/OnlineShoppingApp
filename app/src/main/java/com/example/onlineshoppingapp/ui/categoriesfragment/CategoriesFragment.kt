@@ -13,6 +13,7 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.CategoryAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCategoriesBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,6 +39,8 @@ class CategoriesFragment : Fragment() {
         } else {
             binding.rvCategories.layoutManager = GridLayoutManager(requireContext(),2)
         }
+        if (categoriesViewModel.categories.value != null)
+            categoriesViewModel.getCategories()
 
         val categoriesAdapter = CategoryAdapter{ category ->
             val action = category.id?.let { id ->
@@ -49,32 +52,30 @@ class CategoriesFragment : Fragment() {
         }
         binding.rvCategories.adapter = categoriesAdapter
 
-        categoriesViewModel.hasInternetConnection.observe(viewLifecycleOwner){
-            if (it && categoriesViewModel.categories.value == null){
-                categoriesViewModel.getCategories()
-                binding.rvCategories.visibility = View.VISIBLE
-                binding.lottie.visibility = View.GONE
-            }else if ( !it && categoriesViewModel.categories.value == null)
-                showNoInternetConnection()
-        }
         categoriesViewModel.categories.observe(viewLifecycleOwner) { response ->
             when(response){
+                is Resource.Loading -> {showProgressBar()}
                 is Resource.Success ->{
                     response.data?.let { data ->
                         categoriesAdapter.submitList(data)
                     }
                 }
-                is Resource.Error->showError()
+                is Resource.Error -> { response.message?.let { showSnack(it) } }
             }
         }
     }
-    private fun showNoInternetConnection() {
-        binding.rvCategories.visibility = View.GONE
-        binding.lottie.setAnimation(R.raw.no_internet)
+    private fun showProgressBar() {
+        binding.lottie.setAnimation(R.raw.loading)
         binding.lottie.visibility = View.VISIBLE
     }
-    fun showError(){
-        binding.lottie.setAnimation(R.raw.error)
-        binding.rvCategories.visibility = View.GONE
+
+    private fun showSnack(message: String) {
+        val snackBar = Snackbar.make(binding.layout, message, Snackbar.LENGTH_INDEFINITE)
+        snackBar.setAction(
+            "تلاش دوباره"
+        ) {
+            categoriesViewModel.getCategories()
+        }
+        snackBar.show()
     }
 }

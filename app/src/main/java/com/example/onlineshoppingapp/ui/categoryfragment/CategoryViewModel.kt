@@ -1,12 +1,13 @@
 package com.example.onlineshoppingapp.ui.categoryfragment
 
 import android.app.Application
-import androidx.lifecycle.*
-import com.example.onlineshoppingapp.ConnectionLiveData
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
-import com.example.onlineshoppingapp.data.model.Category
 import com.example.onlineshoppingapp.data.model.Product
+import com.example.onlineshoppingapp.hasInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,11 +16,19 @@ import javax.inject.Inject
 class CategoryViewModel @Inject constructor(private val repository: Repository, app: Application) :
     AndroidViewModel(app) {
 
-    val hasInternetConnection = ConnectionLiveData(app)
     val products = MutableLiveData<Resource<List<Product>>>()
 
-    fun getProductsByCategoryId(categoryId: Int) = viewModelScope.launch {
-        if (hasInternetConnection.value == true)
-            products.value = repository.getProductsByCategory(categoryId)
+    fun getProductsByCategoryId(categoryId: Int){
+        products.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()){
+                viewModelScope.launch {
+                    products.postValue(repository.getProductsByCategory(categoryId))
+                }
+            }else
+                products.postValue(Resource.Error("خطا در اتصال به اینترنت"))
+        }catch (t :Throwable){
+            products.postValue(Resource.Error("خطا در اتصال به سرور"))
+        }
     }
 }
