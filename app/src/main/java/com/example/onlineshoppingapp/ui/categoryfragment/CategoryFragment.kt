@@ -40,7 +40,7 @@ class CategoryFragment : Fragment() {
         } else {
             binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
         }
-        if (categoryViewModel.products.value != null)
+        if (categoryViewModel.products.value == null)
             categoryViewModel.getProductsByCategoryId(args.categoryId)
 
         val productsAdapter = ProductAdapter{ product ->
@@ -59,6 +59,8 @@ class CategoryFragment : Fragment() {
                     response.data?.let { data ->
                         productsAdapter.submitList(data)
                     }
+                    binding.rvProducts.visibility = View.VISIBLE
+                    binding.lottie.visibility = View.GONE
                 }
                 is Resource.Error -> { response.message?.let { showSnack(it) } }
             }
@@ -67,6 +69,8 @@ class CategoryFragment : Fragment() {
     private fun showProgressBar() {
         binding.lottie.setAnimation(R.raw.loading)
         binding.lottie.visibility = View.VISIBLE
+        binding.lottie.playAnimation()
+
     }
 
     private fun showSnack(message: String) {

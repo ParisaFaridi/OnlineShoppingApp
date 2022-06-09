@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.CategoryAdapter
+import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCategoriesBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +22,7 @@ class CategoriesFragment : Fragment() {
 
     private val categoriesViewModel : CategoriesViewModel by viewModels()
     private lateinit var binding : FragmentCategoriesBinding
+    private lateinit var categoriesAdapter :CategoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,16 +35,7 @@ class CategoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            binding.rvCategories.layoutManager = GridLayoutManager(requireContext(),3)
-        } else {
-            binding.rvCategories.layoutManager = GridLayoutManager(requireContext(),2)
-        }
-        if (categoriesViewModel.categories.value != null)
-            categoriesViewModel.getCategories()
-
-        val categoriesAdapter = CategoryAdapter{ category ->
+        categoriesAdapter = CategoryAdapter{ category ->
             val action = category.id?.let { id ->
                 CategoriesFragmentDirections.actionCategoriesFragmentToCategoryFragment(id)
             }
@@ -52,11 +45,22 @@ class CategoriesFragment : Fragment() {
         }
         binding.rvCategories.adapter = categoriesAdapter
 
+        if (categoriesViewModel.categories.value == null)
+            categoriesViewModel.getCategories()
+
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            binding.rvCategories.layoutManager = GridLayoutManager(requireContext(),3)
+        } else {
+            binding.rvCategories.layoutManager = GridLayoutManager(requireContext(),2)
+        }
         categoriesViewModel.categories.observe(viewLifecycleOwner) { response ->
             when(response){
                 is Resource.Loading -> {showProgressBar()}
                 is Resource.Success ->{
                     response.data?.let { data ->
+                        binding.lottie.visibility = View.GONE
+                        binding.rvCategories.visibility = View.VISIBLE
                         categoriesAdapter.submitList(data)
                     }
                 }
@@ -67,6 +71,7 @@ class CategoriesFragment : Fragment() {
     private fun showProgressBar() {
         binding.lottie.setAnimation(R.raw.loading)
         binding.lottie.visibility = View.VISIBLE
+        binding.lottie.playAnimation()
     }
 
     private fun showSnack(message: String) {

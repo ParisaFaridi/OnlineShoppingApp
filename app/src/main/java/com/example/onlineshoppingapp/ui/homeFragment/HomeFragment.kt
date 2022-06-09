@@ -83,6 +83,7 @@ class HomeFragment : Fragment() {
     private fun showProgressBar() {
         binding.lottie.setAnimation(R.raw.loading)
         binding.lottie.visibility = View.VISIBLE
+        binding.lottie.playAnimation()
     }
 
     private fun showSnack(message: String) {
@@ -91,6 +92,7 @@ class HomeFragment : Fragment() {
             "تلاش دوباره"
         ) {
             getLists()
+            binding.lottie.playAnimation()
         }
         snackBar.show()
     }
