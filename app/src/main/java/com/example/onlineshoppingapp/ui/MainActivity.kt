@@ -26,6 +26,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+//        if (!isNetworkConnected()){
+//            binding.lottie.visibility = View.VISIBLE
+//            binding.lottie.setAnimation(R.raw.no_internet)
+//            binding.navHostFragment.visibility = View.GONE
+//        }
+//        connectionLiveData = ConnectionLiveData(this)
+//        connectionLiveData.observe(this){
+//            if (it){
+//                binding.lottie.visibility = View.GONE
+//                binding.navHostFragment.visibility = View.VISIBLE
+//            }else{
+//                binding.lottie.visibility = View.VISIBLE
+//                binding.lottie.setAnimation(R.raw.no_internet)
+//                binding.navHostFragment.visibility = View.GONE
+//            }
+//        }
         val navHostFragment =supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
@@ -33,7 +49,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         return true
     }
-
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }

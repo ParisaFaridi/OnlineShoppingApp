@@ -19,10 +19,6 @@ class CategoriesViewModel @Inject constructor(private val repository: Repository
     val categories = MutableLiveData<Resource<List<Category>>>()
     val hasInternetConnection = ConnectionLiveData(app)
 
-    init {
-        getCategories()
-    }
-
     fun getCategories() = viewModelScope.launch {
         if (hasInternetConnection.value == true)
             categories.value = repository.getCategories()

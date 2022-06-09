@@ -40,11 +40,11 @@ class CategoryFragment : Fragment() {
             binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
         }
         categoryViewModel.hasInternetConnection.observe(viewLifecycleOwner){
-            if (it){
+            if (it && categoryViewModel.products.value == null){
                 categoryViewModel.getProductsByCategoryId(args.categoryId)
                 binding.rvProducts.visibility = View.VISIBLE
                 binding.lottie.visibility = View.GONE
-            }else
+            }else if (!it && categoryViewModel.products.value == null)
                 showNoInternetConnection()
         }
         val productsAdapter = ProductAdapter{ product ->

@@ -19,7 +19,7 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
         getSafeApiResponse(remoteDataSource.getProductsByCategory(categoryId))
 
     fun <T> getSafeApiResponse(response:  Response<T>):Resource<T>{
-        return if (response.isSuccessful)
+        return if (response.isSuccessful && response.body() != null)
             Resource.Success(response.body()!!)
         else
             Resource.Error(message = response.code().toString())

@@ -50,11 +50,11 @@ class CategoriesFragment : Fragment() {
         binding.rvCategories.adapter = categoriesAdapter
 
         categoriesViewModel.hasInternetConnection.observe(viewLifecycleOwner){
-            if (it){
+            if (it && categoriesViewModel.categories.value == null){
                 categoriesViewModel.getCategories()
                 binding.rvCategories.visibility = View.VISIBLE
                 binding.lottie.visibility = View.GONE
-            }else
+            }else if ( !it && categoriesViewModel.categories.value == null)
                 showNoInternetConnection()
         }
         categoriesViewModel.categories.observe(viewLifecycleOwner) { response ->

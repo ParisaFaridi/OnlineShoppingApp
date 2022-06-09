@@ -35,9 +35,9 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         detailViewModel.hasInternetConnection.observe(viewLifecycleOwner){
-            if (it)
+            if (it && detailViewModel.product.value== null)
                 detailViewModel.getProduct(args.productId)
-            else
+            else if (!it && detailViewModel.product.value== null)
                 showNoInternetConnection()
         }
         detailViewModel.product.observe(viewLifecycleOwner){ response ->
