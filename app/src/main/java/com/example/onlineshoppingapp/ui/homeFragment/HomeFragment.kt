@@ -34,33 +34,37 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.title ="صفحه اصلی"
+        activity?.title = "صفحه اصلی"
         setRecyclerViews()
         if (viewModelHome.bestProducts.value == null) {
             getLists()
         }
         viewModelHome.bestProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {showProgressBar()}
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
                 is Resource.Success -> {
                     response.data?.let { data ->
                         showData(bestProductsAdapter, data)
                     }
                 }
-                is Resource.Error -> { response.message?.let { showSnack(it) } }
+                is Resource.Error -> {
+                    response.message?.let { showSnack(it) }
+                }
             }
         }
         viewModelHome.newProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {showProgressBar()}
-                is Resource.Success -> {
-                    response.data?.let { data ->
-                        binding.layout.visibility = View.VISIBLE
-                        binding.lottie.visibility = View.GONE
-                        newProductsAdapter.submitList(data)
-                    }
+                is Resource.Loading -> {
+                    showProgressBar()
                 }
-                is Resource.Error -> { response.message?.let { showSnack(it) } }
+                is Resource.Success -> {
+                    response.data?.let { data -> showData(newProductsAdapter, data) }
+                }
+                is Resource.Error -> {
+                    response.message?.let { showSnack(it) }
+                }
             }
         }
         viewModelHome.mostViewedProducts.observe(viewLifecycleOwner) { response ->
@@ -68,24 +72,21 @@ class HomeFragment : Fragment() {
                 is Resource.Loading -> {
                     showProgressBar()
                 }
-
                 is Resource.Success -> {
-                    response.data?.let { data ->
-                        mostViewedProductsAdapter.submitList(data)
-                        binding.layout.visibility = View.VISIBLE
-                        binding.lottie.visibility = View.GONE
-                    }
+                    response.data?.let { data -> showData(mostViewedProductsAdapter, data) }
                 }
-                is Resource.Error -> { response.message?.let { showSnack(it) } }
+                is Resource.Error -> {
+                    response.message?.let { showSnack(it) }
+                }
             }
         }
     }
 
-    private fun showProgressBar() {
+    private fun showProgressBar() = binding.lottie.apply {
+        setAnimation(R.raw.loading)
+        visibility = View.VISIBLE
+        playAnimation()
         binding.layout.visibility = View.GONE
-        binding.lottie.setAnimation(R.raw.loading)
-        binding.lottie.visibility = View.VISIBLE
-        binding.lottie.playAnimation()
     }
 
     private fun showSnack(message: String) {
@@ -99,12 +100,11 @@ class HomeFragment : Fragment() {
         snackBar.show()
     }
 
-    private fun getLists() {
-        viewModelHome.apply {
-            getNewProducts()
-            getMostViewedProducts()
-            getBestProducts()
-        }
+    private fun getLists() = viewModelHome.apply {
+        getNewProducts()
+        getMostViewedProducts()
+        getBestProducts()
+
     }
 
     private fun showData(adapter: ProductAdapter, data: List<Product>) {

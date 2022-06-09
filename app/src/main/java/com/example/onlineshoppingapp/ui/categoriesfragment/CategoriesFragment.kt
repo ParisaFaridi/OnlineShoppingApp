@@ -19,9 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CategoriesFragment : Fragment() {
 
-    private val categoriesViewModel : CategoriesViewModel by viewModels()
-    private lateinit var binding : FragmentCategoriesBinding
-    private lateinit var categoriesAdapter :CategoryAdapter
+    private val categoriesViewModel: CategoriesViewModel by viewModels()
+    private lateinit var binding: FragmentCategoriesBinding
+    private lateinit var categoriesAdapter: CategoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,11 +33,12 @@ class CategoriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setOrientation()
         activity?.title = "دسته بندی ها"
-        categoriesAdapter = CategoryAdapter{ category ->
+        categoriesAdapter = CategoryAdapter { category ->
             val action = category.id?.let { id ->
                 category.name?.let { name ->
-                    CategoriesFragmentDirections.actionCategoriesFragmentToCategoryFragment(id,name)
+                    CategoriesFragmentDirections.actionCategoriesFragmentToCategoryFragment(id, name)
                 }
             }
             if (action != null) {
@@ -49,32 +50,40 @@ class CategoriesFragment : Fragment() {
         if (categoriesViewModel.categories.value == null)
             categoriesViewModel.getCategories()
 
-        val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            binding.rvCategories.layoutManager = GridLayoutManager(requireContext(),3)
-        } else {
-            binding.rvCategories.layoutManager = GridLayoutManager(requireContext(),2)
-        }
         categoriesViewModel.categories.observe(viewLifecycleOwner) { response ->
-            when(response){
-                is Resource.Loading -> {showProgressBar()}
-                is Resource.Success ->{
+            when (response) {
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                is Resource.Success -> {
                     response.data?.let { data ->
-                        binding.lottie.visibility = View.GONE
-                        binding.rvCategories.visibility = View.VISIBLE
+                        hideProgressBar()
                         categoriesAdapter.submitList(data)
                     }
                 }
-                is Resource.Error -> { response.message?.let { showSnack(it) } }
+                is Resource.Error -> {
+                    response.message?.let { showSnack(it) }
+                }
             }
         }
     }
-    private fun showProgressBar() {
-        binding.lottie.setAnimation(R.raw.loading)
-        binding.lottie.visibility = View.VISIBLE
-        binding.lottie.playAnimation()
+    private fun setOrientation() {
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            binding.rvCategories.layoutManager = GridLayoutManager(requireContext(), 3)
+        } else {
+            binding.rvCategories.layoutManager = GridLayoutManager(requireContext(), 2)
+        }
     }
-
+    private fun hideProgressBar() = binding.apply {
+        lottie.visibility = View.GONE
+        rvCategories.visibility = View.VISIBLE
+    }
+    private fun showProgressBar() = binding.lottie.apply {
+        setAnimation(R.raw.loading)
+        visibility = View.VISIBLE
+        playAnimation()
+    }
     private fun showSnack(message: String) {
         val snackBar = Snackbar.make(binding.layout, message, Snackbar.LENGTH_INDEFINITE)
         snackBar.setAction(

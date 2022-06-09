@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ImageViewPagerAdapter
+import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.databinding.FragmentDetailBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,52 +37,66 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.title ="فروشگاه آنلاین"
+        activity?.title = "فروشگاه آنلاین"
         if (detailViewModel.product.value == null)
             detailViewModel.getProduct(args.productId)
 
         detailViewModel.product.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> { showProgressBar() }
-                is Resource.Success -> {
-                    response.data?.let { data ->
-                        imageViewPagerAdapter = data.images?.let { it1 -> ImageViewPagerAdapter(it1) }!!
-                        setUpViewPager()
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                is Resource.Success -> { response.data?.let {
                         hideProgressBar()
-                        binding.apply {
-                            product = data
-                            tvDescription.text = data.description?.let { fixDescription(it) }
-                            ratingbar.rating = data.averageRating?.toFloat()!!
-                            tvPrice.text = NumberFormat.getNumberInstance(Locale.US).format(data.price?.toLong())
-                        }
+                        setProductData(it)
                     }
                 }
-                is Resource.Error -> { response.message?.let { showSnack(it) } }
+                is Resource.Error -> {
+                    response.message?.let { showSnack(it) }
+                }
             }
         }
     }
-    fun fixDescription(description:String): String {
+
+    private fun setProductData(data: Product) {
+        imageViewPagerAdapter = data.images?.let { images -> ImageViewPagerAdapter(images) }!!
+        setUpViewPager()
+        binding.apply {
+            product = data
+            tvDescription.text = data.description?.let { fixDescription(it) }
+            ratingbar.rating = data.averageRating?.toFloat()!!
+            tvPrice.text = NumberFormat.getNumberInstance(Locale.US).format(data.price?.toLong())
+        }
+
+    }
+
+    private fun fixDescription(description: String): String {
         return description.replace("</p>", "")
             .replace("<p>", "").replace("<br />", "\n")
     }
+
     private fun hideProgressBar() {
         binding.layout.visibility = View.VISIBLE
         binding.lottie.visibility = View.GONE
     }
+
     private fun showProgressBar() {
         binding.lottie.setAnimation(R.raw.loading)
         binding.lottie.visibility = View.VISIBLE
         binding.lottie.playAnimation()
 
     }
+
     private fun showSnack(message: String) {
         val snackBar = Snackbar.make(binding.layout, message, Snackbar.LENGTH_INDEFINITE)
         snackBar.setAction(
-            "تلاش دوباره") {
+            "تلاش دوباره"
+        ) {
             detailViewModel.getProduct(args.productId)
         }
         snackBar.show()
     }
+
     private fun setUpViewPager() {
         binding.viewPager.apply {
             adapter = imageViewPagerAdapter
@@ -92,6 +107,7 @@ class DetailFragment : Fragment() {
         val currentPageIndex = 0
         binding.viewPager.currentItem = currentPageIndex
     }
+
     override fun onDestroy() {
         super.onDestroy()
         binding.viewPager.unregisterOnPageChangeCallback(
