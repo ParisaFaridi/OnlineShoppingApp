@@ -1,8 +1,9 @@
 package com.example.onlineshoppingapp.ui.detailfragment
 
 import android.app.Application
-import androidx.lifecycle.*
-import com.example.onlineshoppingapp.ConnectionLiveData
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Product
