@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 //        if (!isNetworkConnected()){
 //            binding.lottie.visibility = View.VISIBLE
 //            binding.lottie.setAnimation(R.raw.no_internet)
