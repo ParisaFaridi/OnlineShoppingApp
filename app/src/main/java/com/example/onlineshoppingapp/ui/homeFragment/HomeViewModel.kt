@@ -20,23 +20,17 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
     val newProducts = MutableLiveData<Resource<List<Product>>>()
     val mostViewedProducts = MutableLiveData<Resource<List<Product>>>()
 
-    fun getBestProducts() = handleApiCalls("rating",bestProducts)
+    fun getBestProducts() = handleApiCalls("rating", bestProducts)
 
-    fun getNewProducts() = handleApiCalls("date",newProducts)
+    fun getNewProducts() = handleApiCalls("date", newProducts)
 
-    fun getMostViewedProducts() = handleApiCalls("popularity",mostViewedProducts)
+    fun getMostViewedProducts() = handleApiCalls("popularity", mostViewedProducts)
 
-    fun handleApiCalls(orderBy:String,productList :MutableLiveData<Resource<List<Product>>>){
+    private fun handleApiCalls(orderBy: String, productList: MutableLiveData<Resource<List<Product>>>) {
         productList.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()){
-                viewModelScope.launch {
-                    productList.postValue(repository.getProducts(orderBy))
-                }
-            }else
-                bestProducts.postValue(Resource.Error("خطا در اتصال به اینترنت"))
-        }catch (t :Throwable){
-            bestProducts.postValue(Resource.Error("خطا در اتصال به سرور"))
-        }
+        if (hasInternetConnection())
+            viewModelScope.launch { productList.postValue(repository.getProducts(orderBy)) }
+        else
+            bestProducts.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
     }
 }

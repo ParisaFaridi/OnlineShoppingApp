@@ -18,17 +18,11 @@ class CategoryViewModel @Inject constructor(private val repository: Repository, 
 
     val products = MutableLiveData<Resource<List<Product>>>()
 
-    fun getProductsByCategoryId(categoryId: Int){
+    fun getProductsByCategoryId(categoryId: Int) {
         products.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()){
-                viewModelScope.launch {
-                    products.postValue(repository.getProductsByCategory(categoryId))
-                }
-            }else
-                products.postValue(Resource.Error("خطا در اتصال به اینترنت"))
-        }catch (t :Throwable){
-            products.postValue(Resource.Error("خطا در اتصال به سرور"))
-        }
+        if (hasInternetConnection())
+            viewModelScope.launch { products.postValue(repository.getProductsByCategory(categoryId)) }
+        else
+            products.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
     }
 }

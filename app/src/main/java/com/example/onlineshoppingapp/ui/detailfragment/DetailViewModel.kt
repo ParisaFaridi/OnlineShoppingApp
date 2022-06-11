@@ -20,15 +20,9 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
 
     fun getProduct(id: Int){
         product.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()){
-                viewModelScope.launch {
-                    product.postValue(repository.getProductById(id))
-                }
-            }else
-                product.postValue(Resource.Error("خطا در اتصال به اینترنت"))
-        }catch (t :Throwable){
-            product.postValue(Resource.Error("خطا در اتصال به سرور"))
-        }
+        if (hasInternetConnection())
+            viewModelScope.launch { product.postValue(repository.getProductById(id)) }
+        else
+            product.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
     }
 }

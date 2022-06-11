@@ -2,6 +2,7 @@ package com.example.onlineshoppingapp.data
 
 import com.example.onlineshoppingapp.Resource
 import retrofit2.Response
+import java.lang.Exception
 import javax.inject.Inject
 
 class Repository @Inject constructor(private val remoteDataSource: RemoteDataSource) {
@@ -18,10 +19,14 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
     suspend fun getProductsByCategory(categoryId:Int)=
         getSafeApiResponse(remoteDataSource.getProductsByCategory(categoryId))
 
-    fun <T> getSafeApiResponse(response:  Response<T>):Resource<T>{
-        return if (response.isSuccessful && response.body() != null)
-            Resource.Success(response.body()!!)
-        else
-            Resource.Error(message = response.code().toString())
+    private fun <T> getSafeApiResponse(response:  Response<T>):Resource<T>{
+        return try {
+            if (response.isSuccessful && response.body() != null)
+                Resource.Success(response.body()!!)
+            else
+                Resource.Error(message = response.message(), code = response.code())
+        }catch (e:Exception){
+            Resource.Error(message = "خطای ناشناخته", code = 0)
+        }
     }
 }

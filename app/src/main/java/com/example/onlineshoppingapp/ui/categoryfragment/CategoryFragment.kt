@@ -60,8 +60,26 @@ class CategoryFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let { message ->
+                        response.code?.let { code -> showError(message, code) } }
                 }
+            }
+        }
+    }
+
+    private fun showError(message: String,code:Int) {
+        when{
+            code in (400..499) -> {
+            //show lottie animation snack
+            }
+            code in (500..599) ->{
+                //show lottie animation and snack
+            }
+            code ==0 ->{
+                //show inknown error
+            }
+            code == 1 ->{
+                //show now internet connection
             }
         }
     }

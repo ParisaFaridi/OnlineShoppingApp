@@ -13,22 +13,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CategoriesViewModel @Inject constructor(private val repository: Repository,app:Application)
-    : AndroidViewModel(app) {
+class CategoriesViewModel @Inject constructor(
+    private val repository: Repository,
+    app: Application
+) : AndroidViewModel(app) {
 
     val categories = MutableLiveData<Resource<List<Category>>>()
 
-    fun getCategories(){
+    fun getCategories() {
         categories.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()){
-                viewModelScope.launch {
-                    categories.postValue(repository.getCategories())
-                }
-            }else
-                categories.postValue(Resource.Error("خطا در اتصال به اینترنت"))
-        }catch (t :Throwable){
-            categories.postValue(Resource.Error("خطا در اتصال به سرور"))
-        }
+        if (hasInternetConnection()) {
+            viewModelScope.launch { categories.postValue(repository.getCategories()) }
+        } else
+            categories.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
     }
 }
