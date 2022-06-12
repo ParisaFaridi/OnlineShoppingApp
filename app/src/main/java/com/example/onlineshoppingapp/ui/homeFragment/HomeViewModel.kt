@@ -19,6 +19,18 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
     val bestProducts = MutableLiveData<Resource<List<Product>>>()
     val newProducts = MutableLiveData<Resource<List<Product>>>()
     val mostViewedProducts = MutableLiveData<Resource<List<Product>>>()
+    val sliderPics = MutableLiveData<Resource<Product>>()
+    init {
+        getPicForSliders()
+    }
+
+    private fun getPicForSliders() {
+        sliderPics.postValue(Resource.Loading())
+        if (hasInternetConnection())
+            viewModelScope.launch { sliderPics.postValue(repository.getProductById(608)) }
+        else
+            bestProducts.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
+    }
 
     fun getBestProducts() = handleApiCalls("rating", bestProducts)
 

@@ -1,19 +1,27 @@
 package com.example.onlineshoppingapp.ui.homeFragment
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ProductAdapter
+import com.example.onlineshoppingapp.adapters.SliderAdapter
+import com.example.onlineshoppingapp.data.model.Image
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.databinding.FragmentHomeBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -23,6 +31,9 @@ class HomeFragment : Fragment() {
     private lateinit var bestProductsAdapter: ProductAdapter
     private lateinit var newProductsAdapter: ProductAdapter
     private lateinit var mostViewedProductsAdapter: ProductAdapter
+    private lateinit var imageViewPagerAdapter: SliderAdapter
+     var handler = Handler()
+     var runnable = Runnable{}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +49,22 @@ class HomeFragment : Fragment() {
         setRecyclerViews()
         if (viewModelHome.bestProducts.value == null) {
             getLists()
+        }
+        viewModelHome.sliderPics.observe(viewLifecycleOwner){ response ->
+            when (response) {
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                is Resource.Success -> { response.data?.let {
+                        imageViewPagerAdapter = it.images?.let { images -> SliderAdapter(images as MutableList<Image>,binding.viewPager) }!!
+                        setUpViewPager()
+                    }
+                }
+                is Resource.Error -> {
+                    response.message?.let { showSnack(it) }
+                }
+            }
+
         }
         viewModelHome.bestProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -80,6 +107,51 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+    private fun setUpViewPager() {
+        binding.viewPager.apply {
+            adapter = imageViewPagerAdapter
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            setCurrentItem(1,false)
+        }
+        val currentPageIndex = 0
+        binding.viewPager.apply {
+            currentItem = currentPageIndex
+            offscreenPageLimit = 3
+            clipChildren= false
+            clipToPadding = false
+            getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        }
+        val transformer = CompositePageTransformer()
+        transformer.addTransformer(MarginPageTransformer(40))
+        transformer.addTransformer { page, position ->
+            val r = 1 - abs(position)
+            page.scaleY = 0.85f + r * 0.14f
+        }
+        binding.viewPager.setPageTransformer(transformer)
+        handler = Handler()
+        runnable = Runnable {
+            binding.viewPager.currentItem = binding.viewPager.currentItem+1
+        }
+        binding.viewPager.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback(){
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    handler.removeCallbacks(runnable)
+                    handler.postDelayed(runnable,3000)
+                }
+            }
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handler.postDelayed(runnable,3000)
     }
 
     private fun showProgressBar() = binding.lottie.apply {

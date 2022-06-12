@@ -16,7 +16,7 @@ interface ApiService {
     @GET("products?$CONSUMER_KEY_AND_SECRET")
     suspend fun getProducts(
         @Query("per_page")
-        perPage :Int=20,
+        perPage :Int=10,
         @Query("page")
         pages:Int =1,
         @Query("orderby")
