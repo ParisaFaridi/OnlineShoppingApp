@@ -11,6 +11,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSearchBinding
@@ -39,9 +41,9 @@ class SearchFragment : Fragment() {
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(binding.et.rootView,InputMethodManager.SHOW_IMPLICIT)
-        binding.et.requestFocus()
-        binding.et.setOnEditorActionListener { textView, i, keyEvent ->
+        imm.showSoftInput(binding.etSearch.rootView,InputMethodManager.SHOW_IMPLICIT)
+        binding.etSearch.requestFocus()
+        binding.etSearch.setOnEditorActionListener { textView, i, keyEvent ->
             //get editText value
             return@setOnEditorActionListener false
         }
@@ -54,6 +56,7 @@ class SearchFragment : Fragment() {
             }
         }
         binding.rvProducts.adapter = productsAdapter
+        binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
         searchViewModel.searchResults.observe(viewLifecycleOwner){ response ->
             when (response) {
             is Resource.Success -> {
@@ -64,15 +67,20 @@ class SearchFragment : Fragment() {
         }
         }
         var job : Job? = null
-        binding.et.addTextChangedListener { editable ->
+        binding.etSearch.addTextChangedListener { editable ->
             job?.cancel()
             job = MainScope().launch {
                 delay(500L)
                 editable.let {
                     if (editable.toString().isNotEmpty())
-                        searchViewModel.search(editable.toString())
+                        searchViewModel.search(editable.toString(),4)
                 }
             }
+        }
+
+        binding.btnSearch.setOnClickListener {
+            val action = SearchFragmentDirections.actionSearchFragmentToSearchResultsFragment(binding.etSearch.text.toString())
+            findNavController().navigate(action)
         }
     }
 }

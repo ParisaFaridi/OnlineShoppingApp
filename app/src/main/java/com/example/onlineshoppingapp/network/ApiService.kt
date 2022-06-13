@@ -42,7 +42,7 @@ interface ApiService {
         @Query("search")
         searchQuery:String,
         @Query("per_page")
-        perPage :Int=7
+        perPage :Int
     ):Response<List<Product>>
 
     @POST("customers?$CONSUMER_KEY_AND_SECRET")

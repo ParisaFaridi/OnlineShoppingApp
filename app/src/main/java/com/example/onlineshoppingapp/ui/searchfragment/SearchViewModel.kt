@@ -17,10 +17,10 @@ class SearchViewModel @Inject constructor(private val repository: Repository, ap
     AndroidViewModel(app) {
     val searchResults = MutableLiveData<Resource<List<Product>>>()
 
-    fun search(searchQuery : String){
+    fun search(searchQuery : String,perPage:Int){
         searchResults.postValue(Resource.Loading())
         if (hasInternetConnection())
-            viewModelScope.launch { searchResults.postValue(repository.search(searchQuery)) }
+            viewModelScope.launch { searchResults.postValue(repository.search(searchQuery,perPage)) }
         else
             searchResults.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
     }
