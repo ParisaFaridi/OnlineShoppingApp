@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp
+package com.example.onlineshoppingapp.ui.searchfragment
 
 import android.content.Context
 import android.os.Bundle
@@ -11,6 +11,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 class SearchFragment : Fragment() {
 
     lateinit var binding :FragmentSearchBinding
-    val searchViewModel :SearchViewModel by viewModels()
+    val searchViewModel : SearchViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

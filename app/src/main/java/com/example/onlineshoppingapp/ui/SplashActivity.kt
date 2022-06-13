@@ -1,10 +1,10 @@
-package com.example.onlineshoppingapp
+package com.example.onlineshoppingapp.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import com.example.onlineshoppingapp.ui.MainActivity
+import com.example.onlineshoppingapp.R
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

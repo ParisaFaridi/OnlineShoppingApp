@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="20sp"
-    tools:context=".CreateAccountFragment">
+    tools:context=".ui.account.CreateAccountFragment">
 
     <TextView
         android:layout_width="match_parent"

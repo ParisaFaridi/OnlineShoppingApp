@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp
+package com.example.onlineshoppingapp.ui.account
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.onlineshoppingapp.R
+import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.model.Customer
 import com.example.onlineshoppingapp.databinding.FragmentCreateAccountBinding
 import dagger.hilt.android.AndroidEntryPoint
