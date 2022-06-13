@@ -20,7 +20,7 @@ class SearchViewModel @Inject constructor(private val repository: Repository, ap
     fun search(searchQuery : String,perPage:Int){
         searchResults.postValue(Resource.Loading())
         if (hasInternetConnection())
-            viewModelScope.launch { searchResults.postValue(repository.search(searchQuery,perPage)) }
+            viewModelScope.launch { searchResults.postValue(repository.search(searchQuery,perPage,"title","desc")) }
         else
             searchResults.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
     }
