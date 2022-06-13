@@ -5,8 +5,10 @@
       <map>
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/drawable/ic_baseline_arrow_forward_24.xml" value="0.175" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/drawable/ic_baseline_assignment_turned_in_24.xml" value="0.175" />
+        <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/drawable/ic_baseline_filter_list_24.xml" value="0.175" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2005" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/drawable/ic_baseline_shopping_cart_24.xml" value="0.2005" />
+        <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/drawable/ic_baseline_sort_24.xml" value="0.175" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/drawable/ic_baseline_store_mall_directory_24.xml" value="0.1" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/drawable/ic_best_seller_595b40b65ba036ed117d1236.xml" value="0.1855" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/drawable/ic_new_595b40b65ba036ed117d1521.xml" value="0.1855" />
@@ -14,6 +16,7 @@
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/activity_splash.xml" value="0.2" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/category_item.xml" value="0.35294117647058826" />
+        <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/drop_down_item.xml" value="0.25" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/first_item.xml" value="0.25" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/fragment_categories.xml" value="0.25" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/fragment_category.xml" value="0.25" />
@@ -22,7 +25,7 @@
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/fragment_profile.xml" value="0.25" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/fragment_search.xml" value="0.264" />
-        <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/fragment_search_results.xml" value="0.25" />
+        <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/fragment_search_results.xml" value="0.6" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/image_slider.xml" value="0.25" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/image_view.xml" value="0.25" />
         <entry key="..\:/Users/WIN10/AndroidStudioProjects/OnlineShoppingApp/app/src/main/res/layout/nav_header.xml" value="0.10925925925925926" />
