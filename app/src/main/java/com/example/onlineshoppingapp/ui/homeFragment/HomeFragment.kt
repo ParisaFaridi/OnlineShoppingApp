@@ -2,9 +2,7 @@ package com.example.onlineshoppingapp.ui.homeFragment
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -39,6 +37,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -49,6 +48,9 @@ class HomeFragment : Fragment() {
         setRecyclerViews()
         if (viewModelHome.bestProducts.value == null) {
             getLists()
+        }
+        binding.searchView.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
         }
         viewModelHome.sliderPics.observe(viewLifecycleOwner){ response ->
             when (response) {

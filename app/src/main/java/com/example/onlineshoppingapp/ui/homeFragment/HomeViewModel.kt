@@ -10,6 +10,7 @@ import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.hasInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.http.Query
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,6 +20,7 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
     val bestProducts = MutableLiveData<Resource<List<Product>>>()
     val newProducts = MutableLiveData<Resource<List<Product>>>()
     val mostViewedProducts = MutableLiveData<Resource<List<Product>>>()
+
     val sliderPics = MutableLiveData<Resource<Product>>()
     init {
         getPicForSliders()
@@ -31,6 +33,7 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
         else
             bestProducts.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
     }
+
 
     fun getBestProducts() = handleApiCalls("rating", bestProducts)
 

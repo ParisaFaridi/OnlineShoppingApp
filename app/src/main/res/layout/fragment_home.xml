@@ -7,6 +7,28 @@
     android:layout_marginBottom="12dp"
     android:orientation="vertical">
 
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:layoutDirection="rtl"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/search_view_corner"
+        app:iconifiedByDefault="false"
+        app:defaultQueryHint="جست و جو در همه کالا ها" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_marginBottom="6dp"
+        android:layout_height="wrap_content"/>
+
     <ScrollView
         android:id="@+id/layout"
         android:layout_width="match_parent"
@@ -19,7 +41,7 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="200dp"
                 android:paddingHorizontal="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
