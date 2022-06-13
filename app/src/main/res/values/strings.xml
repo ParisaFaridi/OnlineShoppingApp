@@ -10,4 +10,10 @@
     <string name="newest">جدیدترین محصولات</string>
     <string name="popular">محبوب ترین محصولات</string>
     <string name="see_all">مشاهده همه</string>
+    <string name="user_name">نام کاربری</string>
+    <string name="email">ایمیل</string>
+    <string name="last_name">نام خانوادگی</string>
+    <string name="first_name">نام</string>
+    <string name="create_account">ساخت حساب کاربری</string>
+    <string name="must_be_filled">پر کردن این فیلد الزامی است</string>
 </resources>
