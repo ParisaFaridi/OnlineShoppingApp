@@ -1,6 +1,7 @@
 package com.example.onlineshoppingapp.data
 
 import com.example.onlineshoppingapp.Resource
+import com.example.onlineshoppingapp.data.model.Customer
 import retrofit2.Response
 import java.lang.Exception
 import javax.inject.Inject
@@ -12,6 +13,8 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
 
     suspend fun search(searchQuery: String) =
         getSafeApiResponse(remoteDataSource.search(searchQuery = searchQuery))
+
+    suspend fun signUp(customer: Customer) = getSafeApiResponse(remoteDataSource.signUp(customer))
 
     suspend fun getProductById(id:Int) =
         getSafeApiResponse(remoteDataSource.getProductById(id))
