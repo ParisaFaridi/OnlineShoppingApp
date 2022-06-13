@@ -12,6 +12,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/store" />
+        app:lottie_rawRes="@raw/shopping" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
