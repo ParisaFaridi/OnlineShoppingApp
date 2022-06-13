@@ -37,4 +37,12 @@ interface ApiService {
         @Query(value = "category")
         categoryId:Int
     ):Response<List<Product>>
+
+    @GET("products?$CONSUMER_KEY_AND_SECRET")
+    suspend fun search(
+        @Query("search")
+        searchQuery:String,
+        @Query("per_page")
+        perPage :Int=7
+    ):Response<List<Product>>
 }
