@@ -25,4 +25,12 @@ class CustomerViewModel @Inject constructor(private val repository: Repository,a
         else
             customerLive.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
     }
+
+    fun getCustomer(id:Int){
+        customerLive.postValue((Resource.Loading()))
+        if (hasInternetConnection())
+            viewModelScope.launch { customerLive.postValue(repository.getCustomer(id)) }
+        else
+            customerLive.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
+    }
 }
