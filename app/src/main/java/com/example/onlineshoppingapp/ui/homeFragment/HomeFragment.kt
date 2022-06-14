@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
+import com.example.onlineshoppingapp.adapters.OnSaleProductAdapter
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.adapters.SliderAdapter
 import com.example.onlineshoppingapp.data.model.Image
@@ -30,6 +31,7 @@ class HomeFragment : Fragment() {
     private lateinit var newProductsAdapter: ProductAdapter
     private lateinit var mostViewedProductsAdapter: ProductAdapter
     private lateinit var imageViewPagerAdapter: SliderAdapter
+    private lateinit var onSaleProductAdapter: OnSaleProductAdapter
      var handler = Handler()
      var runnable = Runnable{}
 
@@ -68,6 +70,24 @@ class HomeFragment : Fragment() {
             }
 
         }
+        viewModelHome.onSaleProducts.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                is Resource.Success -> {
+                    response.data?.let { data ->
+                        binding.layout.visibility = View.VISIBLE
+                        binding.lottie.visibility = View.GONE
+                        onSaleProductAdapter.submitList(data)
+                    }
+                }
+                is Resource.Error -> {
+                    response.message?.let { showSnack(it) }
+                }
+            }
+        }
+
         viewModelHome.bestProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
@@ -178,6 +198,7 @@ class HomeFragment : Fragment() {
         getNewProducts()
         getMostViewedProducts()
         getBestProducts()
+        getOnSaleProducts()
 
     }
 
@@ -195,10 +216,13 @@ class HomeFragment : Fragment() {
         mostViewedProductsAdapter =
             ProductAdapter { product -> product.id?.let { it -> goToDetailFragment(it) } }
 
+        onSaleProductAdapter = OnSaleProductAdapter { product -> product.id?.let { it -> goToDetailFragment(it) } }
+
         binding.apply {
             rvBestProducts.adapter = bestProductsAdapter
             rvNewProducts.adapter = newProductsAdapter
             rvMostViewedProducts.adapter = mostViewedProductsAdapter
+            rvOnSaleProducts.adapter = onSaleProductAdapter
         }
     }
 
