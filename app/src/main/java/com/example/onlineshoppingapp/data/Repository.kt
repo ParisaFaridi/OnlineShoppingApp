@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(private val remoteDataSource: RemoteDataSource) {
 
-    suspend fun getProducts(orderBy: String) =
-        getSafeApiResponse(remoteDataSource.getProducts(orderBy = orderBy))
+    suspend fun getProducts(orderBy: String,onSale:Boolean) =
+        getSafeApiResponse(remoteDataSource.getProducts(orderBy = orderBy,onSale))
 
     suspend fun search(searchQuery: String,perPage:Int,orderBy: String,order:String) =
         getSafeApiResponse(remoteDataSource.search(searchQuery = searchQuery, perPage = perPage, orderBy = orderBy, order = order))

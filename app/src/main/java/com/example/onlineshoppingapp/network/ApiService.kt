@@ -19,7 +19,11 @@ interface ApiService {
         @Query("page")
         pages:Int =1,
         @Query("orderby")
-        orderBy:String
+        orderBy:String,
+        @Query("on_sale")
+        onSale:Boolean,
+        @Query("exclude")
+        excludes:Array<Int> = arrayOf(608)
     ): Response<List<Product>>
 
     @GET("products/{id}?$CONSUMER_KEY_AND_SECRET")
