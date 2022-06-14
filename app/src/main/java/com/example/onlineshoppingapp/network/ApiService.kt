@@ -55,4 +55,10 @@ interface ApiService {
 
     @POST("customers?$CONSUMER_KEY_AND_SECRET")
     suspend fun signUp(@Body customer: Customer):Response<Customer>
+
+    @GET("customers/{id}?$CONSUMER_KEY_AND_SECRET")
+    suspend fun getCustomer(
+        @Path(value = "id")
+        id:Int
+    ):Response<Customer>
 }
