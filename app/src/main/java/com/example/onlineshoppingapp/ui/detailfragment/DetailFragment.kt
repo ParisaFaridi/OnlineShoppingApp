@@ -13,6 +13,7 @@ import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ImageViewPagerAdapter
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.databinding.FragmentDetailBinding
+import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
@@ -52,12 +53,12 @@ class DetailFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let {  message -> response.code?.let { code -> showErrorSnack(message, code) }
+                    }
                 }
             }
         }
     }
-
     private fun setProductData(data: Product) {
         imageViewPagerAdapter = data.images?.let { images -> ImageViewPagerAdapter(images) }!!
         setUpViewPager()
@@ -86,13 +87,14 @@ class DetailFragment : Fragment() {
         binding.lottie.playAnimation()
 
     }
-
-    private fun showSnack(message: String) {
-        val snackBar = Snackbar.make(binding.layout, message, Snackbar.LENGTH_INDEFINITE)
+    private fun showErrorSnack(message: String, code: Int) {
+        val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
         snackBar.setAction(
-            "تلاش دوباره"
+            getString(R.string.try_again)
         ) {
             detailViewModel.getProduct(args.productId)
+
+            binding.lottie.playAnimation()
         }
         snackBar.show()
     }

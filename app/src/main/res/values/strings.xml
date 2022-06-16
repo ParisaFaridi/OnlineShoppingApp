@@ -9,4 +9,12 @@
     <string name="best">بهترین محصولات</string>
     <string name="newest">جدیدترین محصولات</string>
     <string name="popular">پربازدیدترین محصولات</string>
+    <string name="unknown_error">خطای ناشناخته</string>
+    <string name="no_internet_error">خطا در اتصال به اینترنت</string>
+    <string name="error_404">صفحه پیدا نشد!</string>
+    <string name="error_500">خطای سرور!</string>
+    <string name="error_401">درخواست فاقد اهراز هویت معتبر!</string>
+    <string name="error_400">درخواست نامعتبر!</string>
+    <string name="try_again">تلاش دوباره</string>
+    <string name="main_page">صفخه اصلی</string>
 </resources>

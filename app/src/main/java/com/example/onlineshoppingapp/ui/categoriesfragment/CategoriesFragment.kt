@@ -13,6 +13,7 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.CategoryAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCategoriesBinding
+import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -62,7 +63,8 @@ class CategoriesFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let {  message -> response.code?.let { code -> showErrorSnack(message, code)}
+                    }
                 }
             }
         }
@@ -84,12 +86,13 @@ class CategoriesFragment : Fragment() {
         visibility = View.VISIBLE
         playAnimation()
     }
-    private fun showSnack(message: String) {
-        val snackBar = Snackbar.make(binding.layout, message, Snackbar.LENGTH_INDEFINITE)
+    private fun showErrorSnack(message: String, code: Int) {
+        val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
         snackBar.setAction(
-            "تلاش دوباره"
+            getString(R.string.try_again)
         ) {
             categoriesViewModel.getCategories()
+            binding.lottie.playAnimation()
         }
         snackBar.show()
     }

@@ -12,6 +12,7 @@ import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.databinding.FragmentHomeBinding
+import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,7 +51,9 @@ class HomeFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let {  message -> response.code?.let { code -> showErrorSnack(message, code) }
+                    }
+
                 }
             }
         }
@@ -63,7 +66,8 @@ class HomeFragment : Fragment() {
                     response.data?.let { data -> showData(newProductsAdapter, data) }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let {  message -> response.code?.let { code -> showErrorSnack(message, code) }
+                    }
                 }
             }
         }
@@ -76,10 +80,21 @@ class HomeFragment : Fragment() {
                     response.data?.let { data -> showData(mostViewedProductsAdapter, data) }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let {  message -> response.code?.let { code -> showErrorSnack(message, code) }
+                    }
                 }
             }
         }
+    }
+    private fun showErrorSnack(message: String, code: Int) {
+        val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
+        snackBar.setAction(
+            getString(R.string.try_again)
+        ) {
+            getLists()
+            binding.lottie.playAnimation()
+        }
+        snackBar.show()
     }
 
     private fun showProgressBar() = binding.lottie.apply {
@@ -88,31 +103,18 @@ class HomeFragment : Fragment() {
         playAnimation()
         binding.layout.visibility = View.GONE
     }
-
-    private fun showSnack(message: String) {
-        val snackBar = Snackbar.make(binding.layout, message, Snackbar.LENGTH_INDEFINITE)
-        snackBar.setAction(
-            "تلاش دوباره"
-        ) {
-            getLists()
-            binding.lottie.playAnimation()
+    private fun getLists() {
+        viewModelHome.apply {
+            getNewProducts()
+            getMostViewedProducts()
+            getBestProducts()
         }
-        snackBar.show()
     }
-
-    private fun getLists() = viewModelHome.apply {
-        getNewProducts()
-        getMostViewedProducts()
-        getBestProducts()
-
-    }
-
     private fun showData(adapter: ProductAdapter, data: List<Product>) {
         binding.layout.visibility = View.VISIBLE
         binding.lottie.visibility = View.GONE
         adapter.submitList(data)
     }
-
     private fun setRecyclerViews() {
         bestProductsAdapter =
             ProductAdapter { product -> product.id?.let { it -> goToDetailFragment(it) } }
@@ -127,7 +129,6 @@ class HomeFragment : Fragment() {
             rvMostViewedProducts.adapter = mostViewedProductsAdapter
         }
     }
-
     private fun goToDetailFragment(id: Int) {
         val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(id)
         findNavController().navigate(action)

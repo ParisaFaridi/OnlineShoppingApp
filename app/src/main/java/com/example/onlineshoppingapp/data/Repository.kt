@@ -25,7 +25,7 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
             else
                 Resource.Error(message = response.message(), code = response.code())
         }catch (e:Exception){
-            Resource.Error(message = "خطای ناشناخته", code = 0)
+            Resource.Error(code = 0)
         }
     }
 }
