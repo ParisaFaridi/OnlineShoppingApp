@@ -13,7 +13,8 @@ import com.example.onlineshoppingapp.databinding.SliderImageViewBinding
 
 class SliderAdapter(private val imageList: MutableList<Image>, val viewPager2: ViewPager2) :
     RecyclerView.Adapter<SliderAdapter.ViewPagerViewHolder>() {
-    val runnable = Runnable {
+
+    private val runnable = Runnable {
         imageList.addAll(imageList)
         notifyDataSetChanged()
     }

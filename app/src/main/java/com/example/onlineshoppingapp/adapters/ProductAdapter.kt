@@ -1,5 +1,6 @@
 package com.example.onlineshoppingapp.adapters
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -38,9 +39,12 @@ class ProductAdapter(private val clickHandler: ClickHandler):
         )
         return ItemHolder(binding)
     }
+
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        holder.binding.product = getItem(position)
-        holder.binding.tvPrice.text = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).regularPrice?.toLong()) + " تومان"
+        holder.binding.apply {
+            product = getItem(position)
+            tvPrice.text = getFormattedPrice(position)
+        }
         if (getItem(position).images?.firstOrNull()?.src == null){
             Glide.with(holder.binding.image.context).load(R.drawable.ic_baseline_error_24)
                 .into(holder.binding.image)
@@ -52,4 +56,5 @@ class ProductAdapter(private val clickHandler: ClickHandler):
             clickHandler.invoke(getItem(position))
         }
     }
+    private fun getFormattedPrice(position: Int) = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).regularPrice?.toLong()) + " تومان"
 }

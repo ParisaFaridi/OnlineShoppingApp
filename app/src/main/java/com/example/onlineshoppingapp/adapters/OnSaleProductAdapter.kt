@@ -39,12 +39,12 @@ class OnSaleProductAdapter (private val clickHandler: ClickHandler):
         return ItemHolder(binding)
     }
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        holder.binding.product = getItem(position)
         holder.binding.apply {
-            regularPrice.text = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).regularPrice?.toLong())
-            onSalePrice.text = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).salePrice?.toLong())+ " تومان!"
+            regularPrice.text = getFormattedPrice("regular",position)
+            onSalePrice.text =  getFormattedPrice("sale",position)
+            regularPrice.paintFlags = holder.binding.regularPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            product = getItem(position)
         }
-        holder.binding.regularPrice.paintFlags = holder.binding.regularPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         if (getItem(position).images?.firstOrNull()?.src == null){
             Glide.with(holder.binding.image.context).load(R.drawable.ic_baseline_error_24)
                 .into(holder.binding.image)
@@ -55,5 +55,11 @@ class OnSaleProductAdapter (private val clickHandler: ClickHandler):
         holder.binding.image.setOnClickListener {
             clickHandler.invoke(getItem(position))
         }
+    }
+    private fun getFormattedPrice(type :String?,position: Int): String {
+        return if (type == "regular")
+            NumberFormat.getNumberInstance(Locale.US).format(getItem(position).regularPrice?.toLong())
+        else
+            NumberFormat.getNumberInstance(Locale.US).format(getItem(position).salePrice?.toLong()) + " تومان!"
     }
 }
