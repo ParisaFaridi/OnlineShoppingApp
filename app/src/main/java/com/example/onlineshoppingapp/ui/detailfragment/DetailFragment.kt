@@ -56,6 +56,21 @@ class DetailFragment : Fragment() {
                 }
             }
         }
+        binding.btnMinus.setOnClickListener {
+            if (binding.tvProductNumber.text == "0")
+                return@setOnClickListener
+            else
+                binding.tvProductNumber.text = (binding.tvProductNumber.text.toString().toInt() - 1).toString()
+        }
+        binding.btnPlus.setOnClickListener {
+            if (binding.tvProductNumber.text == "10")
+                return@setOnClickListener
+            else
+                binding.tvProductNumber.text = (binding.tvProductNumber.text.toString().toInt() + 1).toString()
+        }
+        binding.btnAddToCart.setOnClickListener {
+            //detailViewModel.createOrder(binding.tvProductNumber)
+        }
     }
 
     private fun setProductData(data: Product) {

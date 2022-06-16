@@ -46,8 +46,9 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
 
     fun getMostViewedProducts() = handleApiCalls("popularity", mostViewedProducts)
 
-    private fun handleApiCalls(orderBy: String,productList: MutableLiveData<Resource<List<Product>>>,
-                               onSale:Boolean=false,perPage:Int= 10) = viewModelScope.launch {
+    private fun handleApiCalls(orderBy: String,
+                               productList: MutableLiveData<Resource<List<Product>>>, onSale:Boolean=false,
+                               perPage:Int= 10) = viewModelScope.launch {
         handle(productList,repository.getProducts(orderBy,onSale,perPage))
     }
 }

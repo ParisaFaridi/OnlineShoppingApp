@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_baseline_person_24"/>
 
     <item
-        android:id="@+id/cart"
+        android:id="@+id/cartFragment"
         android:title="سبد خرید"
         android:icon="@drawable/ic_baseline_shopping_cart_24"/>
     <item

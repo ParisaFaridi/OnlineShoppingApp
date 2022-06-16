@@ -28,7 +28,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#B2DFDB">
+            android:background="#ebedef">
 
             <TextView
                 android:gravity="center"
@@ -38,7 +38,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
+                android:textSize="18sp"
                 android:maxLines="1"
+                android:textStyle="bold"
+                android:textColor="#363938"
                 android:text="@{category.name}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"

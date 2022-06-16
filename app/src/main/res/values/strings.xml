@@ -16,6 +16,10 @@
     <string name="first_name">نام</string>
     <string name="create_account">ساخت حساب کاربری</string>
     <string name="must_be_filled">پر کردن این فیلد الزامی است</string>
+    <string name="rating">rating</string>
+    <string name="popularity">popularity</string>
+    <string name="date">date</string>
+    <string name="on_sale">on_sale</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>
