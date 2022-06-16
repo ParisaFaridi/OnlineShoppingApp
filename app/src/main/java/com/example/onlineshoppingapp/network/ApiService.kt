@@ -2,20 +2,24 @@ package com.example.onlineshoppingapp.network
 
 import com.example.onlineshoppingapp.data.model.Category
 import com.example.onlineshoppingapp.data.model.Customer
+import com.example.onlineshoppingapp.data.model.Order
 import com.example.onlineshoppingapp.data.model.Product
 import retrofit2.Response
 import retrofit2.http.*
 
 const val CONSUMER_KEY = "ck_33d507c4632f7d97ff70b4f3bae877a94375b177"
 const val CONSUMER_SECRET = "cs_d172173de2ce65486fe0921aa1b9044e9b37535f"
-const val CONSUMER_KEY_AND_SECRET = "consumer_key=$CONSUMER_KEY&consumer_secret=$CONSUMER_SECRET"
 
 interface ApiService {
 
-    @GET("products?$CONSUMER_KEY_AND_SECRET")
+    @GET("products")
     suspend fun getProducts(
+        @Query("consumer_key")
+        consumerKey :String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret :String = CONSUMER_SECRET,
         @Query("per_page")
-        perPage :Int=10,
+        perPage :Int,
         @Query("page")
         pages:Int =1,
         @Query("orderby")
@@ -26,23 +30,40 @@ interface ApiService {
         excludes:Array<Int> = arrayOf(608)
     ): Response<List<Product>>
 
-    @GET("products/{id}?$CONSUMER_KEY_AND_SECRET")
+    @GET("products/{id}")
     suspend fun getProductById(
         @Path(value = "id")
-        productId:Int
+        productId:Int,
+        @Query("consumer_key")
+        consumerKey :String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret :String = CONSUMER_SECRET
     ):Response<Product>
 
-    @GET("products/categories?$CONSUMER_KEY_AND_SECRET")
-    suspend fun getCategories():Response<List<Category>>
+    @GET("products/categories")
+    suspend fun getCategories(
+        @Query("consumer_key")
+        consumerKey :String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret :String = CONSUMER_SECRET
+    ):Response<List<Category>>
 
-    @GET("products?$CONSUMER_KEY_AND_SECRET")
+    @GET("products")
     suspend fun getProductsByCategory(
+        @Query("consumer_key")
+        consumerKey :String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret :String = CONSUMER_SECRET,
         @Query(value = "category")
         categoryId:Int
     ):Response<List<Product>>
 
-    @GET("products?$CONSUMER_KEY_AND_SECRET")
+    @GET("products")
     suspend fun search(
+        @Query("consumer_key")
+        consumerKey :String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret :String = CONSUMER_SECRET,
         @Query("search")
         searchQuery:String,
         @Query("per_page")
@@ -53,12 +74,30 @@ interface ApiService {
         order:String
     ):Response<List<Product>>
 
-    @POST("customers?$CONSUMER_KEY_AND_SECRET")
-    suspend fun signUp(@Body customer: Customer):Response<Customer>
+    @POST("customers")
+    suspend fun signUp(
+        @Query("consumer_key")
+        consumerKey :String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret :String = CONSUMER_SECRET,
+        @Body customer: Customer):Response<Customer>
 
-    @GET("customers/{id}?$CONSUMER_KEY_AND_SECRET")
+    @GET("customers/{id}")
     suspend fun getCustomer(
         @Path(value = "id")
-        id:Int
+        id:Int,
+        @Query("consumer_key")
+        consumerKey :String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret :String = CONSUMER_SECRET
+
     ):Response<Customer>
+
+    @POST("orders")
+    suspend fun createOrder(
+        @Query("consumer_key")
+        consumerKey :String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret :String = CONSUMER_SECRET,
+        @Body order:Order):Response<Order>
 }
