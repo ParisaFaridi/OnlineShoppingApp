@@ -4,13 +4,14 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.onlineshoppingapp.Errors
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.hasInternetConnection
+import com.example.onlineshoppingapp.ui.handle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.http.Query
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +22,7 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
     val newProducts = MutableLiveData<Resource<List<Product>>>()
     val mostViewedProducts = MutableLiveData<Resource<List<Product>>>()
     val onSaleProducts = MutableLiveData<Resource<List<Product>>>()
+    val productList = MutableLiveData<Resource<List<Product>>>()
 
     val sliderPics = MutableLiveData<Resource<Product>>()
     init {
@@ -32,8 +34,9 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
         if (hasInternetConnection())
             viewModelScope.launch { sliderPics.postValue(repository.getProductById(608)) }
         else
-            bestProducts.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
+            bestProducts.postValue(Resource.Error(Errors.INTERNET_FAILURE.message, code = 1))
     }
+    fun getProducts(string: String) = handleApiCalls(string,productList, perPage = 100)
 
     fun getOnSaleProducts() = handleApiCalls("rating", onSaleProducts, onSale = true)
 
@@ -43,11 +46,8 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
 
     fun getMostViewedProducts() = handleApiCalls("popularity", mostViewedProducts)
 
-    private fun handleApiCalls(orderBy: String, productList: MutableLiveData<Resource<List<Product>>>,onSale:Boolean=false) {
-        productList.postValue(Resource.Loading())
-        if (hasInternetConnection())
-            viewModelScope.launch { productList.postValue(repository.getProducts(orderBy,onSale)) }
-        else
-            bestProducts.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
+    private fun handleApiCalls(orderBy: String,productList: MutableLiveData<Resource<List<Product>>>,
+                               onSale:Boolean=false,perPage:Int= 10) = viewModelScope.launch {
+        handle(productList,repository.getProducts(orderBy,onSale,perPage))
     }
 }

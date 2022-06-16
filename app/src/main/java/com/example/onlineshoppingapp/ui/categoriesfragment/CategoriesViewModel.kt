@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Category
-import com.example.onlineshoppingapp.hasInternetConnection
+import com.example.onlineshoppingapp.ui.handle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,11 +20,8 @@ class CategoriesViewModel @Inject constructor(
 
     val categories = MutableLiveData<Resource<List<Category>>>()
 
-    fun getCategories() {
-        categories.postValue(Resource.Loading())
-        if (hasInternetConnection()) {
-            viewModelScope.launch { categories.postValue(repository.getCategories()) }
-        } else
-            categories.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
+    fun getCategories() = viewModelScope.launch {
+        handle(categories,repository.getCategories())
     }
+
 }

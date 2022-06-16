@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Product
-import com.example.onlineshoppingapp.hasInternetConnection
+import com.example.onlineshoppingapp.ui.handle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,11 +17,7 @@ class SearchViewModel @Inject constructor(private val repository: Repository, ap
     AndroidViewModel(app) {
     val searchResults = MutableLiveData<Resource<List<Product>>>()
 
-    fun search(searchQuery : String,perPage:Int){
-        searchResults.postValue(Resource.Loading())
-        if (hasInternetConnection())
-            viewModelScope.launch { searchResults.postValue(repository.search(searchQuery,perPage,"title","desc")) }
-        else
-            searchResults.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
+    fun search(searchQuery : String,perPage:Int) = viewModelScope.launch {
+        handle(searchResults,repository.search(searchQuery,perPage,"title","desc"))
     }
 }

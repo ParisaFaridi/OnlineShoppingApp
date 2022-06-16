@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Product
-import com.example.onlineshoppingapp.hasInternetConnection
+import com.example.onlineshoppingapp.ui.handle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,11 +18,9 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
 
     val product = MutableLiveData<Resource<Product>>()
 
-    fun getProduct(id: Int){
-        product.postValue(Resource.Loading())
-        if (hasInternetConnection())
-            viewModelScope.launch { product.postValue(repository.getProductById(id)) }
-        else
-            product.postValue(Resource.Error("خطا در اتصال به اینترنت", code = 1))
+    fun getProduct(id : Int) = viewModelScope.launch {
+        handle(product,repository.getProductById(id))
     }
+
+    //fun createOrder(){ repository.createOrder(Order())}
 }
