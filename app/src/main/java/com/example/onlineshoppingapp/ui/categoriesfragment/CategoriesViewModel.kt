@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Category
@@ -20,15 +21,11 @@ class CategoriesViewModel @Inject constructor(private val repository: Repository
 
     fun getCategories(){
         categories.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()){
-                viewModelScope.launch {
-                    categories.postValue(repository.getCategories())
-                }
-            }else
-                categories.postValue(Resource.Error("خطا در اتصال به اینترنت"))
-        }catch (t :Throwable){
-            categories.postValue(Resource.Error("خطا در اتصال به سرور"))
-        }
+        if (hasInternetConnection()) {
+            viewModelScope.launch {
+                categories.postValue(repository.getCategories())
+            }
+        } else
+            categories.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
     }
 }

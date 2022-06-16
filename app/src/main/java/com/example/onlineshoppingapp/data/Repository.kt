@@ -1,6 +1,5 @@
 package com.example.onlineshoppingapp.data
 
-import com.example.onlineshoppingapp.Errors
 import com.example.onlineshoppingapp.Resource
 import retrofit2.Response
 import javax.inject.Inject
@@ -26,7 +25,7 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
             else
                 Resource.Error(message = response.message(), code = response.code())
         }catch (e:Exception){
-            Resource.Error(message = Errors.UNKNOWN.message, code = 0)
+            Resource.Error(message = "خطای ناشناخته", code = 0)
         }
     }
 }
