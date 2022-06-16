@@ -1,15 +1,15 @@
 package com.example.onlineshoppingapp.data
 
+import com.example.onlineshoppingapp.Errors
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.model.Customer
 import retrofit2.Response
-import java.lang.Exception
 import javax.inject.Inject
 
 class Repository @Inject constructor(private val remoteDataSource: RemoteDataSource) {
 
-    suspend fun getProducts(orderBy: String,onSale:Boolean) =
-        getSafeApiResponse(remoteDataSource.getProducts(orderBy = orderBy,onSale))
+    suspend fun getProducts(orderBy: String,onSale:Boolean,perPage: Int) =
+        getSafeApiResponse(remoteDataSource.getProducts(orderBy = orderBy,onSale,perPage))
 
     suspend fun getCustomer(id:Int) = getSafeApiResponse(remoteDataSource.getCustomer(id))
 
@@ -34,7 +34,7 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
             else
                 Resource.Error(message = response.message(), code = response.code())
         }catch (e:Exception){
-            Resource.Error(message = "خطای ناشناخته", code = 0)
+            Resource.Error(message = Errors.UNKNOWN.message, code = 0)
         }
     }
 }
