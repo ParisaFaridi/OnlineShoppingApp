@@ -1,6 +1,5 @@
 package com.example.onlineshoppingapp.data
 
-import com.example.onlineshoppingapp.Errors
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.model.Customer
 import retrofit2.Response
@@ -27,14 +26,14 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
     suspend fun getProductsByCategory(categoryId:Int)=
         getSafeApiResponse(remoteDataSource.getProductsByCategory(categoryId))
 
-    private fun <T> getSafeApiResponse(response:  Response<T>):Resource<T>{
+    private fun <T> getSafeApiResponse(response: Response<T>):Resource<T>{
         return try {
             if (response.isSuccessful && response.body() != null)
                 Resource.Success(response.body()!!)
             else
                 Resource.Error(message = response.message(), code = response.code())
         }catch (e:Exception){
-            Resource.Error(message = Errors.UNKNOWN.message, code = 0)
+            Resource.Error()
         }
     }
 }
