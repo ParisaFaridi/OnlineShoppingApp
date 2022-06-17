@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
+import com.example.onlineshoppingapp.adapters.DetailedItemAdapter
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCategoryBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
@@ -36,11 +37,10 @@ class CategoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.title = args.categoryName
-        setOrientation()
         if (categoryViewModel.products.value == null)
             categoryViewModel.getProductsByCategoryId(args.categoryId)
 
-        val productsAdapter = ProductAdapter { product ->
+        val productsAdapter = DetailedItemAdapter { product ->
             val action = product.id?.let { id ->
                 CategoryFragmentDirections.actionCategoryFragmentToDetailFragment(id)
             }
@@ -77,15 +77,6 @@ class CategoryFragment : Fragment() {
             binding.lottie.playAnimation()
         }
         snackBar.show()
-    }
-
-    private fun setOrientation() {
-        val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), 3)
-        } else {
-            binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), 2)
-        }
     }
 
     private fun hideProgressBar() = binding.apply {

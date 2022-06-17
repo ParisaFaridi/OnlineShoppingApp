@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
+import com.example.onlineshoppingapp.adapters.DetailedItemAdapter
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentProductListBinding
+import com.example.onlineshoppingapp.ui.categoryfragment.CategoryFragmentDirections
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,9 +37,16 @@ class ProductListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
          getProducts()
-        binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
 
-        val adapter = ProductAdapter{}
+        val adapter = DetailedItemAdapter{
+                product ->
+            val action = product.id?.let { id ->
+                ProductListFragmentDirections.actionProductListFragmentToDetailFragment(id)
+            }
+            if (action != null) {
+                findNavController().navigate(action)
+            }
+        }
         binding.rvProducts.adapter = adapter
 
         viewModel.productList.observe(viewLifecycleOwner){ response ->
