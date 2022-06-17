@@ -6,18 +6,21 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
+import com.example.onlineshoppingapp.adapters.HeaderAdapter
 import com.example.onlineshoppingapp.adapters.OnSaleProductAdapter
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.adapters.SliderAdapter
 import com.example.onlineshoppingapp.data.model.Image
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.databinding.FragmentHomeBinding
+import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
@@ -46,13 +49,18 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.title = "صفحه اصلی"
         setRecyclerViews()
         if (viewModelHome.bestProducts.value == null) {
             getLists()
         }
-        binding.searchView.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        binding.apply {
+            searchView.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+            }
+            btnBestProducts.setOnClickListener { goToProductListFragment(getString(R.string.rating))  }
+            btnNewProducts.setOnClickListener { goToProductListFragment(getString(R.string.date)) }
+            btnMostViewed.setOnClickListener { goToProductListFragment(getString(R.string.popularity)) }
+            btnOnSaleProducts.setOnClickListener { goToProductListFragment(getString(R.string.on_sale)) }
         }
         viewModelHome.sliderPics.observe(viewLifecycleOwner){ response ->
             when (response) {
@@ -65,10 +73,9 @@ class HomeFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let { message -> response.code?.let { code -> showErrorSnack(message, code) }}
                 }
             }
-
         }
         viewModelHome.onSaleProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -83,11 +90,11 @@ class HomeFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let { message -> response.code?.let { code -> showErrorSnack(message, code) }
+                    }
                 }
             }
         }
-
         viewModelHome.bestProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
@@ -99,7 +106,7 @@ class HomeFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let { message -> response.code?.let { code -> showErrorSnack(message, code) }}
                 }
             }
         }
@@ -112,7 +119,7 @@ class HomeFragment : Fragment() {
                     response.data?.let { data -> showData(newProductsAdapter, data) }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let { message -> response.code?.let { code -> showErrorSnack(message, code) }}
                 }
             }
         }
@@ -125,11 +132,18 @@ class HomeFragment : Fragment() {
                     response.data?.let { data -> showData(mostViewedProductsAdapter, data) }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let { message -> response.code?.let { code -> showErrorSnack(message, code) }
+                    }
                 }
             }
         }
     }
+
+    private fun goToProductListFragment(orderBy: String) {
+        val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(orderBy)
+        findNavController().navigate(action)
+    }
+
     private fun setUpViewPager() {
         binding.viewPager.apply {
             adapter = imageViewPagerAdapter
@@ -183,10 +197,10 @@ class HomeFragment : Fragment() {
         binding.layout.visibility = View.GONE
     }
 
-    private fun showSnack(message: String) {
-        val snackBar = Snackbar.make(binding.layout, message, Snackbar.LENGTH_INDEFINITE)
+    private fun showErrorSnack(message: String, code: Int) {
+        val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
         snackBar.setAction(
-            "تلاش دوباره"
+            getString(R.string.try_again)
         ) {
             getLists()
             binding.lottie.playAnimation()
@@ -199,7 +213,6 @@ class HomeFragment : Fragment() {
         getMostViewedProducts()
         getBestProducts()
         getOnSaleProducts()
-
     }
 
     private fun showData(adapter: ProductAdapter, data: List<Product>) {
@@ -222,7 +235,7 @@ class HomeFragment : Fragment() {
             rvBestProducts.adapter = bestProductsAdapter
             rvNewProducts.adapter = newProductsAdapter
             rvMostViewedProducts.adapter = mostViewedProductsAdapter
-            rvOnSaleProducts.adapter = onSaleProductAdapter
+            rvOnSaleProducts.adapter = ConcatAdapter(HeaderAdapter(),onSaleProductAdapter)
         }
     }
 

@@ -21,10 +21,6 @@
     <string name="first_name">نام</string>
     <string name="create_account">ساخت حساب کاربری</string>
     <string name="must_be_filled">پر کردن این فیلد الزامی است</string>
-    <string name="rating">rating</string>
-    <string name="popularity">popularity</string>
-    <string name="date">date</string>
-    <string name="on_sale">on_sale</string>
     <string name="no_internet_error">خطا در اتصال به اینترنت</string>
     <string name="try_again">تلاش دوباره</string>
     <string name="unknown_error">خطای ناشناخته</string>
@@ -35,6 +31,14 @@
     <string name="add_to_cart">افزودن به سبد خرید</string>
     <string name="_1">1</string>
     <string name="sign_up">ثبت نام</string>
+    <string name="categories">دسته بندی ها</string>
+    <string name="_10">10</string>
+    <string name="_0">0</string>
+    <string name="online_store">فروشگاه آنلاین</string>
+    <string name="on_sale">on_sale</string>
+    <string name="date">date</string>
+    <string name="popularity">popularity</string>
+    <string name="rating">rating</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

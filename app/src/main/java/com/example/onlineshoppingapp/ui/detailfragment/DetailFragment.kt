@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -13,6 +14,7 @@ import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ImageViewPagerAdapter
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.databinding.FragmentDetailBinding
+import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
@@ -37,7 +39,7 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.title = "فروشگاه آنلاین"
+        activity?.title = getString(R.string.online_store)
         if (detailViewModel.product.value == null)
             detailViewModel.getProduct(args.productId)
 
@@ -52,26 +54,30 @@ class DetailFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let { showSnack(it) }
+                    response.message?.let {  message ->
+                        response.code?.let { showErrorSnack(message, it) }
+                    }
                 }
             }
         }
         binding.btnMinus.setOnClickListener {
-            if (binding.tvProductNumber.text == "0")
+            if (binding.tvProductNumber.text == getString(R.string._0))
                 return@setOnClickListener
             else
-                binding.tvProductNumber.text = (binding.tvProductNumber.text.toString().toInt() - 1).toString()
+                binding.tvProductNumber.text = decrementQuantityTv(binding.tvProductNumber)
         }
         binding.btnPlus.setOnClickListener {
-            if (binding.tvProductNumber.text == "10")
+            if (binding.tvProductNumber.text == getString(R.string._10))
                 return@setOnClickListener
             else
-                binding.tvProductNumber.text = (binding.tvProductNumber.text.toString().toInt() + 1).toString()
+                binding.tvProductNumber.text = incrementQuantityTv(binding.tvProductNumber)
         }
         binding.btnAddToCart.setOnClickListener {
             //detailViewModel.createOrder(binding.tvProductNumber)
         }
     }
+    private fun incrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() + 1).toString()
+    private fun decrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() - 1).toString()
 
     private fun setProductData(data: Product) {
         imageViewPagerAdapter = data.images?.let { images -> ImageViewPagerAdapter(images) }!!
@@ -84,7 +90,6 @@ class DetailFragment : Fragment() {
         }
 
     }
-
     private fun fixDescription(description: String): String {
         return description.replace("</p>", "")
             .replace("<p>", "").replace("<br />", "\n")
@@ -102,12 +107,13 @@ class DetailFragment : Fragment() {
 
     }
 
-    private fun showSnack(message: String) {
-        val snackBar = Snackbar.make(binding.layout, message, Snackbar.LENGTH_INDEFINITE)
+    private fun showErrorSnack(message: String, code: Int) {
+        val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
         snackBar.setAction(
-            "تلاش دوباره"
+            getString(R.string.try_again)
         ) {
             detailViewModel.getProduct(args.productId)
+            binding.lottie.playAnimation()
         }
         snackBar.show()
     }

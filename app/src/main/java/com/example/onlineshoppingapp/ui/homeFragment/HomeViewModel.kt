@@ -4,12 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.onlineshoppingapp.Errors
+import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.hasInternetConnection
-import com.example.onlineshoppingapp.ui.handle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,21 +33,27 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
         if (hasInternetConnection())
             viewModelScope.launch { sliderPics.postValue(repository.getProductById(608)) }
         else
-            bestProducts.postValue(Resource.Error(Errors.INTERNET_FAILURE.message, code = 1))
+            bestProducts.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
     }
-    fun getProducts(string: String) = handleApiCalls(string,productList, perPage = 100)
+    fun getProducts(string: String,onSale:Boolean = false) = handleApiCalls(string,productList, perPage = 100, onSale = onSale)
 
-    fun getOnSaleProducts() = handleApiCalls("rating", onSaleProducts, onSale = true)
+    fun getOnSaleProducts() = handleApiCalls(getApplication<Application>().getString(R.string.date), onSaleProducts, onSale = true)
 
-    fun getBestProducts() = handleApiCalls("rating", bestProducts)
+    fun getBestProducts() = handleApiCalls(getApplication<Application>().getString(R.string.rating), bestProducts)
 
-    fun getNewProducts() = handleApiCalls("date", newProducts)
+    fun getNewProducts() = handleApiCalls(getApplication<Application>().getString(R.string.date), newProducts)
 
-    fun getMostViewedProducts() = handleApiCalls("popularity", mostViewedProducts)
+    fun getMostViewedProducts() = handleApiCalls(getApplication<Application>().getString(R.string.popularity), mostViewedProducts)
 
-    private fun handleApiCalls(orderBy: String,
-                               productList: MutableLiveData<Resource<List<Product>>>, onSale:Boolean=false,
-                               perPage:Int= 10) = viewModelScope.launch {
-        handle(productList,repository.getProducts(orderBy,onSale,perPage))
+    private fun handleApiCalls(orderBy: String, productList: MutableLiveData<Resource<List<Product>>>,
+                               onSale:Boolean=false, perPage:Int= 10) = viewModelScope.launch {
+            productList.postValue(Resource.Loading())
+            if (hasInternetConnection()) {
+                viewModelScope.launch {
+                    productList.postValue(repository.getProducts(orderBy,onSale,perPage))
+                }
+            } else
+                productList.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
+
     }
 }
