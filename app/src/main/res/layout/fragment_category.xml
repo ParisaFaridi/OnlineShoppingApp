@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#FFFFFF"
+    android:background="#C8C4C4"
     tools:context="ui.categoryfragment.CategoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView

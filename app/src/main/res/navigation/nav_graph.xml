@@ -94,7 +94,7 @@
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.example.onlineshoppingapp.CartFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" />
     <fragment

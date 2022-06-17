@@ -77,7 +77,7 @@
         android:padding="8dp"
         app:icon="@drawable/ic_baseline_assignment_turned_in_24"
         app:iconGravity="textStart"
-        android:text="ثبت نام"
+        android:text="@string/sign_up"
         android:textSize="24sp"
         app:cornerRadius="18sp" />
 
