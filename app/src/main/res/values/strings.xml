@@ -39,6 +39,9 @@
     <string name="date">date</string>
     <string name="popularity">popularity</string>
     <string name="rating">rating</string>
+    <string name="size">سایز</string>
+    <string name="color">رنگ</string>
+    <string name="filter">فیلتر کن</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

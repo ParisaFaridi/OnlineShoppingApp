@@ -1,13 +1,12 @@
 package com.example.onlineshoppingapp.ui.searchfragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,14 +15,13 @@ import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSearchResultsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.FieldPosition
 
 @AndroidEntryPoint
 class SearchResultsFragment : Fragment() {
 
     private val args : SearchResultsFragmentArgs by navArgs()
     lateinit var binding : FragmentSearchResultsBinding
-    val searchViewModel : SearchResultsVm by viewModels()
+    val searchViewModel : FilterViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,9 +50,14 @@ class SearchResultsFragment : Fragment() {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
         }
+        binding.btnFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_searchResultsFragment_to_filterFragment)
+        }
         val productsAdapter = ProductAdapter { product ->
-            val action = product.id?.let { id ->
-                (id)
+            val action = product.id?.let {
+                SearchResultsFragmentDirections.actionSearchResultsFragmentToDetailFragment(
+                    it
+                )
             }
             if (action != null) {
                 findNavController().navigate(action)
