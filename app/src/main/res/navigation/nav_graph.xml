@@ -91,6 +91,15 @@
         <argument
             android:name="searchQuery"
             app:argType="string" />
+        <action
+            android:id="@+id/action_searchResultsFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_searchResultsFragment_to_filterFragment"
+            app:destination="@id/filterFragment" />
+        <action
+            android:id="@+id/action_searchResultsFragment_to_filterFragment2"
+            app:destination="@id/filterFragment" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
@@ -107,4 +116,23 @@
             android:id="@+id/action_productListFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.example.onlineshoppingapp.ui.searchfragment.FilterFragment"
+        android:label="fragment_filter"
+        tools:layout="@layout/fragment_filter" >
+        <action
+            android:id="@+id/action_filterFragment_to_searchResultsFragment"
+            app:destination="@id/searchResultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/colorFilterFragment"
+        android:name="com.example.onlineshoppingapp.ColorFilterFragment"
+        android:label="fragment_color_filter"
+        tools:layout="@layout/fragment_color_filter" />
+    <fragment
+        android:id="@+id/sizeFilterFragment"
+        android:name="com.example.onlineshoppingapp.SizeFilterFragment"
+        android:label="fragment_size_filter"
+        tools:layout="@layout/fragment_size_filter" />
 </navigation>
