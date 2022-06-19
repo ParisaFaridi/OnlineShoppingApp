@@ -28,9 +28,7 @@ class SizeFilterFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = AttributeItemsAdapter {
-            it.isSelected = !it.isSelected
-        }
+        val adapter = AttributeItemsAdapter ()
         binding.rvFilterItems.adapter = adapter
 
         if (filterVm.sizeFilters.value == null)
