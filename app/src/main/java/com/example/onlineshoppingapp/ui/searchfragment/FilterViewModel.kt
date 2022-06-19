@@ -20,13 +20,14 @@ class FilterViewModel @Inject constructor(private val repository: Repository, ap
 
     val colorFilters = MutableLiveData<Resource<List<AttributeTerm>>>()
     val sizeFilters = MutableLiveData<Resource<List<AttributeTerm>>>()
+    val searchResults = MutableLiveData<Resource<List<Product>>>()
     var searchQuery = ""
+    private var filtersIds= listOf<Int>()
 
     init {
         getColorFilter()
         getSizeFilter()
     }
-
     fun getColorFilter() = viewModelScope.launch {
 
         colorFilters.postValue(Resource.Loading())
@@ -37,7 +38,7 @@ class FilterViewModel @Inject constructor(private val repository: Repository, ap
         } else
             colorFilters.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
     }
-    fun getSizeFilter() = viewModelScope.launch {
+    private fun getSizeFilter() = viewModelScope.launch {
 
         sizeFilters.postValue(Resource.Loading())
         if (hasInternetConnection()) {
@@ -47,39 +48,29 @@ class FilterViewModel @Inject constructor(private val repository: Repository, ap
         } else
             sizeFilters.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
     }
-    val searchResults = MutableLiveData<Resource<List<Product>>>()
 
-    fun search(query : String, perPage:Int, orderBy:String, order:String = "desc") = viewModelScope.launch {
-
+    fun search(query : String=searchQuery,orderBy:String, order:String = "desc") =
+        viewModelScope.launch {
         searchResults.postValue(Resource.Loading())
         if (hasInternetConnection()) {
             viewModelScope.launch {
-                searchResults.postValue(repository.search(query, perPage, orderBy = orderBy, order = order))
+                searchResults.postValue(repository.search(query,50, orderBy = orderBy, order = order,filtersIds))
                 searchQuery = query
             }
         } else
             searchResults.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
 
     }
-    fun getFilteredList(){
-        val filterIds = arrayListOf<Int>()
+    fun addFilters(){
+        val ids = arrayListOf<Int>()
         for (i in colorFilters.value?.data!!){
             if (i.isSelected)
-                filterIds.add(i.id)
+                ids.add(i.id)
         }
         for (i in sizeFilters.value?.data!!){
             if (i.isSelected)
-                filterIds.add(i.id)
+                ids.add(i.id)
         }
-        val ids :List<Int> = filterIds
-        if (filterIds.isNotEmpty()){
-            searchResults.postValue(Resource.Loading())
-            if (hasInternetConnection()) {
-                viewModelScope.launch {
-                    searchResults.postValue(repository.getFilteredProducts(ids,searchQuery))
-                }
-            } else
-                searchResults.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
-        }
+        filtersIds = ids
     }
 }

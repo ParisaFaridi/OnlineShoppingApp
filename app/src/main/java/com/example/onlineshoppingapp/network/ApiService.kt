@@ -55,22 +55,6 @@ interface ApiService {
         categoryId:Int
     ):Response<List<Product>>
 
-    @GET("products")
-    suspend fun search(
-        @Query("consumer_key")
-        consumerKey :String = CONSUMER_KEY,
-        @Query("consumer_secret")
-        consumerSecret :String = CONSUMER_SECRET,
-        @Query("search")
-        searchQuery:String,
-        @Query("per_page")
-        perPage :Int,
-        @Query("orderby")
-        orderBy:String,
-        @Query("order")
-        order:String
-    ):Response<List<Product>>
-
     @POST("customers")
     suspend fun signUp(
         @Query("consumer_key")
@@ -124,6 +108,9 @@ interface ApiService {
         attributeTerms:List<Int>,
         @Query("search")
         searchQuery:String,
+        @Query("orderby")
+        orderBy:String,
+        @Query("order")
+        order:String
     ): Response<List<Product>>
-
 }

@@ -33,18 +33,17 @@ class SearchResultsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchViewModel.search(args.searchQuery,50,"مرتبط ترین")
+        searchViewModel.searchQuery = args.searchQuery
         binding.etSearch.setText(args.searchQuery)
-
         binding.sortSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
             override fun onItemSelected(adapterView : AdapterView<*>?, view: View?, position : Int, id: Long) {
                 when (position) {
-                    0 -> searchViewModel.search(args.searchQuery, 50, "title")
-                    1 -> searchViewModel.search(args.searchQuery, 50, "date")
-                    2 -> searchViewModel.search(args.searchQuery, 50, "popularity")
-                    3 -> searchViewModel.search(args.searchQuery, 50, "rating")
-                    4 -> searchViewModel.search(args.searchQuery, 50, "price")
-                    else -> searchViewModel.search(args.searchQuery, 50, "price", "asc")
+                    0 -> searchViewModel.search(query = args.searchQuery,orderBy = "title")
+                    1 -> searchViewModel.search(orderBy = "date")
+                    2 -> searchViewModel.search(orderBy = "popularity")
+                    3 -> searchViewModel.search(orderBy = "rating")
+                    4 -> searchViewModel.search(orderBy = "price")
+                    else -> searchViewModel.search(orderBy = "price", order =  "asc")
                 }
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {

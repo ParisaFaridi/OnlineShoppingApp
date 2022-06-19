@@ -23,7 +23,7 @@ class SearchViewModel @Inject constructor(private val repository: Repository, ap
         searchResults.postValue(Resource.Loading())
         if (hasInternetConnection()) {
             viewModelScope.launch {
-                searchResults.postValue(repository.search(searchQuery,perPage,"title","desc"))
+                searchResults.postValue(repository.search(searchQuery,perPage,"title","desc", listOf()))
             }
         } else
             searchResults.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))

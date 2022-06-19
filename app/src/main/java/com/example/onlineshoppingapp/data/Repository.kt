@@ -1,6 +1,7 @@
 package com.example.onlineshoppingapp.data
 
 import com.example.onlineshoppingapp.Resource
+import com.example.onlineshoppingapp.data.model.AttributeTerm
 import com.example.onlineshoppingapp.data.model.Customer
 import retrofit2.Response
 import javax.inject.Inject
@@ -12,8 +13,8 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
 
     suspend fun getCustomer(id:Int) = getSafeApiResponse(remoteDataSource.getCustomer(id))
 
-    suspend fun search(searchQuery: String,perPage:Int,orderBy: String,order:String) =
-        getSafeApiResponse(remoteDataSource.search(searchQuery = searchQuery, perPage = perPage, orderBy = orderBy, order = order))
+    suspend fun search(searchQuery: String,perPage:Int,orderBy: String,order:String,attributeTermIds:List<Int>) =
+        getSafeApiResponse(remoteDataSource.search(searchQuery = searchQuery, perPage = perPage, orderBy = orderBy, order = order, ids = attributeTermIds))
 
     suspend fun signUp(customer: Customer) = getSafeApiResponse(remoteDataSource.signUp(customer))
 
@@ -28,9 +29,6 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
 
     suspend fun getAttributeItems(id:Int)=
         getSafeApiResponse(remoteDataSource.getAttributeItems(id))
-
-    suspend fun getFilteredProducts(ids:List<Int>,searchQuery: String)=
-        getSafeApiResponse(remoteDataSource.getFilteredProducts(ids,searchQuery))
 
     private fun <T> getSafeApiResponse(response: Response<T>):Resource<T>{
         return try {

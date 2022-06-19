@@ -46,7 +46,7 @@ class FilterFragment : Fragment() {
             }
         })
         binding.btnFilterResults.setOnClickListener {
-            filterVm.getFilteredList()
+            filterVm.addFilters()
             val action = FilterFragmentDirections.actionFilterFragmentToSearchResultsFragment(filterVm.searchQuery)
             findNavController().navigate(action)
         }

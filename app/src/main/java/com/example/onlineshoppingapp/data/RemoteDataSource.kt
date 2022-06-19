@@ -15,7 +15,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     suspend fun getProductsByCategory(categoryId:Int) = apiService.getProductsByCategory(categoryId = categoryId)
 
-    suspend fun search(searchQuery:String,perPage:Int,orderBy: String,order: String) = apiService.search(searchQuery = searchQuery, perPage = perPage, orderBy = orderBy, order = order)
+    suspend fun search(searchQuery:String,perPage:Int,orderBy: String,order: String,ids:List<Int>) =
+        apiService.getFilteredProducts(searchQuery = searchQuery,perPage= perPage,orderBy = orderBy, order = order,attributeTerms = ids)
 
     suspend fun signUp(customer: Customer) = apiService.signUp(customer = customer)
 
@@ -24,6 +25,4 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     suspend fun getCustomer(id:Int) = apiService.getCustomer(id = id)
 
     suspend fun getAttributeItems(id :Int) = apiService.getAttributeItems(id)
-
-    suspend fun getFilteredProducts(ids:List<Int>,searchQuery: String) = apiService.getFilteredProducts(perPage = 100, attributeTerms = ids, searchQuery = searchQuery)
 }
