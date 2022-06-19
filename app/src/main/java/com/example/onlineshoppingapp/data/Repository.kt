@@ -26,6 +26,12 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
     suspend fun getProductsByCategory(categoryId:Int)=
         getSafeApiResponse(remoteDataSource.getProductsByCategory(categoryId))
 
+    suspend fun getAttributeItems(id:Int)=
+        getSafeApiResponse(remoteDataSource.getAttributeItems(id))
+
+    suspend fun getFilteredProducts(ids:List<Int>,searchQuery: String)=
+        getSafeApiResponse(remoteDataSource.getFilteredProducts(ids,searchQuery))
+
     private fun <T> getSafeApiResponse(response: Response<T>):Resource<T>{
         return try {
             if (response.isSuccessful && response.body() != null)

@@ -1,9 +1,6 @@
 package com.example.onlineshoppingapp.network
 
-import com.example.onlineshoppingapp.data.model.Category
-import com.example.onlineshoppingapp.data.model.Customer
-import com.example.onlineshoppingapp.data.model.Order
-import com.example.onlineshoppingapp.data.model.Product
+import com.example.onlineshoppingapp.data.model.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -100,4 +97,33 @@ interface ApiService {
         @Query("consumer_secret")
         consumerSecret :String = CONSUMER_SECRET,
         @Body order:Order):Response<Order>
+
+    @GET("products/attributes/{attribute_id}/terms")
+    suspend fun getAttributeItems(
+        @Path("attribute_id")
+        id:Int,
+        @Query("consumer_key")
+        consumerKey :String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret :String = CONSUMER_SECRET
+    ):Response<List<AttributeTerm>>
+
+    @GET("products")
+    suspend fun getFilteredProducts(
+        @Query("consumer_key")
+        consumerKey :String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret :String = CONSUMER_SECRET,
+        @Query("per_page")
+        perPage :Int,
+        @Query("page")
+        pages:Int =1,
+        @Query("exclude")
+        excludes:Array<Int> = arrayOf(608),
+        @Query("attribute_term")
+        attributeTerms:List<Int>,
+        @Query("search")
+        searchQuery:String,
+    ): Response<List<Product>>
+
 }
