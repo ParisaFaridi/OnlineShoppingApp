@@ -10,9 +10,9 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.data.model.AttributeTerm
 import com.example.onlineshoppingapp.databinding.FilterItemViewBinding
 
+typealias TermClickHandler = (AttributeTerm) -> Unit
 
-
-class AttributeItemsAdapter() : ListAdapter<AttributeTerm, AttributeItemsAdapter.ItemHolder>(FormulaDiffCallBack) {
+class AttributeItemsAdapter(private val clickHandler:TermClickHandler) : ListAdapter<AttributeTerm, AttributeItemsAdapter.ItemHolder>(FormulaDiffCallBack) {
 
     object FormulaDiffCallBack: DiffUtil.ItemCallback<AttributeTerm>() {
         override fun areItemsTheSame(oldItem: AttributeTerm, newItem: AttributeTerm): Boolean {
@@ -36,7 +36,7 @@ class AttributeItemsAdapter() : ListAdapter<AttributeTerm, AttributeItemsAdapter
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.binding.term = getItem(position)
         holder.binding.radioBtn.setOnClickListener {
-            getItem(position).isSelected = !getItem(position).isSelected
+            clickHandler.invoke(getItem(position))
             holder.binding.radioBtn.isChecked = getItem(position).isSelected
         }
     }

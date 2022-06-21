@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.adapters.FilterTabLayoutAdapter
 import com.example.onlineshoppingapp.databinding.FragmentFilterBinding
 import com.google.android.material.tabs.TabLayout
