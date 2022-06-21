@@ -9,7 +9,7 @@ data class LineItem(
     @Json(name = "meta_data")
     val metaData: List<Any>?=null,
     @Json(name = "name")
-    val name: String,
+    val name: String?=null,
     @Json(name = "parent_name")
     val parentName: Any?= null,
     @Json(name = "price")

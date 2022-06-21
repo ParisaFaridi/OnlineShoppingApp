@@ -1,11 +1,15 @@
 package com.example.onlineshoppingapp.domain
 
+import android.content.Context
+import androidx.room.Room
 import com.example.onlineshoppingapp.network.ApiService
+import com.example.onlineshoppingapp.room.OrderDataBase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -43,6 +47,16 @@ object AppModule {
     fun provideInterceptor(): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
         return OkHttpClient.Builder().addInterceptor(logger).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideDataBase(@ApplicationContext context: Context):OrderDataBase {
+        return Room.databaseBuilder(
+            context,
+            OrderDataBase::class.java, "movie_db"
+        )
+            .fallbackToDestructiveMigration().build()
     }
 
 }
