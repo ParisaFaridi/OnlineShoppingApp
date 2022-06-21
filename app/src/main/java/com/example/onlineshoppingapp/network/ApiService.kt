@@ -12,105 +12,118 @@ interface ApiService {
     @GET("products")
     suspend fun getProducts(
         @Query("consumer_key")
-        consumerKey :String = CONSUMER_KEY,
+        consumerKey: String = CONSUMER_KEY,
         @Query("consumer_secret")
-        consumerSecret :String = CONSUMER_SECRET,
+        consumerSecret: String = CONSUMER_SECRET,
         @Query("per_page")
-        perPage :Int,
+        perPage: Int,
         @Query("page")
-        pages:Int =1,
+        pages: Int = 1,
         @Query("orderby")
-        orderBy:String,
+        orderBy: String,
         @Query("on_sale")
-        onSale:Boolean,
+        onSale: Boolean,
         @Query("exclude")
-        excludes:Array<Int> = arrayOf(608)
+        excludes: Array<Int> = arrayOf(608)
     ): Response<List<Product>>
 
     @GET("products/{id}")
     suspend fun getProductById(
         @Path(value = "id")
-        productId:Int,
+        productId: Int,
         @Query("consumer_key")
-        consumerKey :String = CONSUMER_KEY,
+        consumerKey: String = CONSUMER_KEY,
         @Query("consumer_secret")
-        consumerSecret :String = CONSUMER_SECRET
-    ):Response<Product>
+        consumerSecret: String = CONSUMER_SECRET
+    ): Response<Product>
 
     @GET("products/categories")
     suspend fun getCategories(
         @Query("consumer_key")
-        consumerKey :String = CONSUMER_KEY,
+        consumerKey: String = CONSUMER_KEY,
         @Query("consumer_secret")
-        consumerSecret :String = CONSUMER_SECRET
-    ):Response<List<Category>>
+        consumerSecret: String = CONSUMER_SECRET
+    ): Response<List<Category>>
 
     @GET("products")
     suspend fun getProductsByCategory(
         @Query("consumer_key")
-        consumerKey :String = CONSUMER_KEY,
+        consumerKey: String = CONSUMER_KEY,
         @Query("consumer_secret")
-        consumerSecret :String = CONSUMER_SECRET,
+        consumerSecret: String = CONSUMER_SECRET,
         @Query(value = "category")
-        categoryId:Int
-    ):Response<List<Product>>
+        categoryId: Int
+    ): Response<List<Product>>
 
     @POST("customers")
     suspend fun signUp(
         @Query("consumer_key")
-        consumerKey :String = CONSUMER_KEY,
+        consumerKey: String = CONSUMER_KEY,
         @Query("consumer_secret")
-        consumerSecret :String = CONSUMER_SECRET,
-        @Body customer: Customer):Response<Customer>
+        consumerSecret: String = CONSUMER_SECRET,
+        @Body customer: Customer
+    ): Response<Customer>
 
     @GET("customers/{id}")
     suspend fun getCustomer(
         @Path(value = "id")
-        id:Int,
+        id: Int,
         @Query("consumer_key")
-        consumerKey :String = CONSUMER_KEY,
+        consumerKey: String = CONSUMER_KEY,
         @Query("consumer_secret")
-        consumerSecret :String = CONSUMER_SECRET
+        consumerSecret: String = CONSUMER_SECRET
 
-    ):Response<Customer>
+    ): Response<Customer>
 
     @POST("orders")
     suspend fun createOrder(
         @Query("consumer_key")
-        consumerKey :String = CONSUMER_KEY,
+        consumerKey: String = CONSUMER_KEY,
         @Query("consumer_secret")
-        consumerSecret :String = CONSUMER_SECRET,
-        @Body order:Order):Response<Order>
+        consumerSecret: String = CONSUMER_SECRET,
+        @Body order: Order
+    ): Response<Order>
 
     @GET("products/attributes/{attribute_id}/terms")
     suspend fun getAttributeItems(
         @Path("attribute_id")
-        id:Int,
+        id: Int,
         @Query("consumer_key")
-        consumerKey :String = CONSUMER_KEY,
+        consumerKey: String = CONSUMER_KEY,
         @Query("consumer_secret")
-        consumerSecret :String = CONSUMER_SECRET
-    ):Response<List<AttributeTerm>>
+        consumerSecret: String = CONSUMER_SECRET
+    ): Response<List<AttributeTerm>>
 
     @GET("products")
     suspend fun getFilteredProducts(
         @Query("consumer_key")
-        consumerKey :String = CONSUMER_KEY,
+        consumerKey: String = CONSUMER_KEY,
         @Query("consumer_secret")
-        consumerSecret :String = CONSUMER_SECRET,
+        consumerSecret: String = CONSUMER_SECRET,
         @Query("per_page")
-        perPage :Int,
+        perPage: Int,
         @Query("page")
-        pages:Int =1,
+        pages: Int = 1,
         @Query("exclude")
-        excludes:Array<Int> = arrayOf(608),
+        excludes: Array<Int> = arrayOf(608),
         @Query("attribute_term")
-        attributeTerms:List<Int>,
+        attributeTerms: List<Int>,
         @Query("search")
-        searchQuery:String,
+        searchQuery: String,
         @Query("orderby")
-        orderBy:String,
+        orderBy: String,
         @Query("order")
-        order:String
+        order: String
     ): Response<List<Product>>
+
+    @PUT("orders/{id}")
+    suspend fun updateOrder(
+        @Path("id")
+        id: Int,
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET,
+        @Body order: Order
+    ): Response<Order>
 }
