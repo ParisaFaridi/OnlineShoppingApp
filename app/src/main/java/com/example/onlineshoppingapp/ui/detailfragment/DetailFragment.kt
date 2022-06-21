@@ -73,7 +73,7 @@ class DetailFragment : Fragment() {
                 binding.tvProductNumber.text = incrementQuantityTv(binding.tvProductNumber)
         }
         binding.btnAddToCart.setOnClickListener {
-            //detailViewModel.createOrder(binding.tvProductNumber)
+            detailViewModel.getOrder(binding.tvProductNumber.text.toString().toInt())
         }
     }
     private fun incrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() + 1).toString()

@@ -7,6 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
+import com.example.onlineshoppingapp.data.model.LineItem
+import com.example.onlineshoppingapp.data.model.Order
+import com.example.onlineshoppingapp.data.model.OrderId
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.hasInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,5 +32,18 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
             product.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
 
     }
-    //fun createOrder(){ repository.createOrder(Order())}
+    fun getOrder(quantity:Int) {
+        viewModelScope.launch {
+            if (repository.isOrderNew()== null){
+                val response = repository.createOrder(
+                    Order(lineItems = listOf(
+                            LineItem(productId = product.value?.data?.id!!, quantity = quantity))))
+                repository.insert(OrderId(response.data?.id!!))
+            }else{
+                repository.updateOrder(
+                    repository.isOrderNew()!!.id,listOf(
+                    LineItem(productId = product.value?.data?.id!!, quantity = quantity)))
+            }
+        }
+    }
 }
