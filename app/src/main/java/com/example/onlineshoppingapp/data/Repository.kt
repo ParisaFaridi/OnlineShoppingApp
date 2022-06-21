@@ -1,12 +1,14 @@
 package com.example.onlineshoppingapp.data
 
 import com.example.onlineshoppingapp.Resource
-import com.example.onlineshoppingapp.data.model.AttributeTerm
 import com.example.onlineshoppingapp.data.model.Customer
+import com.example.onlineshoppingapp.data.model.LineItem
+import com.example.onlineshoppingapp.data.model.Order
+import com.example.onlineshoppingapp.data.model.OrderId
 import retrofit2.Response
 import javax.inject.Inject
 
-class Repository @Inject constructor(private val remoteDataSource: RemoteDataSource) {
+class Repository @Inject constructor(private val remoteDataSource: RemoteDataSource,private val localDataSource: LocalDataSource) {
 
     suspend fun getProducts(orderBy: String,onSale:Boolean,perPage: Int) =
         getSafeApiResponse(remoteDataSource.getProducts(orderBy = orderBy,onSale,perPage))
@@ -17,6 +19,8 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
         getSafeApiResponse(remoteDataSource.search(searchQuery = searchQuery, perPage = perPage, orderBy = orderBy, order = order, ids = attributeTermIds))
 
     suspend fun signUp(customer: Customer) = getSafeApiResponse(remoteDataSource.signUp(customer))
+
+    suspend fun createOrder(order: Order) = getSafeApiResponse(remoteDataSource.createOrder(order))
 
     suspend fun getProductById(id:Int) =
         getSafeApiResponse(remoteDataSource.getProductById(id))
@@ -40,4 +44,9 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
             Resource.Error()
         }
     }
+    suspend fun insert(orderId: OrderId) = localDataSource.insert(orderId)
+    suspend fun isOrderNew() = localDataSource.isOrderNew()
+    suspend fun deleteOrder()= localDataSource.deleteOrder()
+    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>)=
+        getSafeApiResponse(remoteDataSource.updateOrder(orderId,listOf))
 }
