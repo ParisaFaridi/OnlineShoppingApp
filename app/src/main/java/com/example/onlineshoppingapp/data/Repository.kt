@@ -17,8 +17,8 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
 
     suspend fun getOrder(id:Int) = getSafeApiResponse(remoteDataSource.getOrder(id))
 
-    suspend fun search(searchQuery: String,perPage:Int,orderBy: String,order:String,attributeTermIds:List<Int>) =
-        getSafeApiResponse(remoteDataSource.search(searchQuery = searchQuery, perPage = perPage, orderBy = orderBy, order = order, ids = attributeTermIds))
+    suspend fun search(searchQuery: String,perPage:Int,orderBy: String,order:String,attributeTermIds:List<Int>,attribute: List<String>) =
+        getSafeApiResponse(remoteDataSource.search(attribute = attribute,searchQuery = searchQuery, perPage = perPage, orderBy = orderBy, order = order, ids = attributeTermIds))
 
     suspend fun signUp(customer: Customer) = getSafeApiResponse(remoteDataSource.signUp(customer))
 

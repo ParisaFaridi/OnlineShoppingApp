@@ -117,6 +117,8 @@ interface ApiService {
         pages: Int = 1,
         @Query("exclude")
         excludes: Array<Int> = arrayOf(608),
+        @Query("attribute")
+        attribute:List<String>,
         @Query("attribute_term")
         attributeTerms: List<Int>,
         @Query("search")

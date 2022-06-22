@@ -14,7 +14,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class FilterViewModel @Inject constructor(private val repository: Repository, app: Application) : AndroidViewModel(app)  {
 
@@ -22,6 +21,7 @@ class FilterViewModel @Inject constructor(private val repository: Repository, ap
     val sizeFilters = MutableLiveData<Resource<List<AttributeTerm>>>()
     val searchResults = MutableLiveData<Resource<List<Product>>>()
     var searchQuery = ""
+    private var attributes = listOf<String>()
     private var filtersIds= listOf<Int>()
 
     init {
@@ -54,7 +54,7 @@ class FilterViewModel @Inject constructor(private val repository: Repository, ap
         searchResults.postValue(Resource.Loading())
         if (hasInternetConnection()) {
             viewModelScope.launch {
-                searchResults.postValue(repository.search(query,50, orderBy = orderBy, order = order,filtersIds))
+                searchResults.postValue(repository.search(query,50, orderBy = orderBy, order = order,filtersIds,attributes))
                 searchQuery = query
             }
         } else
@@ -63,14 +63,22 @@ class FilterViewModel @Inject constructor(private val repository: Repository, ap
     }
     fun addFilters(){
         val ids = arrayListOf<Int>()
+        val attrs = arrayListOf("","")
         for (i in colorFilters.value?.data!!){
-            if (i.isSelected)
+            if (i.isSelected) {
                 ids.add(i.id)
+                if (attrs[0].isEmpty())
+                    attrs.add("pa_color")
+            }
         }
         for (i in sizeFilters.value?.data!!){
-            if (i.isSelected)
+            if (i.isSelected) {
                 ids.add(i.id)
+                if (attrs[1].isEmpty())
+                    attrs.add("pa_size")
+            }
         }
         filtersIds = ids
+        attributes=attrs
     }
 }
