@@ -41,9 +41,22 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
                 repository.insert(OrderId(response.data?.id!!))
             }else{
                 repository.updateOrder(
-                    repository.isOrderNew()!!.id,listOf(
-                    LineItem(productId = product.value?.data?.id!!, quantity = quantity)))
+                    repository.isOrderNew()!!.id,listOf(updateItemLines(quantity)))
             }
         }
+    }
+    suspend fun updateItemLines(newQuantity:Int):LineItem{
+        val x = repository.getOrder(repository.isOrderNew()!!.id).data?.lineItems
+        var id =0
+        var quantity=0
+        if (x != null) {
+            for(i in x){
+                if (i.productId == product.value?.data?.id){
+                    id = i.id
+                    quantity=i.quantity
+                }
+            }
+        }
+        return LineItem(id = id, productId = product.value?.data?.id!!, quantity = quantity+newQuantity)
     }
 }
