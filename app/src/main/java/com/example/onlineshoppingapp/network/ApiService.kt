@@ -75,6 +75,17 @@ interface ApiService {
 
     ): Response<Customer>
 
+    @GET("orders/{id}")
+    suspend fun getOrder(
+        @Path(value ="id")
+        id: Int,
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET
+
+    ): Response<Order>
+
     @POST("orders")
     suspend fun createOrder(
         @Query("consumer_key")
