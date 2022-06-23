@@ -1,6 +1,5 @@
 package com.example.onlineshoppingapp.ui.categoryfragment
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.DetailedItemAdapter
-import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCategoryBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
@@ -65,6 +62,9 @@ class CategoryFragment : Fragment() {
                         response.code?.let { code -> showErrorSnack(message, code) } }
                 }
             }
+        }
+        binding.searchView.setOnClickListener {
+            findNavController().navigate(R.id.action_categoryFragment_to_searchFragment)
         }
     }
 

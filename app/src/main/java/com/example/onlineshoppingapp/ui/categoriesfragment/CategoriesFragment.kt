@@ -69,6 +69,9 @@ class CategoriesFragment : Fragment() {
                 }
             }
         }
+        binding.searchView.setOnClickListener {
+            findNavController().navigate(R.id.action_categoriesFragment_to_searchFragment)
+        }
     }
     private fun setOrientation() {
         val orientation = resources.configuration.orientation
