@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
+import com.example.onlineshoppingapp.data.model.LineItem
 import com.example.onlineshoppingapp.data.model.Order
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.hasInternetConnection
@@ -34,7 +35,16 @@ class CartViewModel @Inject constructor(private val repository: Repository, app:
             order.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
     }
 
-    fun updateQuantity(id: Int, quantity: Int) {
-        TODO("update order")
+    fun updateQuantity(id: Int, newQuantity: Int) {
+        viewModelScope.launch {
+            val lineItems = order.value?.data?.lineItems!!
+            for (i in lineItems){
+                if (i.id == id){
+                    i.quantity = newQuantity
+                    i.total = (i.price?.times(i.quantity)).toString()
+                    order.postValue(repository.updateOrder(order.value!!.data?.id!!,lineItems))
+                }
+            }
+        }
     }
 }

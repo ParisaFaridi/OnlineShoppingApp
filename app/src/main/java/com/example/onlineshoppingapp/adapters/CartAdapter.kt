@@ -14,7 +14,9 @@ import java.text.NumberFormat
 import java.util.*
 
 typealias QuantityClickHandler = (LineItem,Int) -> Unit
-class CartAdapter(private val clickHandler: QuantityClickHandler):
+typealias DeleteClickHandler = (Int) -> Unit
+
+class CartAdapter(private val clickHandler: QuantityClickHandler,private val deleteClickHandler:DeleteClickHandler):
     ListAdapter<LineItem, CartAdapter.ItemHolder>(FormulaDiffCallBack) {
 
     object FormulaDiffCallBack: DiffUtil.ItemCallback<LineItem>() {
@@ -22,7 +24,7 @@ class CartAdapter(private val clickHandler: QuantityClickHandler):
             return oldItem == newItem
         }
         override fun areContentsTheSame(oldItem: LineItem, newItem: LineItem): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.price == newItem.price
         }
     }
 
@@ -57,6 +59,9 @@ class CartAdapter(private val clickHandler: QuantityClickHandler):
                     incrementQuantityTv(holder.binding.tvProductNumber)
                 clickHandler.invoke(getItem(position),holder.binding.tvProductNumber.text.toString().toInt())
             }
+        }
+        holder.binding.btnDelete.setOnClickListener {
+            deleteClickHandler.invoke(getItem(position).id)
         }
     }
     private fun incrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() + 1).toString()

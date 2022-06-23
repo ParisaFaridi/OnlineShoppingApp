@@ -1,11 +1,14 @@
 package com.example.onlineshoppingapp.ui.order
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.CartAdapter
@@ -30,9 +33,11 @@ class CartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getOrder()
-        val adapter = CartAdapter { lineItem,quantity ->
+        val adapter = CartAdapter ({ lineItem,quantity ->
             viewModel.updateQuantity(lineItem.id,quantity)
-        }
+        },{
+            viewModel.updateQuantity(it,0)}
+        )
         binding.rvCartProducts.adapter = adapter
         viewModel.order.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -52,9 +57,15 @@ class CartFragment : Fragment() {
                 }
             }
         }
+        val customerId = activity?.getSharedPreferences("user_info",Context.MODE_PRIVATE)?.getInt("customer_id",0)
+        binding.btnSubmitOrder.setOnClickListener {
+            if (customerId == 0)
+                Toast.makeText(requireContext(), "ابتدا ثبت نام کنید!", Toast.LENGTH_LONG).show()
+            else
+                findNavController().navigate(R.id.action_cartFragment_to_completeOrderFragment)
+
+        }
     }
-
-
     private fun hideProgressBar() {
         binding.layout.visibility = View.VISIBLE
         binding.lottie.visibility = View.GONE
