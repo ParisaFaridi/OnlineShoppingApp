@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -51,6 +52,19 @@ class DetailFragment : Fragment() {
                 is Resource.Success -> { response.data?.let {
                         hideProgressBar()
                         setProductData(it)
+                    }
+                }
+                is Resource.Error -> {
+                    response.message?.let {  message ->
+                        response.code?.let { showErrorSnack(message, it) }
+                    }
+                }
+            }
+        }
+        detailViewModel.order.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> { response.data?.let {
+                    Toast.makeText(requireContext(), "به سبد خرید اضافه شد!", Toast.LENGTH_SHORT).show()
                     }
                 }
                 is Resource.Error -> {

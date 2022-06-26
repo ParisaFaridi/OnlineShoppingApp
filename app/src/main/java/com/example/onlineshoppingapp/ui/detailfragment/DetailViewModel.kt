@@ -21,6 +21,7 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
     AndroidViewModel(app) {
 
     val product = MutableLiveData<Resource<Product>>()
+    val order = MutableLiveData<Resource<Order>>()
 
     fun getProduct(id : Int) = viewModelScope.launch {
         product.postValue(Resource.Loading())
@@ -35,10 +36,11 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
     fun getOrder(quantity:Int) {
         viewModelScope.launch {
             if (repository.isOrderNew()== null){
-                val response = repository.createOrder(
+                order.postValue(repository.createOrder(
                     Order(lineItems = listOf(
-                            LineItem(productId = product.value?.data?.id!!, quantity = quantity))))
-                repository.insert(OrderId(response.data?.id!!))
+                            LineItem(productId = product.value?.data?.id!!, quantity = quantity)))))
+                if (order.value != null)
+                    repository.insert(OrderId(order.value?.data?.id!!))
             }else{
                 repository.updateOrder(
                     repository.isOrderNew()!!.id,listOf(updateItemLines(quantity)))
