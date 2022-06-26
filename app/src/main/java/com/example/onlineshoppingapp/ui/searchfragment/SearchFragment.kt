@@ -44,16 +44,11 @@ class SearchFragment : Fragment() {
         imm.showSoftInput(binding.etSearch.rootView,InputMethodManager.SHOW_IMPLICIT)
         binding.etSearch.requestFocus()
         binding.etSearch.setOnEditorActionListener { textView, i, keyEvent ->
-            //get editText value
             return@setOnEditorActionListener false
         }
         val productsAdapter = ProductAdapter { product ->
-            val action = product.id?.let { id ->
-                (id)
-            }
-            if (action != null) {
-                findNavController().navigate(action)
-            }
+            val action = SearchFragmentDirections.actionSearchFragmentToDetailFragment(product.id!!)
+            findNavController().navigate(action)
         }
         binding.rvProducts.adapter = productsAdapter
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
@@ -77,7 +72,6 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-
         binding.btnSearch.setOnClickListener {
             val action = SearchFragmentDirections.actionSearchFragmentToSearchResultsFragment(binding.etSearch.text.toString())
             findNavController().navigate(action)
