@@ -53,7 +53,8 @@ class ProductListFragment : Fragment() {
             when (response) {
                 is Resource.Loading -> { showProgressBar()}
                 is Resource.Success -> {
-                    hideProgressBar()
+                    binding.rvProducts.visibility = View.VISIBLE
+                    binding.lottie.visibility = View.GONE
                     response.data?.let { adapter.submitList(response.data) }
                 }
                 is Resource.Error -> {
@@ -63,7 +64,6 @@ class ProductListFragment : Fragment() {
             }
         }
     }
-
     private fun getProducts() {
         if (args.orderBy == getString(R.string.on_sale))
             viewModel.getProducts(getString(R.string.date),true)
@@ -74,10 +74,6 @@ class ProductListFragment : Fragment() {
     private fun showProgressBar(){
         binding.rvProducts.visibility = View.GONE
         binding.lottie.visibility - View.VISIBLE
-    }
-    private fun hideProgressBar(){
-        binding.rvProducts.visibility = View.VISIBLE
-        binding.lottie.visibility - View.GONE
     }
     private fun showErrorSnack(message: String, code: Int) {
         val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
