@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
+import com.example.onlineshoppingapp.adapters.DetailedItemAdapter
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,12 +47,11 @@ class SearchFragment : Fragment() {
         binding.etSearch.setOnEditorActionListener { textView, i, keyEvent ->
             return@setOnEditorActionListener false
         }
-        val productsAdapter = ProductAdapter { product ->
+        val productsAdapter = DetailedItemAdapter { product ->
             val action = SearchFragmentDirections.actionSearchFragmentToDetailFragment(product.id!!)
             findNavController().navigate(action)
         }
         binding.rvProducts.adapter = productsAdapter
-        binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
         searchViewModel.searchResults.observe(viewLifecycleOwner){ response ->
             when (response) {
             is Resource.Success -> {

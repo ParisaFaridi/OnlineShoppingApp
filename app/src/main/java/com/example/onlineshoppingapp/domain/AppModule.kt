@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 const val BASE_URL = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/"
@@ -46,7 +47,7 @@ object AppModule {
     @Provides
     fun provideInterceptor(): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
-        return OkHttpClient.Builder().addInterceptor(logger).build()
+        return OkHttpClient.Builder().connectTimeout(60,TimeUnit.SECONDS).readTimeout(60,TimeUnit.SECONDS).writeTimeout(60,TimeUnit.SECONDS).addInterceptor(logger).build()
     }
 
     @Singleton

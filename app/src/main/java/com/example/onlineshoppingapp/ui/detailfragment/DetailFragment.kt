@@ -100,6 +100,7 @@ class DetailFragment : Fragment() {
             product = data
             tvDescription.text = data.description?.let { fixDescription(it) }
             ratingbar.rating = data.averageRating?.toFloat()!!
+            //rvReviews
             tvPrice.text = NumberFormat.getNumberInstance(Locale.US).format(data.price?.toLong())
         }
 
@@ -111,12 +112,16 @@ class DetailFragment : Fragment() {
 
     private fun hideProgressBar() {
         binding.layout.visibility = View.VISIBLE
+        binding.divider.visibility = View.VISIBLE
+        binding.bottom.visibility = View.VISIBLE
         binding.lottie.visibility = View.GONE
     }
 
     private fun showProgressBar() {
         binding.lottie.setAnimation(R.raw.loading)
         binding.lottie.visibility = View.VISIBLE
+        binding.divider.visibility = View.GONE
+        binding.bottom.visibility = View.GONE
         binding.lottie.playAnimation()
 
     }

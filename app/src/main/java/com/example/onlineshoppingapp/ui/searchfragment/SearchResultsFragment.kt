@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
+import com.example.onlineshoppingapp.adapters.DetailedItemAdapter
 import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSearchResultsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +53,7 @@ class SearchResultsFragment : Fragment() {
         binding.btnFilter.setOnClickListener {
             findNavController().navigate(R.id.action_searchResultsFragment_to_filterFragment)
         }
-        val productsAdapter = ProductAdapter { product ->
+        val productsAdapter = DetailedItemAdapter { product ->
             val action = product.id?.let {
                 SearchResultsFragmentDirections.actionSearchResultsFragmentToDetailFragment(
                     it
@@ -63,7 +64,6 @@ class SearchResultsFragment : Fragment() {
             }
         }
         binding.rvProducts.adapter = productsAdapter
-        binding.rvProducts.layoutManager = GridLayoutManager(requireContext(),2)
 
         searchViewModel.searchResults.observe(viewLifecycleOwner){ response ->
             when (response) {
