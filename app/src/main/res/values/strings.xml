@@ -45,6 +45,11 @@
     <string name="continue_order">ادامه فرآیند خرید</string>
     <string name="cart">سبد خرید</string>
     <string name="empty_cart">سبد خرید خالی است</string>
+    <string name="info_completion">تکمیل اطلاعات</string>
+    <string name="complete_order">ثبت نهایی سفارش</string>
+    <string name="zip_code">کد پستی</string>
+    <string name="address">آدرس</string>
+    <string name="city">شهر</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>
