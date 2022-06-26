@@ -1,6 +1,5 @@
 package com.example.onlineshoppingapp.data.model
 
-
 import com.squareup.moshi.Json
 
 data class LineItem(
@@ -13,11 +12,11 @@ data class LineItem(
     @Json(name = "parent_name")
     val parentName: Any?= null,
     @Json(name = "price")
-    val price: Int?= null,
+    var price: Double?= null,
     @Json(name = "product_id")
     val productId: Int,
     @Json(name = "quantity")
-    val quantity: Int,
+    var quantity: Int,
     @Json(name = "sku")
     val sku: String?= null,
     @Json(name = "subtotal")
@@ -29,7 +28,7 @@ data class LineItem(
     @Json(name = "taxes")
     val taxes: List<Any>?= null,
     @Json(name = "total")
-    val total: String?= null,
+    var total: String?= null,
     @Json(name = "total_tax")
     val totalTax: String?= null,
     @Json(name = "variation_id")

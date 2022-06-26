@@ -1,10 +1,7 @@
 package com.example.onlineshoppingapp.data
 
 import com.example.onlineshoppingapp.Resource
-import com.example.onlineshoppingapp.data.model.Customer
-import com.example.onlineshoppingapp.data.model.LineItem
-import com.example.onlineshoppingapp.data.model.Order
-import com.example.onlineshoppingapp.data.model.OrderId
+import com.example.onlineshoppingapp.data.model.*
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -49,6 +46,6 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
     suspend fun insert(orderId: OrderId) = localDataSource.insert(orderId)
     suspend fun isOrderNew() = localDataSource.isOrderNew()
     suspend fun deleteOrder()= localDataSource.deleteOrder()
-    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>)=
-        getSafeApiResponse(remoteDataSource.updateOrder(orderId,listOf))
+    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>,shipping: Shipping?=null,status:String="pending")=
+        getSafeApiResponse(remoteDataSource.updateOrder(orderId,listOf, shipping = shipping, status = status))
 }

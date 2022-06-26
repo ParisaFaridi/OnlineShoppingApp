@@ -3,6 +3,7 @@ package com.example.onlineshoppingapp.data
 import com.example.onlineshoppingapp.data.model.Customer
 import com.example.onlineshoppingapp.data.model.LineItem
 import com.example.onlineshoppingapp.data.model.Order
+import com.example.onlineshoppingapp.data.model.Shipping
 import com.example.onlineshoppingapp.network.ApiService
 import javax.inject.Inject
 
@@ -28,5 +29,5 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     suspend fun getOrder(id:Int) = apiService.getOrder(id = id)
 
     suspend fun getAttributeItems(id :Int) = apiService.getAttributeItems(id)
-    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>) = apiService.updateOrder(id = orderId,order = Order(id = orderId, lineItems = listOf))
+    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>,shipping: Shipping?,status:String) = apiService.updateOrder(id = orderId,order = Order(id = orderId, lineItems = listOf, shipping = shipping, status = status))
 }

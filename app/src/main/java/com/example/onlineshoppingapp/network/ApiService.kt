@@ -129,7 +129,7 @@ interface ApiService {
         order: String
     ): Response<List<Product>>
 
-    @PUT("orders/{id}")
+    @POST("orders/{id}")
     suspend fun updateOrder(
         @Path("id")
         id: Int,
