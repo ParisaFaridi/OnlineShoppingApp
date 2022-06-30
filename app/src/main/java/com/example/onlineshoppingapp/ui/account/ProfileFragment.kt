@@ -34,12 +34,27 @@ class ProfileFragment : Fragment() {
         signUpViewModel.customerLive.observe(viewLifecycleOwner){ response ->
             if (response != null) {
                 when (response) {
+                    is Resource.Loading ->{
+                        showProgressBar()
+                    }
                     is Resource.Success -> {
+                        hideProgressBar()
                         binding.tvName.text = response.data?.firstName + response.data?.lastName
                         binding.tvEmail.text = response.data?.email
                     }
                 }
             }
         }
+    }
+    private fun hideProgressBar() = binding.apply {
+            tvName.visibility = View.VISIBLE
+            tvEmail.visibility = View.VISIBLE
+            lottie.visibility = View.GONE
+    }
+    private fun showProgressBar() = binding.apply {
+        tvName.visibility = View.GONE
+        tvEmail.visibility = View.GONE
+        lottie.visibility = View.VISIBLE
+        lottie.playAnimation()
     }
 }
