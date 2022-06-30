@@ -50,6 +50,7 @@
     <string name="zip_code">کد پستی</string>
     <string name="address">آدرس</string>
     <string name="city">شهر</string>
+    <string name="empty_basket">سبد خرید خالی است!</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

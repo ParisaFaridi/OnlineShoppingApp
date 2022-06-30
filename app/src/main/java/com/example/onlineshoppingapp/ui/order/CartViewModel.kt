@@ -7,9 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
-import com.example.onlineshoppingapp.data.model.LineItem
 import com.example.onlineshoppingapp.data.model.Order
-import com.example.onlineshoppingapp.data.model.Shipping
 import com.example.onlineshoppingapp.hasInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -36,6 +34,7 @@ class CartViewModel @Inject constructor(private val repository: Repository, app:
     }
 
     fun updateQuantity(id: Int, newQuantity: Int) {
+        order.postValue(Resource.Loading())
         viewModelScope.launch {
             val lineItems = order.value?.data?.lineItems!!
             for (i in lineItems){
@@ -45,13 +44,6 @@ class CartViewModel @Inject constructor(private val repository: Repository, app:
                     order.postValue(repository.updateOrder(order.value!!.data?.id!!,lineItems))
                 }
             }
-        }
-    }
-    fun completeOrder(shipping: Shipping) {
-        order.postValue(Resource.Loading())
-        viewModelScope.launch {
-            order.postValue(repository.updateOrder(order.value?.data?.id!!,order.value?.data?.lineItems!!,shipping=shipping, status = "completed"))
-            repository.deleteOrder()
         }
     }
 }

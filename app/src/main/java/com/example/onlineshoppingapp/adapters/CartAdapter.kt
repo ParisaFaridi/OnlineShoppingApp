@@ -66,5 +66,5 @@ class CartAdapter(private val clickHandler: QuantityClickHandler,private val del
     }
     private fun incrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() + 1).toString()
     private fun decrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() - 1).toString()
-    private fun getFormattedPrice(position: Int) = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).total?.toLong()) + " تومان"
+    private fun getFormattedPrice(position: Int) = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).total.toString().toLong()) + " تومان"
 }

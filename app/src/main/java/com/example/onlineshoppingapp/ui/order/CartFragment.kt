@@ -45,6 +45,10 @@ class CartFragment : Fragment() {
                     showProgressBar()
                 }
                 is Resource.Success -> { response.data?.let {
+                    if (it.lineItems.isNullOrEmpty()){
+                        showErrorSnack("",2)
+                        return@observe
+                    }
                     hideProgressBar()
                     adapter.submitList(it.lineItems)
                     binding.tvSumOfPrice.text = it.total
@@ -61,20 +65,38 @@ class CartFragment : Fragment() {
         binding.btnSubmitOrder.setOnClickListener {
             if (customerId == 0)
                 Toast.makeText(requireContext(), "ابتدا ثبت نام کنید!", Toast.LENGTH_LONG).show()
-            else
-                findNavController().navigate(R.id.action_cartFragment_to_completeOrderFragment)
+            else{
+                val action = viewModel.order.value?.data?.let { it1 ->
+                    CartFragmentDirections.actionCartFragmentToCompleteOrderFragment(
+                        it1.id)
+                }
+                if (action != null) {
+                    findNavController().navigate(action)
+                }
+            }
 
         }
     }
     private fun hideProgressBar() {
         binding.layout.visibility = View.VISIBLE
         binding.lottie.visibility = View.GONE
+        binding.tv.visibility = View.GONE
     }
     private fun showProgressBar() {
+        binding.layout.visibility = View.GONE
         binding.lottie.visibility = View.VISIBLE
+        binding.lottie.setAnimation(R.raw.loading)
+        binding.tv.visibility = View.GONE
         binding.lottie.playAnimation()
     }
     private fun showErrorSnack(message: String, code: Int) {
+        if (code == 2){
+            showProgressBar()
+            binding.lottie.setAnimation(R.raw.empty_cart)
+            binding.lottie.playAnimation()
+            binding.tv.visibility = View.VISIBLE
+            return
+        }
         val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
         snackBar.setAction(
             getString(R.string.try_again)
