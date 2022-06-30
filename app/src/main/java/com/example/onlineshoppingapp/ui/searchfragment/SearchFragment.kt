@@ -54,7 +54,11 @@ class SearchFragment : Fragment() {
         binding.rvProducts.adapter = productsAdapter
         searchViewModel.searchResults.observe(viewLifecycleOwner){ response ->
             when (response) {
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
             is Resource.Success -> {
+                hideProgressBar()
                 response.data?.let { data ->
                     productsAdapter.submitList(data)
                 }
@@ -76,5 +80,14 @@ class SearchFragment : Fragment() {
             val action = SearchFragmentDirections.actionSearchFragmentToSearchResultsFragment(binding.etSearch.text.toString())
             findNavController().navigate(action)
         }
+    }
+    private fun hideProgressBar() {
+        binding.rvProducts.visibility = View.VISIBLE
+        binding.lottie.visibility = View.GONE
+    }
+    private fun showProgressBar() {
+        binding.rvProducts.visibility = View.GONE
+        binding.lottie.visibility = View.VISIBLE
+        binding.lottie.playAnimation()
     }
 }

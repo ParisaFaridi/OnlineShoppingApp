@@ -53,6 +53,9 @@ class SearchResultsFragment : Fragment() {
         binding.btnFilter.setOnClickListener {
             findNavController().navigate(R.id.action_searchResultsFragment_to_filterFragment)
         }
+        binding.btnSearch.setOnClickListener {
+            searchViewModel.search(query = binding.etSearch.text.toString(), orderBy = "title")
+        }
         val productsAdapter = DetailedItemAdapter { product ->
             val action = product.id?.let {
                 SearchResultsFragmentDirections.actionSearchResultsFragmentToDetailFragment(
@@ -67,12 +70,25 @@ class SearchResultsFragment : Fragment() {
 
         searchViewModel.searchResults.observe(viewLifecycleOwner){ response ->
             when (response) {
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
                 is Resource.Success -> {
+                    hideProgressBar()
                     response.data?.let { data ->
                         productsAdapter.submitList(data)
                     }
                 }
             }
         }
+    }
+    private fun hideProgressBar() {
+        binding.rvProducts.visibility = View.VISIBLE
+        binding.lottie.visibility = View.GONE
+    }
+    private fun showProgressBar() {
+        binding.rvProducts.visibility = View.GONE
+        binding.lottie.visibility = View.VISIBLE
+        binding.lottie.playAnimation()
     }
 }

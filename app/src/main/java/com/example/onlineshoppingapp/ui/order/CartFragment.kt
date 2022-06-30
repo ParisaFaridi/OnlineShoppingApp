@@ -71,7 +71,6 @@ class CartFragment : Fragment() {
         binding.lottie.visibility = View.GONE
     }
     private fun showProgressBar() {
-        binding.lottie.setAnimation(R.raw.loading)
         binding.lottie.visibility = View.VISIBLE
         binding.lottie.playAnimation()
     }
@@ -81,6 +80,7 @@ class CartFragment : Fragment() {
             getString(R.string.try_again)
         ) {
             viewModel.getOrder()
+            showProgressBar()
             binding.lottie.playAnimation()
         }
         snackBar.show()

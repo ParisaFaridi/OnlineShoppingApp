@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
+import com.example.onlineshoppingapp.data.model.LineItem
 import com.example.onlineshoppingapp.data.model.Order
 import com.example.onlineshoppingapp.data.model.Shipping
 import com.example.onlineshoppingapp.hasInternetConnection
