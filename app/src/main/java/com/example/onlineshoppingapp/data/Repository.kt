@@ -21,6 +21,8 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
 
     suspend fun createOrder(order: Order) = getSafeApiResponse(remoteDataSource.createOrder(order))
 
+    suspend fun getProductReviews(id:Int) = getSafeApiResponse(remoteDataSource.getProductReviews(id))
+
     suspend fun getProductById(id:Int) =
         getSafeApiResponse(remoteDataSource.getProductById(id))
 

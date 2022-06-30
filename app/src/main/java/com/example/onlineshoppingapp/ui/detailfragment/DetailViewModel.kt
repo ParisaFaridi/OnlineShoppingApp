@@ -7,10 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
-import com.example.onlineshoppingapp.data.model.LineItem
-import com.example.onlineshoppingapp.data.model.Order
-import com.example.onlineshoppingapp.data.model.OrderId
-import com.example.onlineshoppingapp.data.model.Product
+import com.example.onlineshoppingapp.data.model.*
 import com.example.onlineshoppingapp.hasInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,16 +19,30 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
 
     val product = MutableLiveData<Resource<Product>>()
     val order = MutableLiveData<Resource<Order>>()
+    val reviews = MutableLiveData<Resource<List<Review>>>()
 
     fun getProduct(id : Int) = viewModelScope.launch {
         product.postValue(Resource.Loading())
+        reviews.postValue(Resource.Loading())
         if (hasInternetConnection()) {
             viewModelScope.launch {
                 product.postValue(repository.getProductById(id))
+                reviews.postValue(repository.getProductReviews(id))
             }
-        } else
-            product.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
-
+        } else {
+            product.postValue(
+                Resource.Error(
+                    getApplication<Application>().getString(R.string.no_internet_error),
+                    code = 1
+                )
+            )
+            reviews.postValue(
+                Resource.Error(
+                    getApplication<Application>().getString(R.string.no_internet_error),
+                    code = 1
+                )
+            )
+        }
     }
     fun getOrder(quantity:Int) {
         viewModelScope.launch {
@@ -60,5 +71,9 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
             }
         }
         return LineItem(id = id, productId = product.value?.data?.id!!, quantity = quantity+newQuantity)
+    }
+
+    fun getProductReviews(){
+
     }
 }

@@ -13,7 +13,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ImageViewPagerAdapter
+import com.example.onlineshoppingapp.adapters.ReviewAdapter
 import com.example.onlineshoppingapp.data.model.Product
+import com.example.onlineshoppingapp.data.model.Review
 import com.example.onlineshoppingapp.databinding.FragmentDetailBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +31,7 @@ class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
     private val args: DetailFragmentArgs by navArgs()
     private lateinit var imageViewPagerAdapter: ImageViewPagerAdapter
+    private lateinit var reviewsAdapter: ReviewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +55,23 @@ class DetailFragment : Fragment() {
                 is Resource.Success -> { response.data?.let {
                         hideProgressBar()
                         setProductData(it)
+                    }
+                }
+                is Resource.Error -> {
+                    response.message?.let {  message ->
+                        response.code?.let { showErrorSnack(message, it) }
+                    }
+                }
+            }
+        }
+        detailViewModel.reviews.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                is Resource.Success -> { response.data?.let {
+                        hideProgressBar()
+                        setReviews(it)
                     }
                 }
                 is Resource.Error -> {
@@ -93,6 +113,11 @@ class DetailFragment : Fragment() {
     private fun incrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() + 1).toString()
     private fun decrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() - 1).toString()
 
+    private fun setReviews(list: List<Review>) {
+        reviewsAdapter = ReviewAdapter()
+        binding.rvReviews.adapter = reviewsAdapter
+        reviewsAdapter.submitList(list)
+    }
     private fun setProductData(data: Product) {
         imageViewPagerAdapter = data.images?.let { images -> ImageViewPagerAdapter(images) }!!
         setUpViewPager()
@@ -100,7 +125,6 @@ class DetailFragment : Fragment() {
             product = data
             tvDescription.text = data.description?.let { fixDescription(it) }
             ratingbar.rating = data.averageRating?.toFloat()!!
-            //rvReviews
             tvPrice.text = NumberFormat.getNumberInstance(Locale.US).format(data.price?.toLong())
         }
 

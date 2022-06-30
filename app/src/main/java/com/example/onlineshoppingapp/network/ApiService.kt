@@ -4,8 +4,8 @@ import com.example.onlineshoppingapp.data.model.*
 import retrofit2.Response
 import retrofit2.http.*
 
-const val CONSUMER_KEY = "ck_33d507c4632f7d97ff70b4f3bae877a94375b177"
-const val CONSUMER_SECRET = "cs_d172173de2ce65486fe0921aa1b9044e9b37535f"
+const val CONSUMER_KEY = "ck_63f4c52da932ddad1570283b31f3c96c4bd9fd6f"
+const val CONSUMER_SECRET = "cs_294e7de35430398f323b43c21dd1b29f67b5370b"
 
 interface ApiService {
 
@@ -85,6 +85,16 @@ interface ApiService {
         consumerSecret: String = CONSUMER_SECRET
 
     ): Response<Order>
+
+    @GET("products/reviews")
+    suspend fun getProductReviews(
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET,
+        @Query("product")
+        productId:Int
+    ):Response<List<Review>>
 
     @POST("orders")
     suspend fun createOrder(
