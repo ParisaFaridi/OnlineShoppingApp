@@ -54,6 +54,11 @@
     <string name="log_in">ورود به حساب کاربری</string>
     <string name="log_inn">ورود</string>
     <string name="log_in_to_account">ورود به حساب کاربری</string>
+    <string name="customer_id">customer_id</string>
+    <string name="user_info">user_info</string>
+    <string name="successful_signup">ثبت نام با موفقیت انجام شد</string>
+    <string name="added_to_cart">به سبد خرید اضافه شد!</string>
+    <string name="ok">باشه</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

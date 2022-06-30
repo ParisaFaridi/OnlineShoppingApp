@@ -1,5 +1,6 @@
 package com.example.onlineshoppingapp.ui
 
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.example.onlineshoppingapp.R
 
@@ -12,5 +13,12 @@ fun Fragment.getErrorMessage(message :String, code:Int):String{
             500 -> resources.getString(R.string.error_500)
             else -> resources.getString(R.string.unknown_error)
         }
+    }
+}
+open class BaseFragment : Fragment(){
+
+    fun setError(editText: EditText) {
+        if (editText.text.isNullOrEmpty())
+            editText.error = getString(R.string.must_be_filled)
     }
 }

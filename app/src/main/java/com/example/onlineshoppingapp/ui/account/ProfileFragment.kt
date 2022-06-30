@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
+import com.example.onlineshoppingapp.data.model.Customer
 import com.example.onlineshoppingapp.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
@@ -26,7 +28,8 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val customerId = activity?.getSharedPreferences("user_info", Context.MODE_PRIVATE)?.getInt("customer_id",0)
+        val customerId = activity?.getSharedPreferences(getString(R.string.user_info), Context.MODE_PRIVATE)?.
+        getInt(getString(R.string.customer_id),0)
 
         if (signUpViewModel.customerLive.value == null)
             customerId?.let { signUpViewModel.getCustomer(it) }
@@ -39,13 +42,18 @@ class ProfileFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         hideProgressBar()
-                        binding.tvName.text = response.data?.firstName + response.data?.lastName
+                        binding.tvName.text = response.data?.let { setName(it) }
                         binding.tvEmail.text = response.data?.email
+                    }
+                    is Resource.Error -> {
+
                     }
                 }
             }
         }
     }
+    private fun setName(data: Customer) = "${data.firstName} ${data.lastName}"
+
     private fun hideProgressBar() = binding.apply {
             tvName.visibility = View.VISIBLE
             tvEmail.visibility = View.VISIBLE

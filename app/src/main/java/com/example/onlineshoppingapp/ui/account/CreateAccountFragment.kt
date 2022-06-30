@@ -5,22 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.model.Customer
 import com.example.onlineshoppingapp.databinding.FragmentCreateAccountBinding
+import com.example.onlineshoppingapp.ui.BaseFragment
+import com.example.onlineshoppingapp.ui.getErrorMessage
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
-class CreateAccountFragment : Fragment() {
+class CreateAccountFragment : BaseFragment() {
 
     lateinit var binding :FragmentCreateAccountBinding
     private val signUpViewModel : CustomerViewModel by activityViewModels()
@@ -35,8 +33,9 @@ class CreateAccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val customerId = activity?.getSharedPreferences(getString(R.string.user_info),Context.MODE_PRIVATE)?.
+        getInt(getString(R.string.customer_id),0)
 
-        val customerId = activity?.getSharedPreferences("user_info",Context.MODE_PRIVATE)?.getInt("customer_id",0)
         if ( customerId!= 0)
             findNavController().navigate(R.id.action_createAccountFragment_to_profileFragment)
 
@@ -45,28 +44,56 @@ class CreateAccountFragment : Fragment() {
                 checkForErrors()
                 return@setOnClickListener
             }
-            signUpViewModel.signUp(Customer(email = binding.etEmail.text.toString(),
-                firstName = binding.etFirstName.text.toString(),
-                lastName = binding.etLastName.text.toString(),
-                username = binding.etUserName.text.toString(),
-            ))
+            signup()
             signUpViewModel.customerLive.observe(viewLifecycleOwner){
                 when(it){
+                    is Resource.Loading ->{
+                        showProgressBar()
+                    }
                     is Resource.Success ->{
-                        Toast.makeText(requireContext(), "${it.data?.id} added!", Toast.LENGTH_LONG).show()
-                        val userInfoShared = activity?.getSharedPreferences("user_info",Context.MODE_PRIVATE)
-                        val editor = userInfoShared?.edit()
-                        it.data?.id?.let { it1 -> editor?.putInt("customer_id", it1)?.apply() }
-
+                        hideProgressBar()
+                        Toast.makeText(requireContext(),getString(R.string.successful_signup),Toast.LENGTH_LONG).show()
+                        saveInShare(it.data?.id)
                         findNavController().navigate(R.id.action_createAccountFragment_to_profileFragment)
                     }
                     is Resource.Error -> {
-                        Toast.makeText(requireContext(), "${it.code}", Toast.LENGTH_LONG).show()
+                            it.message?.let {  message ->
+                                it.code?.let { code -> showErrorSnack(message, code) }
+                        }
                     }
                 }
             }
         }
     }
+    private fun showErrorSnack(message: String, code: Int) {
+        val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
+        snackBar.setAction(getString(R.string.ok)) {
+            snackBar.dismiss()
+        }
+        snackBar.show()
+    }
+
+    private fun hideProgressBar() = binding.apply {
+        layout.visibility = View.VISIBLE
+        lottie.visibility = View.GONE
+    }
+    private fun showProgressBar() = binding.apply {
+        layout.visibility = View.GONE
+        lottie.visibility = View.VISIBLE
+        lottie.playAnimation()
+    }
+    private fun saveInShare(id: Int?) {
+        val userInfoShared = activity?.getSharedPreferences(getString(R.string.user_info),Context.MODE_PRIVATE)
+        val editor = userInfoShared?.edit()
+        id?.let { it -> editor?.putInt(getString(R.string.customer_id), it)?.apply() }
+    }
+
+    private fun signup() =
+        signUpViewModel.signUp(Customer(email = binding.etEmail.text.toString(),
+            firstName = binding.etFirstName.text.toString(),
+            lastName = binding.etLastName.text.toString(),
+            username = binding.etUserName.text.toString(),))
+
     private fun hasEmptyField(): Boolean {
         return (binding.etFirstName.text.isNullOrEmpty() || binding.etLastName.text.isNullOrEmpty() ||
                 binding.etUserName.text.isNullOrEmpty() || binding.etEmail.text.isNullOrEmpty())
@@ -77,10 +104,5 @@ class CreateAccountFragment : Fragment() {
         setError(binding.etLastName)
         setError(binding.etUserName)
         setError(binding.etEmail)
-    }
-
-    private fun setError(editText: EditText) {
-        if (editText.text.isNullOrEmpty())
-            editText.error = getString(R.string.must_be_filled)
     }
 }
