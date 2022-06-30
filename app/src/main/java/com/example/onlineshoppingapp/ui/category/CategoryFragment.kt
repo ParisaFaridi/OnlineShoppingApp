@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.categoryfragment
+package com.example.onlineshoppingapp.ui.category
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.DetailedItemAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCategoryBinding
+import com.example.onlineshoppingapp.ui.category.viewmodels.CategoryViewModel
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint

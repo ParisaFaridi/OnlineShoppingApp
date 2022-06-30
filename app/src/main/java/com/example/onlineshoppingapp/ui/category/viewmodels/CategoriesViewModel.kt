@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.categoriesfragment
+package com.example.onlineshoppingapp.ui.category.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

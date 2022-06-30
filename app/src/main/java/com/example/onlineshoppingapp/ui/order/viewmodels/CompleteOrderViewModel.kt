@@ -1,15 +1,13 @@
-package com.example.onlineshoppingapp.ui
+package com.example.onlineshoppingapp.ui.order.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Order
 import com.example.onlineshoppingapp.data.model.Shipping
-import com.example.onlineshoppingapp.hasInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

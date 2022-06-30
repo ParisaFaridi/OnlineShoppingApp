@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.categoriesfragment
+package com.example.onlineshoppingapp.ui.category
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -13,6 +13,7 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.CategoryAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCategoriesBinding
+import com.example.onlineshoppingapp.ui.category.viewmodels.CategoriesViewModel
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint

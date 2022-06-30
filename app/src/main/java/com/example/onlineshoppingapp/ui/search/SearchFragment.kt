@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.searchfragment
+package com.example.onlineshoppingapp.ui.search
 
 import android.content.Context
 import android.os.Bundle
@@ -11,12 +11,10 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.DetailedItemAdapter
-import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSearchBinding
+import com.example.onlineshoppingapp.ui.search.viewmodels.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope

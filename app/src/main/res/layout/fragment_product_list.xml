@@ -6,7 +6,7 @@
     android:id="@+id/layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="15dp"
-    tools:context="ui.categoryfragment.CategoryFragment">
+    tools:context=".ui.category.CategoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_products"

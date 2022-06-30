@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.searchfragment
+package com.example.onlineshoppingapp.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,12 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.DetailedItemAdapter
-import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSearchResultsBinding
+import com.example.onlineshoppingapp.ui.search.viewmodels.FilterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

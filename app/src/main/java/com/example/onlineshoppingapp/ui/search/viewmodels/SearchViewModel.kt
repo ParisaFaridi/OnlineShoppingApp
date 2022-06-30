@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.categoryfragment
+package com.example.onlineshoppingapp.ui.search.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -14,20 +14,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CategoryViewModel @Inject constructor(private val repository: Repository, app: Application) :
+class SearchViewModel @Inject constructor(private val repository: Repository, app: Application) :
     AndroidViewModel(app) {
+    val searchResults = MutableLiveData<Resource<List<Product>>>()
 
-    val products = MutableLiveData<Resource<List<Product>>>()
+    fun search(searchQuery : String,perPage:Int)  {
 
-    fun getProductsByCategoryId(categoryId: Int) = viewModelScope.launch {
-        products.postValue(Resource.Loading())
+        searchResults.postValue(Resource.Loading())
         if (hasInternetConnection()) {
             viewModelScope.launch {
-                products.postValue(repository.getProductsByCategory(categoryId))
+                searchResults.postValue(repository.search(searchQuery,perPage,"title","desc", listOf(),
+                    listOf()))
             }
         } else
-            products.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
+            searchResults.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
 
     }
-
 }

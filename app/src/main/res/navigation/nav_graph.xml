@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.example.onlineshoppingapp.ui.categoriesfragment.CategoriesFragment"
+        android:name="com.example.onlineshoppingapp.ui.category.CategoriesFragment"
         android:label="fragment_categories"
         tools:layout="@layout/fragment_categories" >
         <action
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="com.example.onlineshoppingapp.ui.categoryfragment.CategoryFragment"
+        android:name="com.example.onlineshoppingapp.ui.category.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" >
         <action
@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.onlineshoppingapp.ui.searchfragment.SearchFragment"
+        android:name="com.example.onlineshoppingapp.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
@@ -85,7 +85,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchResultsFragment"
-        android:name="com.example.onlineshoppingapp.ui.searchfragment.SearchResultsFragment"
+        android:name="com.example.onlineshoppingapp.ui.search.SearchResultsFragment"
         android:label="fragment_search_results"
         tools:layout="@layout/fragment_search_results" >
         <argument
@@ -122,7 +122,7 @@
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
-        android:name="com.example.onlineshoppingapp.ui.searchfragment.FilterFragment"
+        android:name="com.example.onlineshoppingapp.ui.search.FilterFragment"
         android:label="fragment_filter"
         tools:layout="@layout/fragment_filter" >
         <action
@@ -133,7 +133,7 @@
     </fragment>
     <fragment
         android:id="@+id/completeOrderFragment"
-        android:name="com.example.onlineshoppingapp.CompleteOrderFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.CompleteOrderFragment"
         android:label="fragment_complete_order"
         tools:layout="@layout/fragment_complete_order" >
         <action

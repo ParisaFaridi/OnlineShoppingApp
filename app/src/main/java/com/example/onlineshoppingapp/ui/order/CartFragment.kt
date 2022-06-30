@@ -14,6 +14,7 @@ import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.CartAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCartBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
+import com.example.onlineshoppingapp.ui.order.viewmodels.CartViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 

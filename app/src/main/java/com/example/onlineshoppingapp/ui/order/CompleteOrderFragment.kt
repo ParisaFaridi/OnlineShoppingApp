@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp
+package com.example.onlineshoppingapp.ui.order
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,10 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.onlineshoppingapp.R
+import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.model.Shipping
 import com.example.onlineshoppingapp.databinding.FragmentCompleteOrderBinding
-import com.example.onlineshoppingapp.ui.CompleteOrderViewModel
 import com.example.onlineshoppingapp.ui.getErrorMessage
+import com.example.onlineshoppingapp.ui.order.viewmodels.CompleteOrderViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 

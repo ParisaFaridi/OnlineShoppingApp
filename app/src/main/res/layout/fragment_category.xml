@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="ui.categoryfragment.CategoryFragment">
+    tools:context=".ui.category.CategoryFragment">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/search_view"

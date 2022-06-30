@@ -5,7 +5,7 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.categoriesfragment.CategoriesFragment">
+    tools:context=".ui.category.CategoriesFragment">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/search_view"
