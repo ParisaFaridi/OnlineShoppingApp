@@ -9,14 +9,10 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.onlineshoppingapp.adapters.ImageViewPagerAdapter
 import com.example.onlineshoppingapp.data.model.Shipping
 import com.example.onlineshoppingapp.databinding.FragmentCompleteOrderBinding
-import com.example.onlineshoppingapp.databinding.FragmentDetailBinding
-import com.example.onlineshoppingapp.ui.detailfragment.DetailFragmentArgs
-import com.example.onlineshoppingapp.ui.detailfragment.DetailViewModel
+import com.example.onlineshoppingapp.ui.CompleteOrderViewModel
 import com.example.onlineshoppingapp.ui.getErrorMessage
-import com.example.onlineshoppingapp.ui.order.CartViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +20,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class CompleteOrderFragment : Fragment() {
 
     private lateinit var binding: FragmentCompleteOrderBinding
-    private val cartViewModel: CartViewModel by viewModels()
+    private val viewModel: CompleteOrderViewModel by viewModels()
+    private val args :CompleteOrderFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,13 +33,13 @@ class CompleteOrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.btnCompleteOrder.setOnClickListener {
-            cartViewModel.completeOrder(Shipping(address1 = binding.etAddress.text.toString(),
+            viewModel.completeOrder(args.orderId,Shipping(address1 = binding.etAddress.text.toString(),
             city = binding.etCity.text.toString(),
             postcode = binding.etZipCode.text.toString()))
         }
-
-        cartViewModel.order.observe(viewLifecycleOwner) { response ->
+        viewModel.order.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
                     binding.layout.visibility = View.GONE
@@ -53,6 +50,7 @@ class CompleteOrderFragment : Fragment() {
                     binding.lottie.visibility = View.GONE
                     Toast.makeText(requireContext(), "سفارش با موفقیت ثبت شد!", Toast.LENGTH_LONG).show()
                     findNavController().navigate(R.id.action_completeOrderFragment_to_cartFragment)
+
                 }
                 }
                 is Resource.Error -> {
@@ -68,7 +66,7 @@ class CompleteOrderFragment : Fragment() {
         snackBar.setAction(
             getString(R.string.try_again)
         ) {
-            cartViewModel.completeOrder(Shipping(address1 = binding.etAddress.text.toString(),
+            viewModel.completeOrder(args.orderId,Shipping(address1 = binding.etAddress.text.toString(),
                 city = binding.etCity.text.toString(),
                 postcode = binding.etZipCode.text.toString()))
             binding.lottie.playAnimation()

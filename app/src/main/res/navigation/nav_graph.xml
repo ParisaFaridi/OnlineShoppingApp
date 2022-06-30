@@ -141,5 +141,8 @@
             app:destination="@id/cartFragment"
             app:popUpTo="@id/cartFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="orderId"
+            app:argType="integer" />
     </fragment>
 </navigation>
