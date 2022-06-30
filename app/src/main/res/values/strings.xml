@@ -51,6 +51,9 @@
     <string name="address">آدرس</string>
     <string name="city">شهر</string>
     <string name="empty_basket">سبد خرید خالی است!</string>
+    <string name="log_in">ورود به حساب کاربری</string>
+    <string name="log_inn">ورود</string>
+    <string name="log_in_to_account">ورود به حساب کاربری</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>
