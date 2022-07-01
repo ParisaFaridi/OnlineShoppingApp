@@ -36,7 +36,7 @@ class SizeFilterFragment : Fragment() {
         binding.rvFilterItems.adapter = adapter
 
         if (filterVm.sizeFilters.value == null)
-            filterVm.getColorFilter()
+            filterVm.getFilters(4,filterVm.sizeFilters)
 
         filterVm.sizeFilters.observe(viewLifecycleOwner){ response ->
             when (response) {
@@ -73,7 +73,7 @@ class SizeFilterFragment : Fragment() {
         snackBar.setAction(
             getString(R.string.try_again)
         ) {
-            filterVm.getColorFilter()
+            filterVm.getFilters(4,filterVm.sizeFilters)
             binding.lottie.playAnimation()
         }
         snackBar.show()

@@ -1,11 +1,10 @@
 package com.example.onlineshoppingapp.ui.order
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -15,6 +14,7 @@ import com.example.onlineshoppingapp.data.model.Shipping
 import com.example.onlineshoppingapp.databinding.FragmentCompleteOrderBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.example.onlineshoppingapp.ui.order.viewmodels.CompleteOrderViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,7 +50,7 @@ class CompleteOrderFragment : Fragment() {
                 is Resource.Success -> { response.data?.let {
                     binding.layout.visibility = View.VISIBLE
                     binding.lottie.visibility = View.GONE
-                    Toast.makeText(requireContext(), "سفارش با موفقیت ثبت شد!", Toast.LENGTH_LONG).show()
+                    showDialog()
                     findNavController().navigate(R.id.action_completeOrderFragment_to_cartFragment)
 
                 }
@@ -62,6 +62,12 @@ class CompleteOrderFragment : Fragment() {
                 }
             }
         }
+    }
+    private fun showDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.order_completed))
+            .setNeutralButton(getString(R.string.ok_)){ _, _ -> }
+            .show()
     }
     private fun showErrorSnack(message: String, code: Int) {
         val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)

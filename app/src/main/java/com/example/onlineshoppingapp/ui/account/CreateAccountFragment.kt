@@ -67,7 +67,7 @@ class CreateAccountFragment : BaseFragment() {
     }
     private fun showErrorSnack(message: String, code: Int) {
         val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
-        snackBar.setAction(getString(R.string.ok)) {
+        snackBar.setAction(getString(R.string.ok_)) {
             snackBar.dismiss()
         }
         snackBar.show()

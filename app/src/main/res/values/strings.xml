@@ -58,7 +58,16 @@
     <string name="user_info">user_info</string>
     <string name="successful_signup">ثبت نام با موفقیت انجام شد</string>
     <string name="added_to_cart">به سبد خرید اضافه شد!</string>
-    <string name="ok">باشه</string>
+    <string name="ok_">باشه</string>
+    <string name="completed">completed</string>
+    <string name="desc">desc</string>
+    <string name="pa_color">pa_color</string>
+    <string name="pa_size">pa_size</string>
+    <string name="title">title</string>
+    <string name="sign_up_first">ابتدا ثبت نام کنید!</string>
+    <string name="price">price</string>
+    <string name="asc">asc</string>
+    <string name="order_completed">سفارش با موفقیت ثبت شد!</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

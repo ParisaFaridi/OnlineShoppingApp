@@ -38,7 +38,7 @@ class ColorFilterFragment : Fragment() {
         binding.rvFilterItems.adapter = adapter
 
         if (filterVm.colorFilters.value == null)
-            filterVm.getColorFilter()
+            filterVm.getFilters(3,filterVm.colorFilters)
 
         filterVm.colorFilters.observe(viewLifecycleOwner){ response ->
             when (response) {
@@ -76,7 +76,7 @@ class ColorFilterFragment : Fragment() {
         snackBar.setAction(
             getString(R.string.try_again)
         ) {
-            filterVm.getColorFilter()
+            filterVm.getFilters(3,filterVm.colorFilters)
             binding.lottie.playAnimation()
         }
         snackBar.show()

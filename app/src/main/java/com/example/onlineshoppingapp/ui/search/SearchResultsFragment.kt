@@ -22,6 +22,7 @@ class SearchResultsFragment : Fragment() {
     private val args : SearchResultsFragmentArgs by navArgs()
     lateinit var binding : FragmentSearchResultsBinding
     val searchViewModel : FilterViewModel by activityViewModels()
+    private lateinit var productAdapter: DetailedItemAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,17 +34,19 @@ class SearchResultsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         searchViewModel.searchQuery = args.searchQuery
         binding.etSearch.setText(args.searchQuery)
+        setAdapter()
         binding.sortSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
             override fun onItemSelected(adapterView : AdapterView<*>?, view: View?, position : Int, id: Long) {
                 when (position) {
-                    0 -> searchViewModel.search(query = args.searchQuery,orderBy = "title")
-                    1 -> searchViewModel.search(orderBy = "date")
-                    2 -> searchViewModel.search(orderBy = "popularity")
-                    3 -> searchViewModel.search(orderBy = "rating")
-                    4 -> searchViewModel.search(orderBy = "price")
-                    else -> searchViewModel.search(orderBy = "price", order =  "asc")
+                    0 -> searchViewModel.search(query = args.searchQuery,orderBy = getString(R.string.title))
+                    1 -> searchViewModel.search(orderBy = getString(R.string.date))
+                    2 -> searchViewModel.search(orderBy = getString(R.string.popularity))
+                    3 -> searchViewModel.search(orderBy = getString(R.string.rating))
+                    4 -> searchViewModel.search(orderBy = getString(R.string.price))
+                    else -> searchViewModel.search(orderBy = getString(R.string.price), order =  getString(R.string.asc))
                 }
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -53,20 +56,8 @@ class SearchResultsFragment : Fragment() {
             findNavController().navigate(R.id.action_searchResultsFragment_to_filterFragment)
         }
         binding.btnSearch.setOnClickListener {
-            searchViewModel.search(query = binding.etSearch.text.toString(), orderBy = "title")
+            searchViewModel.search(query = binding.etSearch.text.toString(), orderBy = getString(R.string.title))
         }
-        val productsAdapter = DetailedItemAdapter { product ->
-            val action = product.id?.let {
-                SearchResultsFragmentDirections.actionSearchResultsFragmentToDetailFragment(
-                    it
-                )
-            }
-            if (action != null) {
-                findNavController().navigate(action)
-            }
-        }
-        binding.rvProducts.adapter = productsAdapter
-
         searchViewModel.searchResults.observe(viewLifecycleOwner){ response ->
             when (response) {
                 is Resource.Loading -> {
@@ -75,12 +66,25 @@ class SearchResultsFragment : Fragment() {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { data ->
-                        productsAdapter.submitList(data)
+                        productAdapter.submitList(data)
                     }
                 }
             }
         }
     }
+    private fun setAdapter() {
+        productAdapter = DetailedItemAdapter { product ->
+            val action = product.id?.let {
+                SearchResultsFragmentDirections.actionSearchResultsFragmentToDetailFragment(it)
+            }
+            if (action != null) {
+                findNavController().navigate(action)
+            }
+        }
+        binding.rvProducts.adapter = productAdapter
+
+    }
+
     private fun hideProgressBar() {
         binding.rvProducts.visibility = View.VISIBLE
         binding.lottie.visibility = View.GONE

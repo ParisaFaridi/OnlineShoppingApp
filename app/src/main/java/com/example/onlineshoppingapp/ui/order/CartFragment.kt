@@ -23,6 +23,7 @@ class CartFragment : Fragment() {
 
     private lateinit var binding: FragmentCartBinding
     private val viewModel: CartViewModel by viewModels()
+    lateinit var adapter :CartAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,12 +35,14 @@ class CartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getOrder()
+
         val adapter = CartAdapter ({ lineItem,quantity ->
             viewModel.updateQuantity(lineItem.id,quantity)
         },{
             viewModel.updateQuantity(it,0)}
         )
         binding.rvCartProducts.adapter = adapter
+
         viewModel.order.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
@@ -62,10 +65,10 @@ class CartFragment : Fragment() {
                 }
             }
         }
-        val customerId = activity?.getSharedPreferences("user_info",Context.MODE_PRIVATE)?.getInt("customer_id",0)
+        val customerId = activity?.getSharedPreferences(getString(R.string.user_info),Context.MODE_PRIVATE)?.getInt(getString(R.string.customer_id),0)
         binding.btnSubmitOrder.setOnClickListener {
             if (customerId == 0)
-                Toast.makeText(requireContext(), "ابتدا ثبت نام کنید!", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.sign_up_first), Toast.LENGTH_LONG).show()
             else{
                 val action = viewModel.order.value?.data?.let { it1 ->
                     CartFragmentDirections.actionCartFragmentToCompleteOrderFragment(
@@ -75,20 +78,22 @@ class CartFragment : Fragment() {
                     findNavController().navigate(action)
                 }
             }
-
         }
     }
-    private fun hideProgressBar() {
-        binding.layout.visibility = View.VISIBLE
-        binding.lottie.visibility = View.GONE
-        binding.tv.visibility = View.GONE
+
+    private fun hideProgressBar() = binding.apply{
+        layout.visibility = View.VISIBLE
+        lottie.visibility = View.GONE
+        tv.visibility = View.GONE
     }
-    private fun showProgressBar() {
-        binding.layout.visibility = View.GONE
-        binding.lottie.visibility = View.VISIBLE
-        binding.lottie.setAnimation(R.raw.loading)
-        binding.tv.visibility = View.GONE
-        binding.lottie.playAnimation()
+    private fun showProgressBar() = binding.apply{
+        layout.visibility = View.GONE
+        tv.visibility = View.GONE
+        lottie.apply {
+            visibility = View.VISIBLE
+            setAnimation(R.raw.loading)
+            playAnimation()
+        }
     }
     private fun showErrorSnack(message: String, code: Int) {
         if (code == 2){

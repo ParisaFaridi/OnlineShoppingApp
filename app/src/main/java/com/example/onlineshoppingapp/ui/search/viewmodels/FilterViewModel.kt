@@ -25,31 +25,20 @@ class FilterViewModel @Inject constructor(private val repository: Repository, ap
     private var filtersIds= listOf<Int>()
 
     init {
-        getColorFilter()
-        getSizeFilter()
+        getFilters(3,colorFilters)
+        getFilters(4,sizeFilters)
     }
-    fun getColorFilter() = viewModelScope.launch {
-
-        colorFilters.postValue(Resource.Loading())
-        if (hasInternetConnection()) {
+    fun getFilters( filterId : Int,liveData:MutableLiveData<Resource<List<AttributeTerm>>>){
+        liveData.postValue(Resource.Loading())
+        if (hasInternetConnection()){
             viewModelScope.launch {
-                colorFilters.postValue(repository.getAttributeItems(3))
+                liveData.postValue(repository.getAttributeItems(filterId))
             }
-        } else
-            colorFilters.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
-    }
-    private fun getSizeFilter() = viewModelScope.launch {
-
-        sizeFilters.postValue(Resource.Loading())
-        if (hasInternetConnection()) {
-            viewModelScope.launch {
-                sizeFilters.postValue(repository.getAttributeItems(4))
-            }
-        } else
-            sizeFilters.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
+        }else
+            liveData.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
     }
 
-    fun search(query : String=searchQuery,orderBy:String, order:String = "desc") =
+    fun search(query : String=searchQuery,orderBy:String, order:String = getApplication<Application>().getString(R.string.desc)) =
         viewModelScope.launch {
         searchResults.postValue(Resource.Loading())
         if (hasInternetConnection()) {
@@ -68,14 +57,14 @@ class FilterViewModel @Inject constructor(private val repository: Repository, ap
             if (i.isSelected) {
                 ids.add(i.id)
                 if (attrs[0].isEmpty())
-                    attrs.add("pa_color")
+                    attrs.add(getApplication<Application>().getString(R.string.pa_color))
             }
         }
         for (i in sizeFilters.value?.data!!){
             if (i.isSelected) {
                 ids.add(i.id)
                 if (attrs[1].isEmpty())
-                    attrs.add("pa_size")
+                    attrs.add(getApplication<Application>().getString(R.string.pa_size))
             }
         }
         filtersIds = ids

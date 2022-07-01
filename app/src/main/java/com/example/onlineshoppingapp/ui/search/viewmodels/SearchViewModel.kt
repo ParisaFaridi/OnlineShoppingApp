@@ -16,14 +16,14 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(private val repository: Repository, app: Application) :
     AndroidViewModel(app) {
+
     val searchResults = MutableLiveData<Resource<List<Product>>>()
 
     fun search(searchQuery : String,perPage:Int)  {
-
         searchResults.postValue(Resource.Loading())
         if (hasInternetConnection()) {
             viewModelScope.launch {
-                searchResults.postValue(repository.search(searchQuery,perPage,"title","desc", listOf(),
+                searchResults.postValue(repository.search(searchQuery,perPage,getApplication<Application>().getString(R.string.title),getApplication<Application>().getString(R.string.desc), listOf(),
                     listOf()))
             }
         } else
