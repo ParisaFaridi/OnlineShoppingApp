@@ -84,7 +84,7 @@ class DetailFragment : Fragment() {
         detailViewModel.order.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> { response.data?.let {
-                    Toast.makeText(requireContext(), "به سبد خرید اضافه شد!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show()
                     }
                 }
                 is Resource.Error -> {
@@ -107,7 +107,7 @@ class DetailFragment : Fragment() {
                 binding.tvProductNumber.text = incrementQuantityTv(binding.tvProductNumber)
         }
         binding.btnAddToCart.setOnClickListener {
-            detailViewModel.getOrder(binding.tvProductNumber.text.toString().toInt())
+            detailViewModel.createOrder(binding.tvProductNumber.text.toString().toInt())
         }
     }
     private fun incrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() + 1).toString()
