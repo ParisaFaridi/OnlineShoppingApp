@@ -20,7 +20,7 @@
         android:text="@string/search_all"
         android:textColor="#595858"
         android:textSize="18sp"
-        app:backgroundTint="#EDECEC"
+        app:backgroundTint="@color/gray"
         app:cornerRadius="8dp"
         app:icon="@drawable/ic_baseline_search_24"
         app:iconTint="@color/teal_200"
