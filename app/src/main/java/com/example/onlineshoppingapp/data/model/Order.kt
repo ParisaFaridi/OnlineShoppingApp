@@ -11,7 +11,7 @@ data class Order(
     @Json(name = "cart_tax")
     val cartTax: String? = null,
     @Json(name = "coupon_lines")
-    val couponLines: List<Any>? = null,
+    val couponLines: List<Coupon>? = null,
     @Json(name = "created_via")
     val createdVia: String?= null,
     @Json(name = "currency")
@@ -67,7 +67,7 @@ data class Order(
     @Json(name = "tax_lines")
     val taxLines: List<Any>?= null,
     @Json(name = "total")
-    val total: String?= null,
+    var total: String?= null,
     @Json(name = "total_tax")
     val totalTax: String?= null
 )

@@ -68,6 +68,8 @@
     <string name="price">price</string>
     <string name="asc">asc</string>
     <string name="order_completed">سفارش با موفقیت ثبت شد!</string>
+    <string name="coupon">کد تخفیف</string>
+    <string name="coupon_error">کد تخفیف یا اشتباه است یا قبلا استفاده شده</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

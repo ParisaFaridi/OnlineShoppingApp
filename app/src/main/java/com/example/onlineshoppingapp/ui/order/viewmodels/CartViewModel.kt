@@ -52,7 +52,7 @@ class CartViewModel @Inject constructor(private val repository: Repository, app:
                     if (i.id == id) {
                         i.quantity = newQuantity
                         i.total = (i.price?.times(i.quantity)).toString()
-                        order.postValue(repository.updateOrder(order.value!!.data?.id!!, lineItems))
+                        order.postValue(repository.updateOrder(order.value!!.data?.id!!, lineItems, couponLines = listOf()))
                     }
                 }
             }

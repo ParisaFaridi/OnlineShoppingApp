@@ -14,6 +14,8 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
 
     suspend fun getOrder(id:Int) = getSafeApiResponse(remoteDataSource.getOrder(id))
 
+    suspend fun getCoupons() = getSafeApiResponse(remoteDataSource.getCoupons())
+
     suspend fun search(searchQuery: String,perPage:Int,orderBy: String,order:String,attributeTermIds:List<Int>,attribute: List<String>) =
         getSafeApiResponse(remoteDataSource.search(attribute = attribute,searchQuery = searchQuery, perPage = perPage, orderBy = orderBy, order = order, ids = attributeTermIds))
 
@@ -48,6 +50,6 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
     suspend fun insert(orderId: OrderId) = localDataSource.insert(orderId)
     suspend fun isOrderNew() = localDataSource.isOrderNew()
     suspend fun deleteOrder()= localDataSource.deleteOrder()
-    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>,shipping: Shipping?=null,status:String="pending")=
-        getSafeApiResponse(remoteDataSource.updateOrder(orderId,listOf, shipping = shipping, status = status))
+    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>,shipping: Shipping?=null,status:String="pending",couponLines:List<CouponLine?>)=
+        getSafeApiResponse(remoteDataSource.updateOrder(orderId,listOf, shipping = shipping, status = status,couponLines))
 }

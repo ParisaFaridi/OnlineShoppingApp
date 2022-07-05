@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -36,6 +37,7 @@ class CompleteOrderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getOrder()
         binding.btnCompleteOrder.setOnClickListener {
             viewModel.completeOrder(args.orderId,Shipping(address1 = binding.etAddress.text.toString(),
             city = binding.etCity.text.toString(),
@@ -50,8 +52,9 @@ class CompleteOrderFragment : Fragment() {
                 is Resource.Success -> { response.data?.let {
                     binding.layout.visibility = View.VISIBLE
                     binding.lottie.visibility = View.GONE
+                    binding.tvTotalPrice.text = it.total
                     showDialog()
-                    findNavController().navigate(R.id.action_completeOrderFragment_to_cartFragment)
+                    //findNavController().navigate(R.id.action_completeOrderFragment_to_cartFragment)
 
                 }
                 }
@@ -60,6 +63,31 @@ class CompleteOrderFragment : Fragment() {
                         response.code?.let { showErrorSnack(message, it) }
                     }
                 }
+            }
+        }
+        viewModel.coupon.observe(viewLifecycleOwner) { response ->
+            when (response) {
+//                is Resource.Loading -> {
+//                    binding.layout.visibility = View.GONE
+//                    binding.lottie.visibility = View.VISIBLE
+//                }
+                is Resource.Success -> { response.data?.let {
+                    Toast.makeText(requireContext(), " + ${viewModel.order.value?.data?.total}کد با موفقیتی اعمال شد", Toast.LENGTH_SHORT)
+                        .show()
+                    binding.tvTotalPrice.text = viewModel.order.value?.data?.total
+
+                }
+                }
+                is Resource.Error -> {
+                    response.message?.let {  message ->
+                        response.code?.let { showErrorSnack(message, it) }
+                    }
+                }
+            }
+        }
+        binding.btnAddCoupon.setOnClickListener {
+            if (binding.etCoupon.text.toString().isNotEmpty()){
+                viewModel.checkCoupon(binding.etCoupon.text.toString())
             }
         }
     }

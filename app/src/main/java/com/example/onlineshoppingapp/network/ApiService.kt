@@ -149,4 +149,12 @@ interface ApiService {
         consumerSecret: String = CONSUMER_SECRET,
         @Body order: Order
     ): Response<Order>
+
+    @GET("coupons")
+    suspend fun getCoupons(
+    @Query("consumer_key")
+    consumerKey: String = CONSUMER_KEY,
+    @Query("consumer_secret")
+    consumerSecret: String = CONSUMER_SECRET
+    ):Response<List<Coupon>>
 }
