@@ -51,7 +51,7 @@
             android:id="@+id/bottom"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@color/white"
+            android:background="?attr/colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <com.google.android.material.button.MaterialButton
