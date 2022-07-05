@@ -61,6 +61,7 @@ class HomeFragment : Fragment() {
             btnNewProducts.setOnClickListener { goToProductListFragment(getString(R.string.date)) }
             btnMostViewed.setOnClickListener { goToProductListFragment(getString(R.string.popularity)) }
             btnOnSaleProducts.setOnClickListener { goToProductListFragment(getString(R.string.on_sale)) }
+            btnSetting.setOnClickListener { findNavController().navigate(R.id.action_homeFragment_to_settingFragment) }
         }
         viewModelHome.sliderPics.observe(viewLifecycleOwner){ response ->
             when (response) {

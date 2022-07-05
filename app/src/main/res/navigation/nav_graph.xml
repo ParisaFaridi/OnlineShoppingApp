@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_productListFragment"
             app:destination="@id/productListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -145,4 +148,9 @@
             android:name="orderId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.onlineshoppingapp.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
 </navigation>
