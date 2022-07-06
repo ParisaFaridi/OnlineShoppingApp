@@ -1,5 +1,6 @@
 package com.example.onlineshoppingapp.ui.detailfragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.example.onlineshoppingapp.R
@@ -46,19 +48,35 @@ class DetailFragment : Fragment() {
         activity?.title = getString(R.string.online_store)
         if (detailViewModel.product.value == null)
             detailViewModel.getProduct(args.productId)
-
+        val userInfoShared =
+            activity?.getSharedPreferences(getString(R.string.user_info), Context.MODE_PRIVATE)
+        binding.btnAddReview.setOnClickListener {
+            if (userInfoShared == null) {
+                Toast.makeText(requireContext(), "ابتدا ثبت نام کنید!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val action = detailViewModel.product.value?.data?.id?.let { it1 ->
+                DetailFragmentDirections.actionDetailFragmentToAddReviewFragment(
+                    it1
+                )
+            }
+            if (action != null) {
+                findNavController().navigate(action)
+            }
+        }
         detailViewModel.product.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
                     showProgressBar()
                 }
-                is Resource.Success -> { response.data?.let {
+                is Resource.Success -> {
+                    response.data?.let {
                         hideProgressBar()
                         setProductData(it)
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let {  message ->
+                    response.message?.let { message ->
                         response.code?.let { showErrorSnack(message, it) }
                     }
                 }
@@ -69,13 +87,14 @@ class DetailFragment : Fragment() {
                 is Resource.Loading -> {
                     showProgressBar()
                 }
-                is Resource.Success -> { response.data?.let {
+                is Resource.Success -> {
+                    response.data?.let {
                         hideProgressBar()
                         setReviews(it)
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let {  message ->
+                    response.message?.let { message ->
                         response.code?.let { showErrorSnack(message, it) }
                     }
                 }
@@ -83,12 +102,17 @@ class DetailFragment : Fragment() {
         }
         detailViewModel.order.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Success -> { response.data?.let {
-                    Toast.makeText(requireContext(), getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show()
+                is Resource.Success -> {
+                    response.data?.let {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.added_to_cart),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
                 is Resource.Error -> {
-                    response.message?.let {  message ->
+                    response.message?.let { message ->
                         response.code?.let { showErrorSnack(message, it) }
                     }
                 }
@@ -110,21 +134,25 @@ class DetailFragment : Fragment() {
             detailViewModel.createOrder(binding.tvProductNumber.text.toString().toInt())
         }
     }
-    private fun incrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() + 1).toString()
-    private fun decrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() - 1).toString()
+
+    private fun incrementQuantityTv(textView: TextView) =
+        (textView.text.toString().toInt() + 1).toString()
+
+    private fun decrementQuantityTv(textView: TextView) =
+        (textView.text.toString().toInt() - 1).toString()
 
     private fun setReviews(list: List<Review>) {
         reviewsAdapter = ReviewAdapter(requireContext(),
             deleteListener = {
-                 detailViewModel.deleteReview(it.id)
-            }
-            , editListener = {
+                detailViewModel.deleteReview(it.id)
+            }, editListener = {
                 detailViewModel.updateReview(it)
             }
         )
         binding.rvReviews.adapter = reviewsAdapter
         reviewsAdapter.submitList(list)
     }
+
     private fun setProductData(data: Product) {
         imageViewPagerAdapter = data.images?.let { images -> ImageViewPagerAdapter(images) }!!
         setUpViewPager()
@@ -136,6 +164,7 @@ class DetailFragment : Fragment() {
         }
 
     }
+
     private fun fixDescription(description: String): String {
         return description.replace("</p>", "")
             .replace("<p>", "").replace("<br />", "\n")
@@ -158,7 +187,11 @@ class DetailFragment : Fragment() {
     }
 
     private fun showErrorSnack(message: String, code: Int) {
-        val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
+        val snackBar = Snackbar.make(
+            binding.layout,
+            getErrorMessage(message, code),
+            Snackbar.LENGTH_INDEFINITE
+        )
         snackBar.setAction(
             getString(R.string.try_again)
         ) {

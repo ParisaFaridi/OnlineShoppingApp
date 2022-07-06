@@ -30,6 +30,9 @@
         tools:layout="@layout/fragment_detail" >
         <argument android:name="productId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_detailFragment_to_addReviewFragment"
+            app:destination="@id/addReviewFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
@@ -180,5 +183,18 @@
             app:destination="@id/newAddressFragment"
             app:popUpTo="@id/newAddressFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/addReviewFragment"
+        android:name="com.example.onlineshoppingapp.ui.detailfragment.AddReviewFragment"
+        android:label="fragment_add_review"
+        tools:layout="@layout/fragment_add_review" >
+        <action
+            android:id="@+id/action_addReviewFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/detailFragment"
+            app:popUpToInclusive="true" />
+        <argument android:name="product_id"
+            app:argType="integer" />
     </fragment>
 </navigation>
