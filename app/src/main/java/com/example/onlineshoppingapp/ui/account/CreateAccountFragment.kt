@@ -2,6 +2,7 @@ package com.example.onlineshoppingapp.ui.account
 
 import android.content.Context
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +54,7 @@ class CreateAccountFragment : BaseFragment() {
                     is Resource.Success ->{
                         hideProgressBar()
                         Toast.makeText(requireContext(),getString(R.string.successful_signup),Toast.LENGTH_LONG).show()
-                        saveInShare(it.data?.id)
+                        saveInShare(it.data?.id,it.data?.email)
                         findNavController().navigate(R.id.action_createAccountFragment_to_profileFragment)
                     }
                     is Resource.Error -> {
@@ -82,10 +83,11 @@ class CreateAccountFragment : BaseFragment() {
         lottie.visibility = View.VISIBLE
         lottie.playAnimation()
     }
-    private fun saveInShare(id: Int?) {
+    private fun saveInShare(id: Int?,email: String?) {
         val userInfoShared = activity?.getSharedPreferences(getString(R.string.user_info),Context.MODE_PRIVATE)
         val editor = userInfoShared?.edit()
         id?.let { it -> editor?.putInt(getString(R.string.customer_id), it)?.apply() }
+        email?.let { it -> editor?.putString(getString(R.string.email_share),it)?.apply() }
     }
 
     private fun signup() =

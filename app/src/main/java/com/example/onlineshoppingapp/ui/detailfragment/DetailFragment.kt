@@ -114,7 +114,14 @@ class DetailFragment : Fragment() {
     private fun decrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() - 1).toString()
 
     private fun setReviews(list: List<Review>) {
-        reviewsAdapter = ReviewAdapter()
+        reviewsAdapter = ReviewAdapter(requireContext(),
+            deleteListener = {
+                 detailViewModel.deleteReview(it.id)
+            }
+            , editListener = {
+                detailViewModel.updateReview(it)
+            }
+        )
         binding.rvReviews.adapter = reviewsAdapter
         reviewsAdapter.submitList(list)
     }

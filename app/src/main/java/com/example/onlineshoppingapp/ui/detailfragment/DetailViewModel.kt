@@ -2,6 +2,7 @@ package com.example.onlineshoppingapp.ui.detailfragment
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.R
@@ -61,5 +62,37 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
             }
         }
         return LineItem(id = id, productId = product.value?.data?.id!!, quantity = quantity+newQuantity)
+    }
+    fun createReview(review: Review):MutableLiveData<Resource<Review>>{
+        var mReview = MutableLiveData<Resource<Review>>(Resource.Loading())
+        if (hasInternetConnection()){
+            viewModelScope.launch {
+                mReview.postValue(repository.createReview(review))
+            }
+        }else
+            mReview.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
+        return mReview
+    }
+    fun updateReview(review: Review):MutableLiveData<Resource<Review>>{
+        var mReview = MutableLiveData<Resource<Review>>(Resource.Loading())
+        if (hasInternetConnection()){
+            viewModelScope.launch {
+                mReview.postValue(repository.updateReview(review,review.id))
+            }
+        }else
+            mReview.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
+        return mReview
+
+
+    }
+    fun deleteReview(id: Int):MutableLiveData<Resource<DeletedReview>>{
+        var mReview = MutableLiveData<Resource<DeletedReview>>(Resource.Loading())
+        if (hasInternetConnection()){
+            viewModelScope.launch {
+                mReview.postValue(repository.deleteReview(id))
+            }
+        }else
+            mReview.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
+        return mReview
     }
 }

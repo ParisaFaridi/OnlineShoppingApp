@@ -76,6 +76,8 @@
     <string name="address_2">آدرس 2 (اختیاری)</string>
     <string name="country">کشور</string>
     <string name="phone">تلفن</string>
+    <string name="email_share">email</string>
+    <string name="add_comment">دیدگاه خود را درباره این نظر بنویسید</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>
