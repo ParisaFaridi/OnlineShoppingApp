@@ -24,13 +24,14 @@ class CompleteOrderViewModel @Inject constructor(
 ) :
     AndroidViewModel(app) {
 
+    var flag = false
     val order = MutableLiveData<Resource<Order>>()
     val coupon = MutableLiveData<Resource<Coupon>>()
 
     init {
         getAllAddresses()
     }
-    fun completeOrder(orderId:Int,shipping: Shipping) {
+
     fun completeOrder(orderId: Int, shipping: Shipping) {
         order.postValue(Resource.Loading())
         viewModelScope.launch {
@@ -45,6 +46,7 @@ class CompleteOrderViewModel @Inject constructor(
                         couponLines = getCouponLine()
                     )
                 })
+                flag = true
                 repository.deleteOrder()
             } else
                 order.postValue(

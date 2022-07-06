@@ -13,6 +13,7 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.AddressAdapter
 import com.example.onlineshoppingapp.data.model.Address
+import com.example.onlineshoppingapp.data.model.Shipping
 import com.example.onlineshoppingapp.databinding.FragmentCompleteOrderBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.example.onlineshoppingapp.ui.order.viewmodels.CompleteOrderViewModel
@@ -25,8 +26,8 @@ class CompleteOrderFragment : Fragment() {
 
     private lateinit var binding: FragmentCompleteOrderBinding
     private val viewModel: CompleteOrderViewModel by viewModels()
-    private val args :CompleteOrderFragmentArgs by navArgs()
-    lateinit var addressAdapter:AddressAdapter
+    private val args: CompleteOrderFragmentArgs by navArgs()
+    private lateinit var addressAdapter: AddressAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,92 +39,100 @@ class CompleteOrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAllAddresses().observe(viewLifecycleOwner){
+        viewModel.getAllAddresses().observe(viewLifecycleOwner) {
             if (it != null) {
                 addressAdapter = AddressAdapter(it as ArrayList<Address>)
                 binding.rvAddresses.adapter = addressAdapter
                 addressAdapter.notifyDataSetChanged()
             }
 
-        viewModel.getOrder()
-        binding.btnCompleteOrder.setOnClickListener {
-            viewModel.completeOrder(args.orderId,Shipping(address1 = binding.etAddress.text.toString(),
-            city = binding.etCity.text.toString(),
-            postcode = binding.etZipCode.text.toString()))
-        }
-        binding.btnNewAddress.setOnClickListener {
-            findNavController().navigate(R.id.action_completeOrderFragment_to_newAddressFragment)
-        }
-//        binding.btnCompleteOrder.setOnClickListener {
-//            viewModel.completeOrder(args.orderId,Shipping(address1 = binding.etAddress.text.toString(),
-//            city = binding.etCity.text.toString(),
-//            postcode = binding.etZipCode.text.toString()))
-//        }
-        viewModel.order.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Loading -> {
-                    binding.layout.visibility = View.GONE
-                    binding.lottie.visibility = View.VISIBLE
+            viewModel.getOrder()
+            binding.btnCompleteOrder.setOnClickListener {
+                val address = addressAdapter.selected
+                if (address != null) {
+                    viewModel.completeOrder(
+                        args.orderId, Shipping(
+                            address1 = address.address1,
+                            city = address.city,
+                            postcode = address.postcode
+                        )
+                    )
                 }
-                is Resource.Success -> { response.data?.let {
-                    binding.layout.visibility = View.VISIBLE
-                    binding.lottie.visibility = View.GONE
-                    binding.tvTotalPrice.text = it.total
-                    showDialog()
-                    //findNavController().navigate(R.id.action_completeOrderFragment_to_cartFragment)
+            }
+            binding.btnNewAddress.setOnClickListener {
+                findNavController().navigate(R.id.action_completeOrderFragment_to_newAddressFragment)
+            }
 
-                }
-                }
-                is Resource.Error -> {
-                    response.message?.let {  message ->
-                        response.code?.let { showErrorSnack(message, it) }
+            viewModel.order.observe(viewLifecycleOwner) { response ->
+                when (response) {
+                    is Resource.Loading -> {
+                        binding.layout.visibility = View.GONE
+                        binding.lottie.visibility = View.VISIBLE
+                    }
+                    is Resource.Success -> {
+                        response.data?.let {
+                            binding.layout.visibility = View.VISIBLE
+                            binding.lottie.visibility = View.GONE
+                            binding.tvTotalPrice.text = it.total
+                            if (viewModel.flag){
+                                findNavController().navigate(R.id.action_completeOrderFragment_to_cartFragment)
+                                showDialog()
+                            }
+                        }
+                    }
+                    is Resource.Error -> {
+                        response.message?.let { message ->
+                            response.code?.let { showErrorSnack(message, it) }
+                        }
                     }
                 }
             }
-        }
-        viewModel.coupon.observe(viewLifecycleOwner) { response ->
-            when (response) {
-//                is Resource.Loading -> {
-//                    binding.layout.visibility = View.GONE
-//                    binding.lottie.visibility = View.VISIBLE
-//                }
-                is Resource.Success -> { response.data?.let {
-                    Toast.makeText(requireContext(), " + ${viewModel.order.value?.data?.total}کد با موفقیتی اعمال شد", Toast.LENGTH_SHORT)
-                        .show()
-                    binding.tvTotalPrice.text = viewModel.order.value?.data?.total
+            viewModel.coupon.observe(viewLifecycleOwner) { response ->
+                when (response) {
 
-                }
-                }
-                is Resource.Error -> {
-                    response.message?.let {  message ->
-                        response.code?.let { showErrorSnack(message, it) }
+                    is Resource.Success -> {
+                        response.data?.let {
+                            Toast.makeText(
+                                requireContext(),
+                                " + ${viewModel.order.value?.data?.total}کد با موفقیتی اعمال شد",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            binding.tvTotalPrice.text = viewModel.order.value?.data?.total
+
+                        }
+                    }
+                    is Resource.Error -> {
+                        response.message?.let { message ->
+                            response.code?.let { showErrorSnack(message, it) }
+                        }
                     }
                 }
             }
-        }
-        binding.btnAddCoupon.setOnClickListener {
-            if (binding.etCoupon.text.toString().isNotEmpty()){
-                viewModel.checkCoupon(binding.etCoupon.text.toString())
+            binding.btnAddCoupon.setOnClickListener {
+                if (binding.etCoupon.text.toString().isNotEmpty()) {
+                    viewModel.checkCoupon(binding.etCoupon.text.toString())
+                }
             }
         }
     }
+
     private fun showDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(getString(R.string.order_completed))
-            .setNeutralButton(getString(R.string.ok_)){ _, _ -> }
+            .setNeutralButton(getString(R.string.ok_)) { _, _ -> }
             .show()
     }
+
     private fun showErrorSnack(message: String, code: Int) {
-        val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
-        snackBar.setAction(
-            getString(R.string.try_again)
-        ) {
-//            viewModel.completeOrder(args.orderId,Shipping(address1 = binding.etAddress.text.toString(),
-//                city = binding.etCity.text.toString(),
-//                postcode = binding.etZipCode.text.toString()))
+        val snackBar = Snackbar.make(
+            binding.layout,
+            getErrorMessage(message, code),
+            Snackbar.LENGTH_INDEFINITE
+        )
+        snackBar.setAction("باشه") {
             binding.lottie.playAnimation()
         }
         snackBar.show()
     }
-
 }

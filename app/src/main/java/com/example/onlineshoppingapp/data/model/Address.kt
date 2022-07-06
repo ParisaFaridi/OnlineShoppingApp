@@ -7,12 +7,14 @@ import androidx.room.PrimaryKey
 class Address(
     @PrimaryKey(autoGenerate = true)
     var id:Int=0,
-    val title:String,
-    val address1: String,
-    val city: String,
-    val country: String,
-    val phone: String,
-    val postcode: String,
-    val lat:Double,
-    val long:Double
-)
+    var title:String,
+    var address1: String,
+    var city: String,
+    var country: String,
+    var phone: String,
+    var postcode: String,
+    var lat:Double,
+    var long:Double
+){
+    constructor() : this(0, "", "", "", "", "", "", 0.0,0.0)
+}
