@@ -9,6 +9,8 @@ const val CONSUMER_SECRET = "cs_294e7de35430398f323b43c21dd1b29f67b5370b"
 
 interface ApiService {
 
+    //product
+
     @GET("products")
     suspend fun getProducts(
         @Query("consumer_key")
@@ -37,14 +39,6 @@ interface ApiService {
         consumerSecret: String = CONSUMER_SECRET
     ): Response<Product>
 
-    @GET("products/categories")
-    suspend fun getCategories(
-        @Query("consumer_key")
-        consumerKey: String = CONSUMER_KEY,
-        @Query("consumer_secret")
-        consumerSecret: String = CONSUMER_SECRET
-    ): Response<List<Category>>
-
     @GET("products")
     suspend fun getProductsByCategory(
         @Query("consumer_key")
@@ -54,56 +48,6 @@ interface ApiService {
         @Query(value = "category")
         categoryId: Int
     ): Response<List<Product>>
-
-    @POST("customers")
-    suspend fun signUp(
-        @Query("consumer_key")
-        consumerKey: String = CONSUMER_KEY,
-        @Query("consumer_secret")
-        consumerSecret: String = CONSUMER_SECRET,
-        @Body customer: Customer
-    ): Response<Customer>
-
-    @GET("customers/{id}")
-    suspend fun getCustomer(
-        @Path(value = "id")
-        id: Int,
-        @Query("consumer_key")
-        consumerKey: String = CONSUMER_KEY,
-        @Query("consumer_secret")
-        consumerSecret: String = CONSUMER_SECRET
-
-    ): Response<Customer>
-
-    @GET("orders/{id}")
-    suspend fun getOrder(
-        @Path(value ="id")
-        id: Int,
-        @Query("consumer_key")
-        consumerKey: String = CONSUMER_KEY,
-        @Query("consumer_secret")
-        consumerSecret: String = CONSUMER_SECRET
-
-    ): Response<Order>
-
-    @GET("products/reviews")
-    suspend fun getProductReviews(
-        @Query("consumer_key")
-        consumerKey: String = CONSUMER_KEY,
-        @Query("consumer_secret")
-        consumerSecret: String = CONSUMER_SECRET,
-        @Query("product")
-        productId:Int
-    ):Response<List<Review>>
-
-    @POST("orders")
-    suspend fun createOrder(
-        @Query("consumer_key")
-        consumerKey: String = CONSUMER_KEY,
-        @Query("consumer_secret")
-        consumerSecret: String = CONSUMER_SECRET,
-        @Body order: Order
-    ): Response<Order>
 
     @GET("products/attributes/{attribute_id}/terms")
     suspend fun getAttributeItems(
@@ -139,6 +83,58 @@ interface ApiService {
         order: String
     ): Response<List<Product>>
 
+    @GET("products/categories")
+    suspend fun getCategories(
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET
+    ): Response<List<Category>>
+
+
+    //customer
+
+    @POST("customers")
+    suspend fun signUp(
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET,
+        @Body customer: Customer
+    ): Response<Customer>
+
+    @GET("customers/{id}")
+    suspend fun getCustomer(
+        @Path(value = "id")
+        id: Int,
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET
+    ): Response<Customer>
+
+
+    //order
+
+    @GET("orders/{id}")
+    suspend fun getOrder(
+        @Path(value ="id")
+        id: Int,
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET
+    ): Response<Order>
+
+    @POST("orders")
+    suspend fun createOrder(
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET,
+        @Body order: Order
+    ): Response<Order>
+
     @POST("orders/{id}")
     suspend fun updateOrder(
         @Path("id")
@@ -150,6 +146,52 @@ interface ApiService {
         @Body order: Order
     ): Response<Order>
 
+
+    //reviews
+
+    @GET("products/reviews")
+    suspend fun getProductReviews(
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET,
+        @Query("product")
+        productId:Int
+    ):Response<List<Review>>
+
+    @POST("products/reviews")
+    suspend fun createReview(
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET,
+        @Body review: Review
+    ):Response<Review>
+
+    @POST("products/reviews/{id}")
+    suspend fun updateReview(
+        @Path("id")
+        id: Int,
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET,
+        @Body review: Review
+    ):Response<Review>
+
+    @DELETE("products/reviews/{id}")
+    suspend fun deleteReview(
+        @Path("id")
+        id: Int,
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET,
+        @Query("force")
+        force:Boolean=true
+    ):Response<DeletedReview>
+
+    //coupon
     @GET("coupons")
     suspend fun getCoupons(
     @Query("consumer_key")

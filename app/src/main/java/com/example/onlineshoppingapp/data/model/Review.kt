@@ -27,5 +27,9 @@ data class Review(
     @Json(name = "status")
     val status: String,
     @Json(name = "verified")
-    val verified: Boolean
+    val verified: Boolean,
+    @Json(name = "product_name")
+    val productName: String,
+    @Json(name = "product_permalink")
+    val productPermalink: String,
 )
