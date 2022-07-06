@@ -147,10 +147,24 @@
         <argument
             android:name="orderId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_completeOrderFragment_to_newAddressFragment"
+            app:destination="@id/newAddressFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.example.onlineshoppingapp.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/newAddressFragment"
+        android:name="com.example.onlineshoppingapp.NewAddressFragment"
+        android:label="fragment_new_address"
+        tools:layout="@layout/fragment_new_address" >
+        <action
+            android:id="@+id/action_newAddressFragment_to_completeOrderFragment"
+            app:destination="@id/completeOrderFragment"
+            app:popUpTo="@id/completeOrderFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
