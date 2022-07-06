@@ -1,9 +1,11 @@
 package com.example.onlineshoppingapp
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.onlineshoppingapp.data.model.Address
@@ -37,19 +39,33 @@ class NewAddressFragment : BaseFragment() {
             addNewAddress()
             findNavController().navigate(R.id.action_newAddressFragment_to_completeOrderFragment)
             }
-
+        binding.btnLocation.setOnClickListener {
+            findNavController().navigate(R.id.action_newAddressFragment_to_mapsFragment)
+        }
         }
 
-    private fun addNewAddress() =
-        viewModel.addAddress(Address(
-            title = binding.etTitle.text.toString(),
-            address1 = binding.etAddress1.text.toString(),
-            address2 = binding.etAddress2.text.toString(),
-            country = binding.etCountry.text.toString(),
-            city = binding.etCity.text.toString(),
-            phone = binding.etPhone.text.toString(),
-            postcode = binding.etPostCode.text.toString())
-        )
+    private fun addNewAddress() {
+        val shared = activity?.getSharedPreferences("lat_long",Context.MODE_PRIVATE)
+        val lat = shared?.getString("latitude","0.0")?.toDouble()
+        val long = shared?.getString("longitude","0.0")?.toDouble()
+        findNavController().navigate(R.id.action_mapsFragment_to_newAddressFragment)
+        if (lat != null && long != null){
+            viewModel.addAddress(
+                Address(
+                    title = binding.etTitle.text.toString(),
+                    address1 = binding.etAddress1.text.toString(),
+                    country = binding.etCountry.text.toString(),
+                    city = binding.etCity.text.toString(),
+                    phone = binding.etPhone.text.toString(),
+                    postcode = binding.etPostCode.text.toString(),
+                    lat = lat,
+                    long = long
+                )
+            )
+        }else{
+            Toast.makeText(requireContext(), "لطفا لوکیشن را تایید کنید", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun hasEmptyField(): Boolean {
         return (binding.etTitle.text.isNullOrEmpty() || binding.etAddress1.text.isNullOrEmpty() ||

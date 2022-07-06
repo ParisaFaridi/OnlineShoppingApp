@@ -9,9 +9,10 @@ class Address(
     var id:Int=0,
     val title:String,
     val address1: String,
-    val address2: String?=null,
     val city: String,
     val country: String,
     val phone: String,
     val postcode: String,
+    val lat:Double,
+    val long:Double
 )
