@@ -50,6 +50,6 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
     suspend fun insert(orderId: OrderId) = localDataSource.insert(orderId)
     suspend fun isOrderNew() = localDataSource.isOrderNew()
     suspend fun deleteOrder()= localDataSource.deleteOrder()
-    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>,shipping: Shipping?=null,status:String="pending",couponLines:List<CouponLine?>)=
+    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>,shipping: Shipping?=null,status:String="pending",couponLines:List<Coupon>)=
         getSafeApiResponse(remoteDataSource.updateOrder(orderId,listOf, shipping = shipping, status = status,couponLines))
 }

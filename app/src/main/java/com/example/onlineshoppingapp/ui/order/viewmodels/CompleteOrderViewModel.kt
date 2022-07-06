@@ -8,7 +8,6 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
 import com.example.onlineshoppingapp.data.model.Coupon
-import com.example.onlineshoppingapp.data.model.CouponLine
 import com.example.onlineshoppingapp.data.model.Order
 import com.example.onlineshoppingapp.data.model.Shipping
 import com.example.onlineshoppingapp.hasInternetConnection
@@ -51,22 +50,13 @@ class CompleteOrderViewModel @Inject constructor(
         }
     }
 
-    private fun getCouponLine(): List<CouponLine?> {
+    private fun getCouponLine(): List<Coupon> {
         return if (coupon.value == null || coupon.value is Resource.Error)
             listOf()
-        else{
-            listOf(coupon.value!!.data?.let {
-                it.id?.let { it1 -> it.amount?.let { it2 ->
-                    it.code?.let { it3 ->
-                        CouponLine(id = it1, code = it3,
-                            it2
-                        )
-                    }
-                } }
-            })
+        else {
+            listOf(Coupon(code = coupon.value!!.data?.code!!))
         }
     }
-
     fun checkCoupon(couponCode: String) {
         coupon.postValue(Resource.Loading())
         viewModelScope.launch {
