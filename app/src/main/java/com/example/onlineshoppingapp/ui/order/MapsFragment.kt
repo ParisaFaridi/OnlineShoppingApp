@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp
+package com.example.onlineshoppingapp.ui.order
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.databinding.FragmentMapsBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices

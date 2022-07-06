@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp
+package com.example.onlineshoppingapp.ui.homeFragment
 
 import android.os.Build
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.databinding.FragmentSettingBinding
 
 

@@ -153,12 +153,12 @@
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.example.onlineshoppingapp.SettingFragment"
+        android:name="com.example.onlineshoppingapp.ui.homeFragment.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/newAddressFragment"
-        android:name="com.example.onlineshoppingapp.NewAddressFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.NewAddressFragment"
         android:label="fragment_new_address"
         tools:layout="@layout/fragment_new_address" >
         <action
@@ -172,7 +172,7 @@
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
-        android:name="com.example.onlineshoppingapp.MapsFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" >
         <action

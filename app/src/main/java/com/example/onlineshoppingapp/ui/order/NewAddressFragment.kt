@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp
+package com.example.onlineshoppingapp.ui.order
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.data.model.Address
 import com.example.onlineshoppingapp.databinding.FragmentNewAddressBinding
 import com.example.onlineshoppingapp.ui.BaseFragment
