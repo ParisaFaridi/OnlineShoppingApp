@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.onlineshoppingapp.ui.detailfragment.DetailFragment"
+        android:name="com.example.onlineshoppingapp.ui.product.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" >
         <argument android:name="productId"
@@ -186,7 +186,7 @@
     </fragment>
     <fragment
         android:id="@+id/addReviewFragment"
-        android:name="com.example.onlineshoppingapp.ui.detailfragment.AddReviewFragment"
+        android:name="com.example.onlineshoppingapp.ui.product.AddReviewFragment"
         android:label="fragment_add_review"
         tools:layout="@layout/fragment_add_review" >
         <action

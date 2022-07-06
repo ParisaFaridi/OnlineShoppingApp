@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.detailfragment
+package com.example.onlineshoppingapp.ui.product
 
 import android.content.Context
 import android.os.Bundle
