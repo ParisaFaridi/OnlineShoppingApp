@@ -2,11 +2,13 @@ package com.example.onlineshoppingapp.ui.order.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
+import com.example.onlineshoppingapp.data.model.Address
 import com.example.onlineshoppingapp.data.model.Order
 import com.example.onlineshoppingapp.data.model.Shipping
 import com.example.onlineshoppingapp.hasInternetConnection
@@ -20,6 +22,9 @@ class CompleteOrderViewModel @Inject constructor(private val repository: Reposit
 
     val order = MutableLiveData<Resource<Order>>()
 
+    init {
+        getAllAddresses()
+    }
     fun completeOrder(orderId:Int,shipping: Shipping) {
         order.postValue(Resource.Loading())
         viewModelScope.launch {
@@ -35,5 +40,16 @@ class CompleteOrderViewModel @Inject constructor(private val repository: Reposit
             }else
                 order.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
         }
+    }
+    fun getAllAddresses(): LiveData<List<Address?>> {
+        lateinit var addresses : LiveData<List<Address?>>
+        viewModelScope.launch {
+            addresses = repository.getAllAddresses()
+        }
+        return addresses
+    }
+
+    fun addAddress(address: Address) = viewModelScope.launch {
+        repository.insertAddress(address)
     }
 }
