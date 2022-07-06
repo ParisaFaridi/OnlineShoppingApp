@@ -7,11 +7,11 @@ data class Billing(
     @Json(name = "address_1")
     val address1: String,
     @Json(name = "address_2")
-    val address2: String,
+    val address2: String?=null,
     @Json(name = "city")
     val city: String,
     @Json(name = "company")
-    val company: String,
+    val company: String?=null,
     @Json(name = "country")
     val country: String,
     @Json(name = "email")
@@ -25,5 +25,5 @@ data class Billing(
     @Json(name = "postcode")
     val postcode: String,
     @Json(name = "state")
-    val state: String
+    val state: String?=null
 )

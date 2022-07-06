@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
     }
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         return true
     }
     override fun onSupportNavigateUp(): Boolean {

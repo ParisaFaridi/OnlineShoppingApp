@@ -46,10 +46,10 @@ class OnSaleProductAdapter (private val clickHandler: ClickHandler):
             product = getItem(position)
         }
         if (getItem(position).images?.firstOrNull()?.src == null){
-            Glide.with(holder.binding.image.context).load(R.drawable.ic_baseline_error_24)
+            Glide.with(holder.binding.image.context).load(R.drawable.ic_baseline_error_24).centerCrop()
                 .into(holder.binding.image)
         }else{
-            Glide.with(holder.binding.image.context).load(getItem(position).images?.get(0)?.src)
+            Glide.with(holder.binding.image.context).load(getItem(position).images?.get(0)?.src).centerCrop()
                 .into(holder.binding.image)
         }
         holder.binding.image.setOnClickListener {

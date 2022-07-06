@@ -47,6 +47,9 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
             Resource.Error()
         }
     }
+    suspend fun insertAddress(address: Address)= localDataSource.insertAddress(address)
+    suspend fun getAddress(id:Int) = localDataSource.getAddress(id)
+    suspend fun getAllAddresses() = localDataSource.getAllAddresses()
     suspend fun insert(orderId: OrderId) = localDataSource.insert(orderId)
     suspend fun isOrderNew() = localDataSource.isOrderNew()
     suspend fun deleteOrder()= localDataSource.deleteOrder()

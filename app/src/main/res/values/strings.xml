@@ -69,7 +69,13 @@
     <string name="asc">asc</string>
     <string name="order_completed">سفارش با موفقیت ثبت شد!</string>
     <string name="coupon">کد تخفیف</string>
-    <string name="coupon_error">کد تخفیف یا اشتباه است یا قبلا استفاده شده</string>
+    <string name="coupon_error">کد تخفیف یا اشتباه است</string>
+    <string name="new_address">آدرس جدید</string>
+    <string name="address_title">عنوان</string>
+    <string name="address_1">آدرس 1</string>
+    <string name="address_2">آدرس 2 (اختیاری)</string>
+    <string name="country">کشور</string>
+    <string name="phone">تلفن</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

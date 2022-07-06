@@ -11,7 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
-import com.example.onlineshoppingapp.data.model.Shipping
+import com.example.onlineshoppingapp.adapters.AddressAdapter
+import com.example.onlineshoppingapp.data.model.Address
 import com.example.onlineshoppingapp.databinding.FragmentCompleteOrderBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.example.onlineshoppingapp.ui.order.viewmodels.CompleteOrderViewModel
@@ -25,6 +26,7 @@ class CompleteOrderFragment : Fragment() {
     private lateinit var binding: FragmentCompleteOrderBinding
     private val viewModel: CompleteOrderViewModel by viewModels()
     private val args :CompleteOrderFragmentArgs by navArgs()
+    lateinit var addressAdapter:AddressAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +38,12 @@ class CompleteOrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getAllAddresses().observe(viewLifecycleOwner){
+            if (it != null) {
+                addressAdapter = AddressAdapter(it as ArrayList<Address>)
+                binding.rvAddresses.adapter = addressAdapter
+                addressAdapter.notifyDataSetChanged()
+            }
 
         viewModel.getOrder()
         binding.btnCompleteOrder.setOnClickListener {
@@ -43,6 +51,14 @@ class CompleteOrderFragment : Fragment() {
             city = binding.etCity.text.toString(),
             postcode = binding.etZipCode.text.toString()))
         }
+        binding.btnNewAddress.setOnClickListener {
+            findNavController().navigate(R.id.action_completeOrderFragment_to_newAddressFragment)
+        }
+//        binding.btnCompleteOrder.setOnClickListener {
+//            viewModel.completeOrder(args.orderId,Shipping(address1 = binding.etAddress.text.toString(),
+//            city = binding.etCity.text.toString(),
+//            postcode = binding.etZipCode.text.toString()))
+//        }
         viewModel.order.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
@@ -102,9 +118,9 @@ class CompleteOrderFragment : Fragment() {
         snackBar.setAction(
             getString(R.string.try_again)
         ) {
-            viewModel.completeOrder(args.orderId,Shipping(address1 = binding.etAddress.text.toString(),
-                city = binding.etCity.text.toString(),
-                postcode = binding.etZipCode.text.toString()))
+//            viewModel.completeOrder(args.orderId,Shipping(address1 = binding.etAddress.text.toString(),
+//                city = binding.etCity.text.toString(),
+//                postcode = binding.etZipCode.text.toString()))
             binding.lottie.playAnimation()
         }
         snackBar.show()
