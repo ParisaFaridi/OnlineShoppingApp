@@ -31,7 +31,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     suspend fun getAttributeItems(id :Int) = apiService.getAttributeItems(id)
 
-    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>,shipping: Shipping?,status:String,couponLines:List<CouponLine?>) =
+    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>,shipping: Shipping?,
+                            status:String,couponLines:List<Coupon>) =
         apiService.updateOrder(id = orderId,order =
         Order(id = orderId, lineItems = listOf, shipping = shipping, status = status, couponLines = couponLines))
 }

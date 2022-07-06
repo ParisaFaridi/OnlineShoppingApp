@@ -44,7 +44,7 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
                     repository.insert(OrderId(order.value?.data?.id!!))
             }else{
                 repository.updateOrder(
-                    repository.isOrderNew()!!.id,listOf(updateItemLines(quantity)), couponLines =listOf<CouponLine>())
+                    repository.isOrderNew()!!.id,listOf(updateItemLines(quantity)), couponLines =listOf())
             }
         }
     }
