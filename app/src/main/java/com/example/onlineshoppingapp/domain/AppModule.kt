@@ -3,7 +3,7 @@ package com.example.onlineshoppingapp.domain
 import android.content.Context
 import androidx.room.Room
 import com.example.onlineshoppingapp.network.ApiService
-import com.example.onlineshoppingapp.room.OrderDataBase
+import com.example.onlineshoppingapp.room.ShopDataBase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -52,10 +52,10 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideDataBase(@ApplicationContext context: Context):OrderDataBase {
+    fun provideDataBase(@ApplicationContext context: Context):ShopDataBase {
         return Room.databaseBuilder(
             context,
-            OrderDataBase::class.java, "movie_db"
+            ShopDataBase::class.java, "movie_db"
         )
             .fallbackToDestructiveMigration().build()
     }
