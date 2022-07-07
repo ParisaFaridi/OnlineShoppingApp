@@ -154,8 +154,8 @@
             app:popUpTo="@id/cartFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_completeOrderFragment_to_newAddressFragment"
-            app:destination="@id/newAddressFragment" />
+            android:id="@+id/action_completeOrderFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -172,9 +172,6 @@
             app:destination="@id/completeOrderFragment"
             app:popUpTo="@id/completeOrderFragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_newAddressFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
@@ -184,8 +181,7 @@
         <action
             android:id="@+id/action_mapsFragment_to_newAddressFragment"
             app:destination="@id/newAddressFragment"
-            app:popUpTo="@id/newAddressFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/addReviewFragment"

@@ -7,17 +7,17 @@ data class Shipping(
     @Json(name = "address_1")
     val address1: String,
     @Json(name = "address_2")
-    val address2: String?=null,
+    val address2: String,
     @Json(name = "city")
     val city: String,
     @Json(name = "company")
     val company: String?=null,
     @Json(name = "country")
-    val country: String?=null,
+    val country: String,
     @Json(name = "first_name")
-    val firstName: String?=null,
+    val firstName: String,
     @Json(name = "last_name")
-    val lastName: String?=null,
+    val lastName: String,
     @Json(name = "postcode")
     val postcode: String,
     @Json(name = "state")

@@ -1,6 +1,7 @@
 package com.example.onlineshoppingapp.ui.order
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.AddressAdapter
 import com.example.onlineshoppingapp.data.model.Address
-import com.example.onlineshoppingapp.data.model.Shipping
 import com.example.onlineshoppingapp.databinding.FragmentCompleteOrderBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.example.onlineshoppingapp.ui.order.viewmodels.CompleteOrderViewModel
@@ -44,24 +44,23 @@ class CompleteOrderFragment : Fragment() {
             if (it != null)
                 binding.tvTotalPrice.text = it.toString()
         }
+        val userInfoShared = activity?.getSharedPreferences(getString(R.string.user_info), Context.MODE_PRIVATE)
+        val customerName = userInfoShared?.getString("name","")
         viewModel.getAllAddresses().observe(viewLifecycleOwner) {
             if (it != null) {
                 addressAdapter = AddressAdapter(it as ArrayList<Address>)
                 binding.rvAddresses.adapter = addressAdapter
                 addressAdapter.notifyDataSetChanged()
+                binding.btnCompleteOrder.isEnabled = it.isEmpty()
             }
             binding.btnCompleteOrder.setOnClickListener {
                 val address = addressAdapter.selected
                 if (address != null) {
-                    viewModel.completeOrder(
-                        Shipping(
-                            address1 = address.address1,
-                            city = address.city,
-                            postcode = address.postcode))
+                    viewModel.completeOrder(address,customerName!!)
                 }
             }
             binding.btnNewAddress.setOnClickListener {
-                findNavController().navigate(R.id.action_completeOrderFragment_to_newAddressFragment)
+                findNavController().navigate(R.id.action_completeOrderFragment_to_mapsFragment)
             }
             viewModel.order.observe(viewLifecycleOwner) { response ->
                 when (response) {
