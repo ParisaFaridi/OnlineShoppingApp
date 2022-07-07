@@ -43,6 +43,7 @@ class CartAdapter(private val clickHandler: QuantityClickHandler,private val del
         holder.binding.apply {
             cartProduct = getItem(position)
             tvPrice.text = getFormattedPrice(position)
+            tvTotalOfProduct.text = getItem(position).totalPrice
             Glide.with(holder.binding.image.context).load(getItem(position).image).centerCrop()
                 .into(holder.binding.image)
         }
