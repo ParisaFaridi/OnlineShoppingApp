@@ -72,13 +72,16 @@
     <string name="coupon_error">کد تخفیف اشتباه است</string>
     <string name="new_address">آدرس جدید</string>
     <string name="address_title">عنوان</string>
-    <string name="address_1">آدرس 1</string>
+    <string name="address_1">آدرس</string>
     <string name="address_2">آدرس 2 (اختیاری)</string>
     <string name="country">کشور</string>
     <string name="phone">تلفن</string>
     <string name="email_share">email</string>
     <string name="add_comment">دیدگاه خود را درباره این کالا بنویسید</string>
     <string name="log_out">خروج از حساب کاربری</string>
+    <string name="lat_long">مختصات</string>
+    <string name="first_name_share">first_name</string>
+    <string name="last_name_share">last_name</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

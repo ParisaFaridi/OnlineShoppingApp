@@ -33,9 +33,8 @@ class CreateAccountFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val customerId = activity?.getSharedPreferences(getString(R.string.user_info),Context.MODE_PRIVATE)?.
+        val customerId = activity?.getSharedPreferences(getString(R.string.user_info), Context.MODE_PRIVATE)?.
         getInt(getString(R.string.customer_id),0)
-
         if ( customerId!= 0)
             findNavController().navigate(R.id.action_createAccountFragment_to_profileFragment)
 
@@ -58,8 +57,7 @@ class CreateAccountFragment : BaseFragment() {
                     }
                     is Resource.Error -> {
                             it.message?.let {  message ->
-                                it.code?.let { code -> showErrorSnack(message, code) }
-                        }
+                                it.code?.let { code -> showErrorSnack(message, code) } }
                     }
                 }
             }
@@ -87,7 +85,8 @@ class CreateAccountFragment : BaseFragment() {
         val editor = userInfoShared?.edit()
         customer?.id?.let { it -> editor?.putInt(getString(R.string.customer_id), it)?.apply() }
         customer?.email?.let { it -> editor?.putString(getString(R.string.email_share),it)?.apply() }
-        editor?.putString("name","${customer?.firstName}  ${customer?.lastName}")
+        customer?.firstName?.let{it -> editor?.putString(getString(R.string.first_name_share),it)?.apply()}
+        customer?.lastName?.let{it -> editor?.putString(getString(R.string.last_name_share),it)?.apply()}
     }
 
     private fun signup() =
