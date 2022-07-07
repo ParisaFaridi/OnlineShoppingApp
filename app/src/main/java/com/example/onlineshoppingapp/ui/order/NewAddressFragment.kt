@@ -1,18 +1,18 @@
 package com.example.onlineshoppingapp.ui.order
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.data.model.Address
 import com.example.onlineshoppingapp.databinding.FragmentNewAddressBinding
 import com.example.onlineshoppingapp.ui.BaseFragment
 import com.example.onlineshoppingapp.ui.order.viewmodels.CompleteOrderViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,6 +20,7 @@ class NewAddressFragment : BaseFragment() {
 
     lateinit var binding :FragmentNewAddressBinding
     private val viewModel: CompleteOrderViewModel by viewModels()
+    private val args:NewAddressFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,40 +33,26 @@ class NewAddressFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.etAddress2.setText(args.latLong)
         binding.btnSaveAddress.setOnClickListener {
             if (hasEmptyField()) {
                 checkForErrors()
                 return@setOnClickListener
             }
             addNewAddress()
+            showDialog()
             findNavController().navigate(R.id.action_newAddressFragment_to_completeOrderFragment)
-            }
-        binding.btnLocation.setOnClickListener {
-            findNavController().navigate(R.id.action_newAddressFragment_to_mapsFragment)
         }
-        }
-
+    }
     private fun addNewAddress() {
-        val shared = activity?.getSharedPreferences("lat_long",Context.MODE_PRIVATE)
-        val lat = shared?.getString("latitude","0.0")?.toDouble()
-        val long = shared?.getString("longitude","0.0")?.toDouble()
-        findNavController().navigate(R.id.action_mapsFragment_to_newAddressFragment)
-        if (lat != null && long != null){
-            viewModel.addAddress(
-                Address(
-                    title = binding.etTitle.text.toString(),
-                    address1 = binding.etAddress1.text.toString(),
-                    country = binding.etCountry.text.toString(),
-                    city = binding.etCity.text.toString(),
-                    phone = binding.etPhone.text.toString(),
-                    postcode = binding.etPostCode.text.toString(),
-                    lat = lat,
-                    long = long
-                )
-            )
-        }else{
-            Toast.makeText(requireContext(), "لطفا لوکیشن را تایید کنید", Toast.LENGTH_SHORT).show()
-        }
+        viewModel.addAddress(Address(
+            title = binding.etTitle.text.toString(),
+            address1 = binding.etAddress1.text.toString(),
+            country = binding.etCountry.text.toString(),
+            city = binding.etCity.text.toString(),
+            phone = binding.etPhone.text.toString(),
+            postcode = binding.etPostCode.text.toString(),
+            latLong = binding.etAddress2.text.toString()))
     }
 
     private fun hasEmptyField(): Boolean {
@@ -80,5 +67,11 @@ class NewAddressFragment : BaseFragment() {
         setError(binding.etCity)
         setError(binding.etPhone)
         setError(binding.etPostCode)
+    }
+    private fun showDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage("آدرس ثبت شد!")
+            .setNeutralButton(getString(R.string.ok_)) { _, _ -> }
+            .show()
     }
 }

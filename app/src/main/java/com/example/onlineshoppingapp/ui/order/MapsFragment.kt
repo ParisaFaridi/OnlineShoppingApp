@@ -60,12 +60,8 @@ class MapsFragment : Fragment() {
             map = readyMap
         }
         binding.btnConfirm.setOnClickListener {
-            val shared = activity?.getSharedPreferences("lat_long",Context.MODE_PRIVATE)
-            val editor = shared?.edit()
-            editor?.putString("latitude", lat)
-            editor?.putString("longitude", long)
-            editor?.apply()
-            findNavController().navigate(R.id.action_mapsFragment_to_newAddressFragment)
+            val action = MapsFragmentDirections.actionMapsFragmentToNewAddressFragment("$lat,$long")
+            findNavController().navigate(action)
         }
     }
 
