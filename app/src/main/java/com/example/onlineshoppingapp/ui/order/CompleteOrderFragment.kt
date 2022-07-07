@@ -86,7 +86,13 @@ class CompleteOrderFragment : Fragment() {
             }
             viewModel.coupon.observe(viewLifecycleOwner) { response ->
                 when (response) {
+                    is Resource.Loading -> {
+                        binding.layout.visibility = View.GONE
+                        binding.lottie.visibility = View.VISIBLE
+                    }
                     is Resource.Success -> {
+                        binding.layout.visibility = View.VISIBLE
+                        binding.lottie.visibility = View.GONE
                         response.data?.let {
                             Toast.makeText(
                                 requireContext(),

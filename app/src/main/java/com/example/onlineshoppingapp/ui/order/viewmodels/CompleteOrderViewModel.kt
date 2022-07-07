@@ -75,7 +75,7 @@ class CompleteOrderViewModel @Inject constructor(
                             total = (oldTotal.toDouble().minus(i.amount?.toDouble()!!)).toString()
                             break
                         }
-                        coupon.postValue(Resource.Error(getApplication<Application>().getString(R.string.coupon_error), code = 10))
+                        coupon.postValue(Resource.Error(getApplication<Application>().getString(R.string.coupon_error)))
                     }
                 }
             } else {
