@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class Address(
+data class Address(
     @PrimaryKey(autoGenerate = true)
     var id:Int=0,
     var title:String,
@@ -13,8 +13,5 @@ class Address(
     var country: String,
     var phone: String,
     var postcode: String,
-    var lat:Double,
-    var long:Double
-){
-    constructor() : this(0, "", "", "", "", "", "", 0.0,0.0)
-}
+    var latLong:String
+)
