@@ -18,7 +18,6 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
     AndroidViewModel(app) {
 
     val product = MutableLiveData<Resource<Product>>()
-    val order = MutableLiveData<Resource<Order>>()
     val reviews = MutableLiveData<Resource<List<Review>>>()
 
     fun getProduct(id : Int) = viewModelScope.launch {
@@ -34,36 +33,9 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
             reviews.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
         }
     }
-    fun createOrder(quantity:Int) {
-        viewModelScope.launch {
-            if (repository.isOrderNew()== null){
-                order.postValue(repository.createOrder(
-                    Order(lineItems = listOf(
-                            LineItem(productId = product.value?.data?.id!!, quantity = quantity)))))
-                if (order.value != null)
-                    repository.insert(OrderId(order.value?.data?.id!!))
-            }else{
-                repository.updateOrder(
-                    repository.isOrderNew()!!.id,listOf(updateItemLines(quantity)), couponLines =listOf())
-            }
-        }
-    }
-    private suspend fun updateItemLines(newQuantity:Int):LineItem{
-        val mOrder = repository.getOrder(repository.isOrderNew()!!.id).data?.lineItems
-        var id =0
-        var quantity=0
-        if (mOrder != null) {
-            for(i in mOrder){
-                if (i.productId == product.value?.data?.id){
-                    id = i.id
-                    quantity=i.quantity
-                }
-            }
-        }
-        return LineItem(id = id, productId = product.value?.data?.id!!, quantity = quantity+newQuantity)
-    }
+
     fun createReview(review: Review):MutableLiveData<Resource<Review>>{
-        var mReview = MutableLiveData<Resource<Review>>(Resource.Loading())
+        val mReview = MutableLiveData<Resource<Review>>(Resource.Loading())
         if (hasInternetConnection()){
             viewModelScope.launch {
                 mReview.postValue(repository.createReview(review))
@@ -73,7 +45,7 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
         return mReview
     }
     fun updateReview(review: Review):MutableLiveData<Resource<Review>>{
-        var mReview = MutableLiveData<Resource<Review>>(Resource.Loading())
+        val mReview = MutableLiveData<Resource<Review>>(Resource.Loading())
         if (hasInternetConnection()){
             viewModelScope.launch {
                 mReview.postValue(repository.updateReview(review,review.id))
@@ -85,7 +57,7 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
 
     }
     fun deleteReview(id: Int):MutableLiveData<Resource<DeletedReview>>{
-        var mReview = MutableLiveData<Resource<DeletedReview>>(Resource.Loading())
+        val mReview = MutableLiveData<Resource<DeletedReview>>(Resource.Loading())
         if (hasInternetConnection()){
             viewModelScope.launch {
                 mReview.postValue(repository.deleteReview(id))
@@ -93,5 +65,34 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
         }else
             mReview.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
         return mReview
+    }
+
+    fun addToCart(quantity:Int) =viewModelScope.launch{
+        if (!repository.exists(product.value?.data?.id!!)){
+            product.value!!.data?.let {
+                repository.insertCartProduct(cartProduct = CartProduct(
+                    it.id!!,
+                    it.name!!,
+                    it.images?.get(0)?.src!!,
+                    quantity,
+                    it.price!!,
+                    (it.price.toLong() * quantity.toLong()).toString()
+                )
+                )
+            }
+        }else{
+            val mProduct = repository.getCartProduct(product.value?.data?.id!!)
+            val newQuantity = quantity + mProduct.quantity
+            val newTotal = newQuantity * mProduct.price.toLong()
+            repository.insertCartProduct(
+                CartProduct(mProduct.id,
+                    mProduct.name,
+                    mProduct.image,
+                    newQuantity,
+                    mProduct.price,
+                    newTotal.toString()
+                    )
+            )
+        }
     }
 }

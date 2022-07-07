@@ -100,24 +100,7 @@ class DetailFragment : Fragment() {
                 }
             }
         }
-        detailViewModel.order.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Success -> {
-                    response.data?.let {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.added_to_cart),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                is Resource.Error -> {
-                    response.message?.let { message ->
-                        response.code?.let { showErrorSnack(message, it) }
-                    }
-                }
-            }
-        }
+
         binding.btnMinus.setOnClickListener {
             if (binding.tvProductNumber.text == getString(R.string._0))
                 return@setOnClickListener
@@ -131,7 +114,12 @@ class DetailFragment : Fragment() {
                 binding.tvProductNumber.text = incrementQuantityTv(binding.tvProductNumber)
         }
         binding.btnAddToCart.setOnClickListener {
-            detailViewModel.createOrder(binding.tvProductNumber.text.toString().toInt())
+            detailViewModel.addToCart(binding.tvProductNumber.text.toString().toInt())
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.added_to_cart),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
