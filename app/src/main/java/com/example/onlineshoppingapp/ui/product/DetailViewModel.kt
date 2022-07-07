@@ -19,6 +19,7 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
 
     val product = MutableLiveData<Resource<Product>>()
     val reviews = MutableLiveData<Resource<List<Review>>>()
+    val relatedProducts = MutableLiveData<List<Product>>()
 
     fun getProduct(id : Int) = viewModelScope.launch {
         product.postValue(Resource.Loading())
@@ -93,6 +94,14 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
                     newTotal.toString()
                     )
             )
+        }
+    }
+    fun setRelatedProducts(relatedIds: List<Int>) {
+        val liveData = MutableLiveData<ArrayList<Product>>()
+        viewModelScope.launch {
+            for (i in relatedIds)
+                repository.getProductById(i).data?.let { liveData.value?.add(it) }
+            relatedProducts.value = liveData.value
         }
     }
 }

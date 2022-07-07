@@ -35,35 +35,86 @@ class AddReviewFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val userInfoShared = activity?.getSharedPreferences(getString(R.string.user_info), Context.MODE_PRIVATE)
-        val email =userInfoShared?.getString("email","")
-        val reviewerName = userInfoShared?.getString("name","")
+        binding.ratingBar.rating = args.rating.toFloat()
+        binding.etReview.setText(args.review)
+        val userInfoShared =
+            activity?.getSharedPreferences(getString(R.string.user_info), Context.MODE_PRIVATE)
+        val email = userInfoShared?.getString("email", "")
+        val reviewerName = userInfoShared?.getString("first_name", "")
         binding.btnSubmit.setOnClickListener {
-            if (binding.etReview.text.isNullOrEmpty()){
+            if (binding.etReview.text.isNullOrEmpty()) {
                 setError(binding.etReview)
                 return@setOnClickListener
             }
-            detailViewModel.createReview(Review(
-                rating = binding.ratingBar.rating.toInt(),
-                review = binding.etReview.text.toString(), productId = args.productId,
-                reviewer = reviewerName!!,
-                reviewerEmail = email!!)
-            ).observe(viewLifecycleOwner){ response ->
-                when (response) {
-                    is Resource.Loading -> {
-                        showProgressBar()
-                    }
-                    is Resource.Success -> {
-                        response.data?.let {
-                            hideProgressBar()
-                            Toast.makeText(requireContext(), "نظر شما ثبت شد!", Toast.LENGTH_SHORT)
-                                .show()
-                            findNavController().navigate(R.id.action_addReviewFragment_to_detailFragment)
+            if (args.reviewId == 0) {
+                detailViewModel.createReview(
+                    Review(
+                        rating = binding.ratingBar.rating.toInt(),
+                        review = binding.etReview.text.toString(), productId = args.productId,
+                        reviewer = reviewerName!!,
+                        reviewerEmail = email!!
+                    )
+                ).observe(viewLifecycleOwner) { response ->
+                    when (response) {
+                        is Resource.Loading -> {
+                            showProgressBar()
+                        }
+                        is Resource.Success -> {
+                            response.data?.let {
+                                hideProgressBar()
+                                Toast.makeText(
+                                    requireContext(), "نظر شما ثبت شد!", Toast.LENGTH_SHORT
+                                ).show()
+                                val action =
+                                    AddReviewFragmentDirections.actionAddReviewFragmentToDetailFragment(
+                                        args.productId
+                                    )
+                                findNavController().navigate(action)
+                            }
+                        }
+                        is Resource.Error -> {
+                            response.message?.let { message ->
+                                response.code?.let {
+                                    showErrorSnack(message, it, reviewerName, email)
+                                }
+                            }
                         }
                     }
-                    is Resource.Error -> {
-                        response.message?.let { message ->
-                            response.code?.let { showErrorSnack(message, it,reviewerName, email) }
+                }
+            } else {
+                detailViewModel.updateReview(
+                    Review(
+                        id = args.reviewId,
+                        productId = args.productId,
+                        rating = binding.ratingBar.rating.toInt(),
+                        review = binding.etReview.text.toString(),
+                        reviewer = reviewerName!!,
+                        reviewerEmail = email!!
+                    )
+                ).observe(viewLifecycleOwner) { response ->
+                    when (response) {
+                        is Resource.Loading -> {
+                            showProgressBar()
+                        }
+                        is Resource.Success -> {
+                            response.data?.let {
+                                hideProgressBar()
+                                Toast.makeText(
+                                    requireContext(), "نظر شما ثبت شد!", Toast.LENGTH_SHORT
+                                ).show()
+                                val action =
+                                    AddReviewFragmentDirections.actionAddReviewFragmentToDetailFragment(
+                                        args.productId
+                                    )
+                                findNavController().navigate(action)
+                            }
+                        }
+                        is Resource.Error -> {
+                            response.message?.let { message ->
+                                response.code?.let {
+                                    showErrorSnack(message, it, reviewerName, email)
+                                }
+                            }
                         }
                     }
                 }

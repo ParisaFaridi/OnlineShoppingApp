@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.ImageViewPagerAdapter
+import com.example.onlineshoppingapp.adapters.ProductAdapter
 import com.example.onlineshoppingapp.adapters.ReviewAdapter
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.data.model.Review
@@ -25,7 +26,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
 import java.util.*
 
-
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
 
@@ -34,6 +34,7 @@ class DetailFragment : Fragment() {
     private val args: DetailFragmentArgs by navArgs()
     private lateinit var imageViewPagerAdapter: ImageViewPagerAdapter
     private lateinit var reviewsAdapter: ReviewAdapter
+    private lateinit var relatedAdapter: ProductAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,9 +57,7 @@ class DetailFragment : Fragment() {
                 return@setOnClickListener
             }
             val action = detailViewModel.product.value?.data?.id?.let { it1 ->
-                DetailFragmentDirections.actionDetailFragmentToAddReviewFragment(
-                    it1
-                )
+                DetailFragmentDirections.actionDetailFragmentToAddReviewFragment(it1,0,"",0)
             }
             if (action != null) {
                 findNavController().navigate(action)
@@ -100,7 +99,13 @@ class DetailFragment : Fragment() {
                 }
             }
         }
-
+        detailViewModel.relatedProducts.observe(viewLifecycleOwner) { relatedProducts ->
+            relatedAdapter = ProductAdapter {
+                it.id?.let { it1 -> goToDetailFragment(it1) }
+            }
+            binding.rvRelatedProducts.adapter = relatedAdapter
+            relatedAdapter.submitList(relatedProducts)
+        }
         binding.btnMinus.setOnClickListener {
             if (binding.tvProductNumber.text == getString(R.string._0))
                 return@setOnClickListener
@@ -122,7 +127,10 @@ class DetailFragment : Fragment() {
             ).show()
         }
     }
-
+    private fun goToDetailFragment(id: Int) {
+        val action = DetailFragmentDirections.actionDetailFragmentSelf(id)
+        findNavController().navigate(action)
+    }
     private fun incrementQuantityTv(textView: TextView) =
         (textView.text.toString().toInt() + 1).toString()
 
@@ -131,10 +139,37 @@ class DetailFragment : Fragment() {
 
     private fun setReviews(list: List<Review>) {
         reviewsAdapter = ReviewAdapter(requireContext(),
-            deleteListener = {
-                detailViewModel.deleteReview(it.id)
+            deleteListener = { review->
+                detailViewModel.deleteReview(review.id).observe(viewLifecycleOwner) { response ->
+                    when (response) {
+                        is Resource.Loading -> {
+                            showProgressBar()
+                        }
+                        is Resource.Success -> {
+                            response.data?.let {
+                                hideProgressBar()
+                                Toast.makeText(
+                                    requireContext(), "نظر شما حذف شد!", Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                        is Resource.Error -> {
+                            response.message?.let { message ->
+                                response.code?.let {
+                                    showErrorSnack(message, it)
+                                }
+                            }
+                        }
+                    }
+                }
             }, editListener = {
-                detailViewModel.updateReview(it)
+                val action = detailViewModel.product.value?.data?.id?.let { it1 ->
+                    DetailFragmentDirections.actionDetailFragmentToAddReviewFragment(
+                        it1,it.rating,it.review,it.id)
+                }
+                if (action != null) {
+                    findNavController().navigate(action)
+                }
             }
         )
         binding.rvReviews.adapter = reviewsAdapter
@@ -149,8 +184,8 @@ class DetailFragment : Fragment() {
             tvDescription.text = data.description?.let { fixDescription(it) }
             ratingbar.rating = data.averageRating?.toFloat()!!
             tvPrice.text = NumberFormat.getNumberInstance(Locale.US).format(data.price?.toLong())
+            data.relatedIds?.let { detailViewModel.setRelatedProducts(it) }
         }
-
     }
 
     private fun fixDescription(description: String): String {

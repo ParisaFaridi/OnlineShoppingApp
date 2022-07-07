@@ -148,11 +148,28 @@
                     android:layoutDirection="rtl"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toTopOf="@id/btn_add_review"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_description"
                     tools:listitem="@layout/review_item" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_related_products"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="75"
+                    android:clipToPadding="false"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/btn_add_review"
+                    app:layout_constraintTop_toBottomOf="@id/rv_reviews"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:listitem="@layout/on_sale_item" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_review"

@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_detailFragment_to_addReviewFragment"
             app:destination="@id/addReviewFragment" />
+        <action
+            android:id="@+id/action_detailFragment_self"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
@@ -197,6 +200,15 @@
             app:popUpTo="@id/detailFragment"
             app:popUpToInclusive="true" />
         <argument android:name="product_id"
+            app:argType="integer" />
+        <argument
+            android:name="rating"
+            app:argType="integer" />
+        <argument
+            android:name="review"
+            app:argType="string" />
+        <argument
+            android:name="review_id"
             app:argType="integer" />
     </fragment>
 </navigation>
