@@ -69,4 +69,19 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
     suspend fun insert(orderId: OrderId) = localDataSource.insert(orderId)
     suspend fun isOrderNew() = localDataSource.isOrderNew()
     suspend fun deleteOrder()= localDataSource.deleteOrder()
+
+    suspend fun insertCartProduct(cartProduct: CartProduct) =
+        localDataSource.insertCartProduct(cartProduct)
+
+    suspend fun emptyCart() = localDataSource.emptyCart()
+
+    suspend fun exists(id : Int) = localDataSource.exists(id)
+
+    suspend fun deleteProduct(id: Int) = localDataSource.deleteProduct(id)
+
+    fun getAllCartProducts() = localDataSource.getAllCartProducts()
+
+    suspend fun getCartProduct(id: Int) = localDataSource.getCartProduct(id)
+
+    fun getTotalPrice() = localDataSource.getTotalPrice()
 }

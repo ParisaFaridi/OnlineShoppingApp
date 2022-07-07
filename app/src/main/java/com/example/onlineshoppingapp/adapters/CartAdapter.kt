@@ -7,23 +7,25 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.onlineshoppingapp.R
+import com.example.onlineshoppingapp.data.model.CartProduct
 import com.example.onlineshoppingapp.data.model.LineItem
 import com.example.onlineshoppingapp.databinding.CartItemBinding
 import java.text.NumberFormat
 import java.util.*
 
-typealias QuantityClickHandler = (LineItem,Int) -> Unit
+typealias QuantityClickHandler = (Int,Int) -> Unit
 typealias DeleteClickHandler = (Int) -> Unit
 
 class CartAdapter(private val clickHandler: QuantityClickHandler,private val deleteClickHandler:DeleteClickHandler):
-    ListAdapter<LineItem, CartAdapter.ItemHolder>(FormulaDiffCallBack) {
+    ListAdapter<CartProduct, CartAdapter.ItemHolder>(FormulaDiffCallBack) {
 
-    object FormulaDiffCallBack: DiffUtil.ItemCallback<LineItem>() {
-        override fun areItemsTheSame(oldItem: LineItem, newItem: LineItem): Boolean {
+    object FormulaDiffCallBack: DiffUtil.ItemCallback<CartProduct>() {
+        override fun areItemsTheSame(oldItem: CartProduct, newItem: CartProduct): Boolean {
             return oldItem == newItem
         }
-        override fun areContentsTheSame(oldItem: LineItem, newItem: LineItem): Boolean {
+        override fun areContentsTheSame(oldItem: CartProduct, newItem: CartProduct): Boolean {
             return oldItem.price == newItem.price
         }
     }
@@ -39,8 +41,10 @@ class CartAdapter(private val clickHandler: QuantityClickHandler,private val del
     }
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.binding.apply {
-            lineItem = getItem(position)
+            cartProduct = getItem(position)
             tvPrice.text = getFormattedPrice(position)
+            Glide.with(holder.binding.image.context).load(getItem(position).image).centerCrop()
+                .into(holder.binding.image)
         }
         holder.binding.btnMinus.setOnClickListener {
             if (holder.binding.tvProductNumber.text == "1")
@@ -48,7 +52,7 @@ class CartAdapter(private val clickHandler: QuantityClickHandler,private val del
             else {
                 holder.binding.tvProductNumber.text =
                     decrementQuantityTv(holder.binding.tvProductNumber)
-                clickHandler.invoke(getItem(position),holder.binding.tvProductNumber.text.toString().toInt())
+                clickHandler.invoke(getItem(position).id,holder.binding.tvProductNumber.text.toString().toInt())
             }
         }
         holder.binding.btnPlus.setOnClickListener {
@@ -57,7 +61,7 @@ class CartAdapter(private val clickHandler: QuantityClickHandler,private val del
             else {
                 holder.binding.tvProductNumber.text =
                     incrementQuantityTv(holder.binding.tvProductNumber)
-                clickHandler.invoke(getItem(position),holder.binding.tvProductNumber.text.toString().toInt())
+                clickHandler.invoke(getItem(position).id,holder.binding.tvProductNumber.text.toString().toInt())
             }
         }
         holder.binding.btnDelete.setOnClickListener {
@@ -66,5 +70,5 @@ class CartAdapter(private val clickHandler: QuantityClickHandler,private val del
     }
     private fun incrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() + 1).toString()
     private fun decrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() - 1).toString()
-    private fun getFormattedPrice(position: Int) = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).total.toString().toLong()) + " تومان"
+    private fun getFormattedPrice(position: Int) = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).price.toString().toLong()) + " تومان"
 }

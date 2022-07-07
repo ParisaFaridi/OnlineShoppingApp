@@ -29,7 +29,7 @@ public final class DetailViewModel_HiltModules {
 
     @Binds
     @IntoMap
-    @StringKey("com.example.onlineshoppingapp.ui.detailfragment.DetailViewModel")
+    @StringKey("com.example.onlineshoppingapp.ui.product.DetailViewModel")
     @HiltViewModelMap
     public abstract ViewModel binds(DetailViewModel vm);
   }
@@ -44,7 +44,7 @@ public final class DetailViewModel_HiltModules {
     @IntoSet
     @HiltViewModelMap.KeySet
     public static String provide() {
-      return "com.example.onlineshoppingapp.ui.detailfragment.DetailViewModel";
+      return "com.example.onlineshoppingapp.ui.product.DetailViewModel";
     }
   }
 }
