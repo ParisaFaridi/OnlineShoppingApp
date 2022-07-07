@@ -32,7 +32,7 @@ class CompleteOrderViewModel @Inject constructor(
         getAllAddresses()
     }
 
-    fun completeOrder(orderId: Int, shipping: Shipping) {
+    fun completeOrder(shipping: Shipping) {
         order.postValue(Resource.Loading())
         viewModelScope.launch {
             if (hasInternetConnection()) {
@@ -57,7 +57,7 @@ class CompleteOrderViewModel @Inject constructor(
                 )
         }
     }
-
+    fun emptyCart() =viewModelScope.launch {  repository.emptyCart()}
     private fun getCouponLine(): List<Coupon> {
         return if (coupon.value == null || coupon.value is Resource.Error)
             listOf()

@@ -62,7 +62,6 @@ class CompleteOrderFragment : Fragment() {
             binding.btnNewAddress.setOnClickListener {
                 findNavController().navigate(R.id.action_completeOrderFragment_to_newAddressFragment)
             }
-
             viewModel.order.observe(viewLifecycleOwner) { response ->
                 when (response) {
                     is Resource.Loading -> {
@@ -75,6 +74,7 @@ class CompleteOrderFragment : Fragment() {
                             binding.lottie.visibility = View.GONE
                             binding.tvTotalPrice.text = it.total
                             if (viewModel.flag){
+                                viewModel.emptyCart()
                                 findNavController().navigate(R.id.action_completeOrderFragment_to_cartFragment)
                                 showDialog()
                             }
@@ -116,14 +116,12 @@ class CompleteOrderFragment : Fragment() {
             }
         }
     }
-
     private fun showDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(getString(R.string.order_completed))
             .setNeutralButton(getString(R.string.ok_)) { _, _ -> }
             .show()
     }
-
     private fun showErrorSnack(message: String, code: Int) {
         val snackBar = Snackbar.make(
             binding.layout,
