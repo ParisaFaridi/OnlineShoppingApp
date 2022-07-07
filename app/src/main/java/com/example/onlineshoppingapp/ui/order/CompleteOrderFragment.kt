@@ -1,5 +1,6 @@
 package com.example.onlineshoppingapp.ui.order
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.AddressAdapter
@@ -26,7 +26,6 @@ class CompleteOrderFragment : Fragment() {
 
     private lateinit var binding: FragmentCompleteOrderBinding
     private val viewModel: CompleteOrderViewModel by viewModels()
-    private val args: CompleteOrderFragmentArgs by navArgs()
     private lateinit var addressAdapter: AddressAdapter
 
     override fun onCreateView(
@@ -37,26 +36,28 @@ class CompleteOrderFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.getTotalPrice().observe(viewLifecycleOwner){
+            if (it != null)
+                binding.tvTotalPrice.text = it.toString()
+        }
         viewModel.getAllAddresses().observe(viewLifecycleOwner) {
             if (it != null) {
                 addressAdapter = AddressAdapter(it as ArrayList<Address>)
                 binding.rvAddresses.adapter = addressAdapter
                 addressAdapter.notifyDataSetChanged()
             }
-
-            viewModel.getOrder()
             binding.btnCompleteOrder.setOnClickListener {
                 val address = addressAdapter.selected
                 if (address != null) {
                     viewModel.completeOrder(
-                        args.orderId, Shipping(
+                        Shipping(
                             address1 = address.address1,
                             city = address.city,
-                            postcode = address.postcode
-                        )
-                    )
+                            postcode = address.postcode))
                 }
             }
             binding.btnNewAddress.setOnClickListener {
@@ -72,46 +73,40 @@ class CompleteOrderFragment : Fragment() {
                         response.data?.let {
                             binding.layout.visibility = View.VISIBLE
                             binding.lottie.visibility = View.GONE
-                            binding.tvTotalPrice.text = it.total
-                            if (viewModel.flag){
-                                viewModel.emptyCart()
-                                findNavController().navigate(R.id.action_completeOrderFragment_to_cartFragment)
-                                showDialog()
-                            }
+                            findNavController().navigate(R.id.action_completeOrderFragment_to_cartFragment)
+                            showDialog()
                         }
                     }
                     is Resource.Error -> {
                         response.message?.let { message ->
-                            response.code?.let { showErrorSnack(message, it) }
+                            response.code?.let { code -> showErrorSnack(message, code) }
                         }
                     }
                 }
             }
             viewModel.coupon.observe(viewLifecycleOwner) { response ->
                 when (response) {
-
                     is Resource.Success -> {
                         response.data?.let {
                             Toast.makeText(
                                 requireContext(),
-                                " + ${viewModel.order.value?.data?.total}کد با موفقیتی اعمال شد",
+                                "کد با موفقیت اعمال شد",
                                 Toast.LENGTH_SHORT
                             )
                                 .show()
-                            binding.tvTotalPrice.text = viewModel.order.value?.data?.total
-
+                            binding.tvTotalPrice.text = viewModel.total
                         }
                     }
                     is Resource.Error -> {
                         response.message?.let { message ->
-                            response.code?.let { showErrorSnack(message, it) }
+                            response.code?.let { code -> showErrorSnack(message, code) }
                         }
                     }
                 }
             }
             binding.btnAddCoupon.setOnClickListener {
                 if (binding.etCoupon.text.toString().isNotEmpty()) {
-                    viewModel.checkCoupon(binding.etCoupon.text.toString())
+                    viewModel.checkCoupon(binding.etCoupon.text.toString(),binding.tvTotalPrice.text.toString())
                 }
             }
         }

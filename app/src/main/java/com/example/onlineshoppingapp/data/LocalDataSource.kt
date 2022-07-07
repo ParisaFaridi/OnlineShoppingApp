@@ -2,15 +2,11 @@ package com.example.onlineshoppingapp.data
 
 import com.example.onlineshoppingapp.data.model.Address
 import com.example.onlineshoppingapp.data.model.CartProduct
-import com.example.onlineshoppingapp.data.model.OrderId
 import com.example.onlineshoppingapp.room.ShopDataBase
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(private val shopDataBase: ShopDataBase) {
 
-    suspend fun insert(orderId: OrderId) = shopDataBase.orderDao.insert(orderId)
-    suspend fun isOrderNew() = shopDataBase.orderDao.getOrder()
-    suspend fun deleteOrder() = shopDataBase.orderDao.delete()
     fun getAllAddresses() = shopDataBase.addressDao.getAllAddresses()
     suspend fun insertAddress(address: Address) = shopDataBase.addressDao.insert(address)
     suspend fun getAddress(id: Int) = shopDataBase.addressDao.getAddress(id)

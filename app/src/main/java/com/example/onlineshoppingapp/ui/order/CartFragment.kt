@@ -53,7 +53,8 @@ class CartFragment : Fragment() {
             }
         }
         viewModel.getTotalPrice().observe(viewLifecycleOwner){
-            binding.tvSumOfPrice.text = it.toString()
+            if (it != null)
+                binding.tvSumOfPrice.text = it.toString()
         }
         val customerId = activity?.getSharedPreferences(getString(R.string.user_info),Context.MODE_PRIVATE)?.getInt(getString(R.string.customer_id),0)
         binding.btnSubmitOrder.setOnClickListener {

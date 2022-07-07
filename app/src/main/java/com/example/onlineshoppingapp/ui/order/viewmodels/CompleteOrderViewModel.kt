@@ -8,10 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.Repository
-import com.example.onlineshoppingapp.data.model.Coupon
-import com.example.onlineshoppingapp.data.model.Address
-import com.example.onlineshoppingapp.data.model.Order
-import com.example.onlineshoppingapp.data.model.Shipping
+import com.example.onlineshoppingapp.data.model.*
 import com.example.onlineshoppingapp.hasInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,44 +17,45 @@ import javax.inject.Inject
 @HiltViewModel
 class CompleteOrderViewModel @Inject constructor(
     private val repository: Repository,
-    app: Application
-) :
-    AndroidViewModel(app) {
+    app: Application) : AndroidViewModel(app) {
 
-    var flag = false
     val order = MutableLiveData<Resource<Order>>()
     val coupon = MutableLiveData<Resource<Coupon>>()
+    var total = ""
 
     init {
         getAllAddresses()
     }
-
     fun completeOrder(shipping: Shipping) {
         order.postValue(Resource.Loading())
         viewModelScope.launch {
             if (hasInternetConnection()) {
-                val currentOrder = repository.getOrder(orderId)
-                order.postValue(currentOrder.data?.lineItems?.let {
-                    repository.updateOrder(
-                        orderId,
-                        it,
-                        shipping = shipping,
-                        status = getApplication<Application>().getString(R.string.completed),
-                        couponLines = getCouponLine()
-                    )
-                })
-                flag = true
-                repository.deleteOrder()
+                order.postValue(repository.createOrder(
+                        Order(
+                            shipping = shipping,
+                            status = getApplication<Application>().getString(R.string.completed),
+                            couponLines = getCouponLine(),
+                            lineItems = getLineItems()
+                        )
+                ))
+                emptyCart()
             } else
-                order.postValue(
-                    Resource.Error(
-                        getApplication<Application>().getString(R.string.no_internet_error),
-                        code = 1
-                    )
-                )
+                order.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
         }
     }
-    fun emptyCart() =viewModelScope.launch {  repository.emptyCart()}
+    private fun getLineItems():List<LineItem>{
+        val lineItems = arrayListOf<LineItem>()
+        val cartProducts = repository.getAllCartProducts().value
+        if (cartProducts != null) {
+            for (product in cartProducts){
+                lineItems.add(LineItem(productId = product.id,
+                        quantity = product.quantity))
+            }
+        }
+        return lineItems
+    }
+    private fun emptyCart() =viewModelScope.launch {  repository.emptyCart()}
+
     private fun getCouponLine(): List<Coupon> {
         return if (coupon.value == null || coupon.value is Resource.Error)
             listOf()
@@ -65,7 +63,7 @@ class CompleteOrderViewModel @Inject constructor(
             listOf(Coupon(code = coupon.value!!.data?.code!!))
         }
     }
-    fun checkCoupon(couponCode: String) {
+    fun checkCoupon(couponCode: String,oldTotal:String){
         coupon.postValue(Resource.Loading())
         viewModelScope.launch {
             if (hasInternetConnection()) {
@@ -74,7 +72,7 @@ class CompleteOrderViewModel @Inject constructor(
                     for (i in coupons){
                         if (i.code == couponCode) {
                             coupon.postValue(Resource.Success(i))
-                            order.value?.data?.total = (order.value?.data?.total?.toDouble()?.minus(i.amount?.toDouble()!!)).toString()
+                            total = (oldTotal.toDouble().minus(i.amount?.toDouble()!!)).toString()
                             break
                         }
                         coupon.postValue(Resource.Error(getApplication<Application>().getString(R.string.coupon_error), code = 10))
@@ -86,29 +84,6 @@ class CompleteOrderViewModel @Inject constructor(
             }
         }
     }
-    fun getOrder() = viewModelScope.launch {
-        if (repository.isOrderNew() == null) {
-            order.postValue(
-                Resource.Error(
-                    getApplication<Application>().getString(R.string.empty_cart),
-                    code = 2
-                )
-            )
-            return@launch
-        }
-        order.postValue(Resource.Loading())
-        if (hasInternetConnection()) {
-            viewModelScope.launch {
-                order.postValue(repository.getOrder(repository.isOrderNew()!!.id))
-            }
-        } else
-            order.postValue(
-                Resource.Error(
-                    getApplication<Application>().getString(R.string.no_internet_error),
-                    code = 1
-                )
-            )
-    }
     fun getAllAddresses(): LiveData<List<Address?>> {
         lateinit var addresses : LiveData<List<Address?>>
         viewModelScope.launch {
@@ -116,8 +91,9 @@ class CompleteOrderViewModel @Inject constructor(
         }
         return addresses
     }
-
     fun addAddress(address: Address) = viewModelScope.launch {
         repository.insertAddress(address)
     }
+
+    fun getTotalPrice() = repository.getTotalPrice()
 }
