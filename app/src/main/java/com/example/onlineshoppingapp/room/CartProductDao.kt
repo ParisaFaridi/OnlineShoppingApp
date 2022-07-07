@@ -29,5 +29,5 @@ interface CartProductDao {
     suspend fun deleteProduct(id: Int)
 
     @Query("SELECT SUM(totalPrice) FROM CartProduct")
-    fun getTotalPrice(): LiveData<Double>
+    fun getTotalPrice(): LiveData<String>
 }

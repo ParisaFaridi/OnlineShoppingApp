@@ -42,7 +42,7 @@ class CartFragment : Fragment() {
         binding.rvCartProducts.adapter = adapter
 
         viewModel.getAllCartProducts().observe(viewLifecycleOwner){
-            if (it == null){
+            if (it.isEmpty()){
                 showProgressBar()
                 binding.lottie.setAnimation(R.raw.empty_cart)
                 binding.lottie.playAnimation()

@@ -26,18 +26,17 @@ class CompleteOrderViewModel @Inject constructor(
     init {
         getAllAddresses()
     }
-    fun completeOrder(address: Address,name:String) {
+    fun completeOrder(address: Address,firstName:String,lastName:String) {
         order.postValue(Resource.Loading())
         viewModelScope.launch {
             if (hasInternetConnection()) {
-                val splitName = name.split(" ")
                 val shipping = Shipping(
                     address1 = address.address1,
-                    address2 = "${address.lat},${address.long}",
+                    address2 = address.latLong,
                     city = address.city,
                     country = address.country,
-                    firstName = splitName[0],
-                    lastName = splitName[1],
+                    firstName = firstName,
+                    lastName = lastName,
                     postcode = address.postcode
                 )
                 order.postValue(repository.createOrder(
@@ -104,6 +103,5 @@ class CompleteOrderViewModel @Inject constructor(
     fun addAddress(address: Address) = viewModelScope.launch {
         repository.insertAddress(address)
     }
-
     fun getTotalPrice() = repository.getTotalPrice()
 }

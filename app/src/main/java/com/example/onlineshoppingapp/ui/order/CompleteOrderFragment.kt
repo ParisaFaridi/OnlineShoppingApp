@@ -42,21 +42,22 @@ class CompleteOrderFragment : Fragment() {
 
         viewModel.getTotalPrice().observe(viewLifecycleOwner){
             if (it != null)
-                binding.tvTotalPrice.text = it.toString()
+                binding.tvTotalPrice.text = it
         }
         val userInfoShared = activity?.getSharedPreferences(getString(R.string.user_info), Context.MODE_PRIVATE)
-        val customerName = userInfoShared?.getString("name","")
+        val firstName = userInfoShared?.getString("first_name","")
+        val lastName = userInfoShared?.getString("last_name","")
+
         viewModel.getAllAddresses().observe(viewLifecycleOwner) {
             if (it != null) {
                 addressAdapter = AddressAdapter(it as ArrayList<Address>)
                 binding.rvAddresses.adapter = addressAdapter
                 addressAdapter.notifyDataSetChanged()
-                binding.btnCompleteOrder.isEnabled = it.isEmpty()
             }
             binding.btnCompleteOrder.setOnClickListener {
                 val address = addressAdapter.selected
                 if (address != null) {
-                    viewModel.completeOrder(address,customerName!!)
+                    viewModel.completeOrder(address,firstName!!,lastName!!)
                 }
             }
             binding.btnNewAddress.setOnClickListener {
