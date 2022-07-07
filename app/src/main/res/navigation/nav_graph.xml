@@ -79,7 +79,13 @@
         android:id="@+id/profileFragment"
         android:name="com.example.onlineshoppingapp.ui.account.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_createAccountFragment"
+            app:destination="@id/createAccountFragment"
+            app:popUpTo="@id/createAccountFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/createAccountFragment"
         android:name="com.example.onlineshoppingapp.ui.account.CreateAccountFragment"

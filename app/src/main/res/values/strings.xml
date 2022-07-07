@@ -77,7 +77,8 @@
     <string name="country">کشور</string>
     <string name="phone">تلفن</string>
     <string name="email_share">email</string>
-    <string name="add_comment">دیدگاه خود را درباره این نظر بنویسید</string>
+    <string name="add_comment">دیدگاه خود را درباره این کالا بنویسید</string>
+    <string name="log_out">خروج از حساب کاربری</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

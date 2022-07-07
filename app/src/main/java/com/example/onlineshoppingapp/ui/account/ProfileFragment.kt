@@ -2,11 +2,12 @@ package com.example.onlineshoppingapp.ui.account
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.model.Customer
@@ -51,13 +52,19 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+        binding.btnLogOut.setOnClickListener {
+            val shared = activity?.getSharedPreferences(getString(R.string.user_info), Context.MODE_PRIVATE)
+            shared?.edit()?.clear()?.apply()
+            findNavController().navigate(R.id.action_profileFragment_to_createAccountFragment)
+        }
     }
     private fun setName(data: Customer) = "${data.firstName} ${data.lastName}"
 
     private fun hideProgressBar() = binding.apply {
-            tvName.visibility = View.VISIBLE
-            tvEmail.visibility = View.VISIBLE
-            lottie.visibility = View.GONE
+        tvName.visibility = View.VISIBLE
+        tvEmail.visibility = View.VISIBLE
+        btnLogOut.visibility=View.VISIBLE
+        lottie.visibility = View.GONE
     }
     private fun showProgressBar() = binding.apply {
         tvName.visibility = View.GONE

@@ -92,14 +92,6 @@
                 app:cornerRadius="18sp"
                 app:icon="@drawable/ic_baseline_assignment_turned_in_24"
                 app:iconGravity="textStart" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/log_in"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/log_in"
-                android:textColor="#46B7EA" />
         </LinearLayout>
 
         <com.airbnb.lottie.LottieAnimationView
