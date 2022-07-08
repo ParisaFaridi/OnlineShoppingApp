@@ -99,12 +99,27 @@ class DetailFragment : Fragment() {
                 }
             }
         }
-        detailViewModel.relatedProducts.observe(viewLifecycleOwner) { relatedProducts ->
-            relatedAdapter = ProductAdapter {
-                it.id?.let { it1 -> goToDetailFragment(it1) }
+        detailViewModel.relatedProducts.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                is Resource.Success -> {
+                    response.data?.let { relatedProducts->
+                        hideProgressBar()
+                        relatedAdapter = ProductAdapter {
+                            it.id?.let { it1 -> goToDetailFragment(it1) }
+                        }
+                        binding.rvRelatedProducts.adapter = relatedAdapter
+                        relatedAdapter.submitList(relatedProducts)
+                    }
+                }
+                is Resource.Error -> {
+                    response.message?.let { message ->
+                        response.code?.let { showErrorSnack(message, it) }
+                    }
+                }
             }
-            binding.rvRelatedProducts.adapter = relatedAdapter
-            relatedAdapter.submitList(relatedProducts)
         }
         binding.btnMinus.setOnClickListener {
             if (binding.tvProductNumber.text == getString(R.string._0))
@@ -184,7 +199,7 @@ class DetailFragment : Fragment() {
             tvDescription.text = data.description?.let { fixDescription(it) }
             ratingbar.rating = data.averageRating?.toFloat()!!
             tvPrice.text = NumberFormat.getNumberInstance(Locale.US).format(data.price?.toLong())
-            data.relatedIds?.let { detailViewModel.setRelatedProducts(it) }
+            data.relatedIds?.let { detailViewModel.getRelatedProducts(it) }
         }
     }
 
@@ -203,6 +218,7 @@ class DetailFragment : Fragment() {
     private fun showProgressBar() {
         binding.lottie.setAnimation(R.raw.loading)
         binding.lottie.visibility = View.VISIBLE
+        binding.layout.visibility = View.GONE
         binding.divider.visibility = View.GONE
         binding.bottom.visibility = View.GONE
         binding.lottie.playAnimation()

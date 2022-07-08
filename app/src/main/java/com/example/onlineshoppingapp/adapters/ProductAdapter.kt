@@ -43,7 +43,7 @@ class ProductAdapter(private val clickHandler: ClickHandler):
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.binding.apply {
             product = getItem(position)
-            tvPrice.text = getFormattedPrice(position)
+            tvPrice.text = getItem(position).price
         }
         if (getItem(position).images?.firstOrNull()?.src == null){
             Glide.with(holder.binding.image.context).load(R.drawable.ic_baseline_error_24).centerCrop()
@@ -56,5 +56,5 @@ class ProductAdapter(private val clickHandler: ClickHandler):
             clickHandler.invoke(getItem(position))
         }
     }
-    private fun getFormattedPrice(position: Int) = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).regularPrice?.toLong()) + " تومان"
+    //    private fun getFormattedPrice(position: Int) = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).salePrice?.toLong()) + " تومان"
 }

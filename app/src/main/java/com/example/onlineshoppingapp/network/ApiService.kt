@@ -92,6 +92,17 @@ interface ApiService {
     ): Response<List<Category>>
 
 
+    @GET("products")
+    suspend fun getRelatedProducts(
+        @Query("consumer_key")
+        consumerKey: String = CONSUMER_KEY,
+        @Query("consumer_secret")
+        consumerSecret: String = CONSUMER_SECRET,
+        @Query("include")
+        relatedIds: List<Int>
+    ):Response<List<Product>>
+
+
     //customer
 
     @POST("customers")

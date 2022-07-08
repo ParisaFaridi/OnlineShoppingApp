@@ -51,6 +51,9 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
 
     suspend fun deleteReview(id: Int) = getSafeApiResponse(remoteDataSource.deleteReview(id = id))
 
+    suspend fun getRelatedProducts(relatedIds: List<Int>) =
+        getSafeApiResponse(remoteDataSource.getRelatedProducts(relatedIds))
+
     private fun <T> getSafeApiResponse(response: Response<T>):Resource<T>{
         return try {
             if (response.isSuccessful && response.body() != null)

@@ -124,13 +124,15 @@ class CompleteOrderFragment : Fragment() {
             .show()
     }
     private fun showErrorSnack(message: String, code: Int) {
+        binding.layout.visibility = View.VISIBLE
+        binding.lottie.visibility = View.GONE
         val snackBar = Snackbar.make(
             binding.layout,
             getErrorMessage(message, code),
             Snackbar.LENGTH_INDEFINITE
         )
         snackBar.setAction("باشه") {
-            binding.lottie.playAnimation()
+
         }
         snackBar.show()
     }

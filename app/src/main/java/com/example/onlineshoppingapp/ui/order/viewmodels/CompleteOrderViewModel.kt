@@ -22,6 +22,7 @@ class CompleteOrderViewModel @Inject constructor(
     val order = MutableLiveData<Resource<Order>>()
     val coupon = MutableLiveData<Resource<Coupon>>()
     var total = ""
+    var allCoupons = arrayListOf<Coupon>()
 
     init {
         getAllAddresses()
@@ -76,13 +77,20 @@ class CompleteOrderViewModel @Inject constructor(
         coupon.postValue(Resource.Loading())
         viewModelScope.launch {
             if (hasInternetConnection()) {
-                val coupons = repository.getCoupons().data
-                if (coupons != null) {
-                    for (i in coupons){
+                val mCoupons = repository.getCoupons().data
+                if (mCoupons != null) {
+                    for (i in mCoupons){
                         if (i.code == couponCode) {
-                            coupon.postValue(Resource.Success(i))
-                            total = (oldTotal.toDouble().minus(i.amount?.toDouble()!!)).toString()
-                            break
+                            if (allCoupons.contains(i)) {
+                                coupon.postValue(Resource.Error("کد تخفیف تکراری است"))
+                                break
+                            } else {
+                                coupon.postValue(Resource.Success(i))
+                                allCoupons.add(i)
+                                total =
+                                    (oldTotal.toDouble().minus(i.amount?.toDouble()!!)).toString()
+                                break
+                            }
                         }
                         coupon.postValue(Resource.Error(getApplication<Application>().getString(R.string.coupon_error)))
                     }

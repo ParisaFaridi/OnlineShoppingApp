@@ -19,7 +19,7 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
 
     val product = MutableLiveData<Resource<Product>>()
     val reviews = MutableLiveData<Resource<List<Review>>>()
-    val relatedProducts = MutableLiveData<List<Product>>()
+    val relatedProducts = MutableLiveData<Resource<List<Product>>>()
 
     fun getProduct(id : Int) = viewModelScope.launch {
         product.postValue(Resource.Loading())
@@ -96,12 +96,14 @@ class DetailViewModel @Inject constructor(private val repository: Repository, ap
             )
         }
     }
-    fun setRelatedProducts(relatedIds: List<Int>) {
-        val liveData = MutableLiveData<ArrayList<Product>>()
-        viewModelScope.launch {
-            for (i in relatedIds)
-                repository.getProductById(i).data?.let { liveData.value?.add(it) }
-            relatedProducts.value = liveData.value
-        }
+    fun getRelatedProducts(relatedIds: List<Int>) = viewModelScope.launch {
+        relatedProducts.postValue(Resource.Loading())
+        if (hasInternetConnection()) {
+            viewModelScope.launch {
+                relatedProducts.postValue(repository.getRelatedProducts(relatedIds))
+            }
+        } else
+            relatedProducts.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
+
     }
 }
