@@ -17,6 +17,7 @@ import com.example.onlineshoppingapp.data.model.Address
 import com.example.onlineshoppingapp.databinding.FragmentCompleteOrderBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.example.onlineshoppingapp.ui.order.viewmodels.CompleteOrderViewModel
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,7 +51,13 @@ class CompleteOrderFragment : Fragment() {
 
         viewModel.getAllAddresses().observe(viewLifecycleOwner) {
             if (it != null) {
-                addressAdapter = AddressAdapter(it as ArrayList<Address>)
+                addressAdapter = AddressAdapter(it as ArrayList<Address>) { address ->
+                    val latLng = address.latLong.split(",")
+                    val action = CompleteOrderFragmentDirections.actionCompleteOrderFragmentToShowMapFragment(
+                        LatLng(latLng[0].toDouble(),latLng[1].toDouble())
+                    )
+                    findNavController().navigate(action)
+                }
                 binding.rvAddresses.adapter = addressAdapter
                 addressAdapter.notifyDataSetChanged()
             }

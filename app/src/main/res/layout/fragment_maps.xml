@@ -25,7 +25,6 @@
         android:layout_weight="1"
         android:padding="10dp"
         android:text="تائید"
-        android:enabled="false"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
