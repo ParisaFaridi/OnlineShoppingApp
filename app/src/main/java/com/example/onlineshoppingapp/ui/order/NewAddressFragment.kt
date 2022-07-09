@@ -33,7 +33,6 @@ class NewAddressFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.etAddress2.setText(args.latLong)
         binding.btnSaveAddress.setOnClickListener {
             if (hasEmptyField()) {
                 checkForErrors()
@@ -52,7 +51,7 @@ class NewAddressFragment : BaseFragment() {
             city = binding.etCity.text.toString(),
             phone = binding.etPhone.text.toString(),
             postcode = binding.etPostCode.text.toString(),
-            latLong = binding.etAddress2.text.toString()))
+            latLong = args.latLong))
     }
 
     private fun hasEmptyField(): Boolean {
