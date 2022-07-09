@@ -49,6 +49,13 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerViews()
         setOnClickListeners()
+        if (viewModelHome.sliderPics.value == null) {
+            viewModelHome.getPicForSliders()
+            viewModelHome.getOnSaleProducts()
+            viewModelHome.getMostViewedProducts()
+            viewModelHome.getNewProducts()
+            viewModelHome.getBestProducts()
+        }
         viewModelHome.sliderPics.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
@@ -60,7 +67,6 @@ class HomeFragment : BaseFragment() {
                             SliderAdapter(images as MutableList<Image>, binding.viewPager)
                         }!!
                         setUpViewPager()
-                        viewModelHome.getOnSaleProducts()
                     }
                 }
                 is Resource.Error -> {
@@ -72,12 +78,8 @@ class HomeFragment : BaseFragment() {
         }
         viewModelHome.onSaleProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showProgressBar(binding.layout, binding.lottie)
-                }
                 is Resource.Success -> {
                     response.data?.let { data ->
-                        viewModelHome.getBestProducts()
                         onSaleProductAdapter.submitList(data)
                     }
                 }
@@ -90,13 +92,9 @@ class HomeFragment : BaseFragment() {
         }
         viewModelHome.bestProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showProgressBar(binding.layout, binding.lottie)
-                }
                 is Resource.Success -> {
                     response.data?.let { data ->
                         bestProductsAdapter.submitList(data)
-                        viewModelHome.getNewProducts()
                     }
                 }
                 is Resource.Error -> {
@@ -108,13 +106,9 @@ class HomeFragment : BaseFragment() {
         }
         viewModelHome.newProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showProgressBar(binding.layout, binding.lottie)
-                }
                 is Resource.Success -> {
                     response.data?.let { data ->
                         newProductsAdapter.submitList(data)
-                        viewModelHome.getMostViewedProducts()
                     }
                 }
                 is Resource.Error -> {
@@ -126,9 +120,6 @@ class HomeFragment : BaseFragment() {
         }
         viewModelHome.mostViewedProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showProgressBar(binding.layout, binding.lottie)
-                }
                 is Resource.Success -> {
                     response.data?.let { data ->
                         hideProgressBar(binding.layout,binding.lottie)

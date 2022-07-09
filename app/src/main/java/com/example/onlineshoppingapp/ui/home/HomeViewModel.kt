@@ -23,9 +23,6 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
     val onSaleProducts = MutableLiveData<Resource<List<Product>>>()
     val sliderPics = MutableLiveData<Resource<Product>>()
 
-    init {
-        getPicForSliders()
-    }
     fun getPicForSliders() {
         sliderPics.postValue(Resource.Loading())
         if (hasInternetConnection())
