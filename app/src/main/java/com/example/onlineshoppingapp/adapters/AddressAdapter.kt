@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.onlineshoppingapp.data.model.Address
 import com.example.onlineshoppingapp.databinding.AddressItemViewBinding
 
-class AddressAdapter(private val addresses: ArrayList<Address>) :
+class AddressAdapter(private val addresses: ArrayList<Address>,val locationHandler:(Address) -> Unit) :
     RecyclerView.Adapter<AddressAdapter.SingleViewHolder>() {
 
     private var checkedPosition = 0
@@ -41,6 +41,9 @@ class AddressAdapter(private val addresses: ArrayList<Address>) :
 
     override fun onBindViewHolder(singleViewHolder: SingleViewHolder, position: Int) {
         singleViewHolder.bind(addresses[position])
+        singleViewHolder.binding.imLocation.setOnClickListener {
+            locationHandler.invoke(addresses[position])
+        }
     }
 
     override fun getItemCount(): Int {

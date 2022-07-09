@@ -159,6 +159,9 @@
         <action
             android:id="@+id/action_completeOrderFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_completeOrderFragment_to_showMapFragment"
+            app:destination="@id/showMapFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -210,5 +213,14 @@
         <argument
             android:name="review_id"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/showMapFragment"
+        android:name="com.example.onlineshoppingapp.ShowMapFragment"
+        android:label="fragment_show_map"
+        tools:layout="@layout/fragment_show_map" >
+        <argument
+            android:name="latLong"
+            app:argType="com.google.android.gms.maps.model.LatLng" />
     </fragment>
 </navigation>
