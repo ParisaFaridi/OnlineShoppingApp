@@ -2,19 +2,92 @@
     <string name="app_name">Online Shopping App</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="error_404">صفحه پیدا نشد!</string>
+    <string name="error_500">خطای سرور!</string>
+    <string name="error_401">درخواست فاقد احراز هویت معتبر میباشد!</string>
+    <string name="error_400">درخواست نامعتبر!</string>
+    <string name="main_page">صفخه اصلی</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="description">مشخصات:</string>
     <string name="toman">تومان</string>
     <string name="best">بهترین محصولات</string>
     <string name="newest">جدیدترین محصولات</string>
-    <string name="popular">پربازدیدترین محصولات</string>
-    <string name="unknown_error">خطای ناشناخته</string>
+    <string name="popular">محبوب ترین محصولات</string>
+    <string name="see_all">مشاهده همه</string>
+    <string name="user_name">نام کاربری</string>
+    <string name="email">ایمیل</string>
+    <string name="last_name">نام خانوادگی</string>
+    <string name="first_name">نام</string>
+    <string name="create_account">ساخت حساب کاربری</string>
+    <string name="must_be_filled">پر کردن این فیلد الزامی است</string>
     <string name="no_internet_error">خطا در اتصال به اینترنت</string>
-    <string name="error_404">صفحه پیدا نشد!</string>
-    <string name="error_500">خطای سرور!</string>
-    <string name="error_401">درخواست فاقد اهراز هویت معتبر!</string>
-    <string name="error_400">درخواست نامعتبر!</string>
     <string name="try_again">تلاش دوباره</string>
-    <string name="main_page">صفخه اصلی</string>
+    <string name="unknown_error">خطای ناشناخته</string>
+    <string name="filters">فیلتر ها</string>
+    <string name="search">جست و جو</string>
+    <string name="search_all">جست و جو در همه کالا ها…</string>
+    <string name="on_sale_products">پیشنهاد شگفت انگیز</string>
+    <string name="add_to_cart">افزودن به سبد خرید</string>
+    <string name="_1">1</string>
+    <string name="sign_up">ثبت نام</string>
+    <string name="categories">دسته بندی ها</string>
+    <string name="_10">10</string>
+    <string name="_0">0</string>
+    <string name="online_store">فروشگاه آنلاین</string>
+    <string name="on_sale">on_sale</string>
+    <string name="date">date</string>
+    <string name="popularity">popularity</string>
+    <string name="rating">rating</string>
+    <string name="size">سایز</string>
+    <string name="color">رنگ</string>
+    <string name="filter">فیلتر کن</string>
+    <string name="cart_sum">جمع سبد خرید</string>
+    <string name="continue_order">ادامه فرآیند خرید</string>
+    <string name="cart">سبد خرید</string>
+    <string name="empty_cart">سبد خرید خالی است</string>
+    <string name="info_completion">تکمیل اطلاعات</string>
+    <string name="complete_order">ثبت نهایی سفارش</string>
+    <string name="zip_code">کد پستی</string>
+    <string name="address">آدرس</string>
+    <string name="city">شهر</string>
+    <string name="empty_basket">سبد خرید خالی است!</string>
+    <string name="log_in">ورود به حساب کاربری</string>
+    <string name="log_inn">ورود</string>
+    <string name="log_in_to_account">ورود به حساب کاربری</string>
+    <string name="customer_id">customer_id</string>
+    <string name="user_info">user_info</string>
+    <string name="successful_signup">ثبت نام با موفقیت انجام شد</string>
+    <string name="added_to_cart">به سبد خرید اضافه شد!</string>
+    <string name="ok_">باشه</string>
+    <string name="completed">completed</string>
+    <string name="desc">desc</string>
+    <string name="pa_color">pa_color</string>
+    <string name="pa_size">pa_size</string>
+    <string name="title">title</string>
+    <string name="sign_up_first">ابتدا ثبت نام کنید!</string>
+    <string name="price">price</string>
+    <string name="asc">asc</string>
+    <string name="order_completed">سفارش با موفقیت ثبت شد!</string>
+    <string name="coupon">کد تخفیف</string>
+    <string name="coupon_error">کد تخفیف اشتباه است</string>
+    <string name="new_address">آدرس جدید</string>
+    <string name="address_title">عنوان</string>
+    <string name="address_1">آدرس</string>
+    <string name="address_2">آدرس 2 (اختیاری)</string>
+    <string name="country">کشور</string>
+    <string name="phone">تلفن</string>
+    <string name="email_share">email</string>
+    <string name="add_comment">دیدگاه خود را درباره این کالا بنویسید</string>
+    <string name="log_out">خروج از حساب کاربری</string>
+    <string name="lat_long">مختصات</string>
+    <string name="first_name_share">first_name</string>
+    <string name="last_name_share">last_name</string>
+    <string-array name="sortBy">
+        <item>مرتبط ترین</item>
+        <item>جدید ترین</item>
+        <item>محبوب ترین</item>
+        <item>بهترین</item>
+        <item>گران ترین</item>
+        <item>ارزان ترین</item>
+    </string-array>
 </resources>

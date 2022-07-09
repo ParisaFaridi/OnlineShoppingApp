@@ -5,25 +5,47 @@
     android:layout_height="match_parent"
     android:id="@+id/layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#B2DFDB"
-    tools:context="ui.categoryfragment.CategoryFragment">
+    tools:context=".ui.category.CategoryFragment">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="start|center"
+        android:padding="10dp"
+        android:text="@string/search_all"
+        android:textColor="#595858"
+        android:textSize="18sp"
+        app:backgroundTint="@color/gray"
+        app:cornerRadius="8dp"
+        app:icon="@drawable/ic_baseline_search_24"
+        app:iconTint="@color/teal_200"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/lottie"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/lottie"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_products"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:visibility="gone"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:clipToPadding="false"
+        android:padding="15dp"
         android:paddingBottom="20dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.456"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/product_item" />
+        app:layout_constraintTop_toBottomOf="@+id/search_view" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie"

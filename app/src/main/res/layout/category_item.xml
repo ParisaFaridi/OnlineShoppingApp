@@ -16,9 +16,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +25,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#B2DFDB">
+            android:background="@color/gray">
 
             <TextView
                 android:gravity="center"
@@ -38,7 +35,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
+                android:textSize="18sp"
                 android:maxLines="1"
+                android:textStyle="bold"
+                android:textColor="#363938"
                 android:text="@{category.name}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"
@@ -48,7 +48,7 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:scaleType="fitXY"
+                android:scaleType="centerInside"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginStart="8dp"

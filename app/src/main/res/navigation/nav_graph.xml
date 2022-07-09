@@ -13,27 +13,45 @@
         <action
             android:id="@+id/action_homeFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_productListFragment"
+            app:destination="@id/productListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.onlineshoppingapp.ui.detailfragment.DetailFragment"
+        android:name="com.example.onlineshoppingapp.ui.product.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" >
         <argument android:name="productId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_detailFragment_to_addReviewFragment"
+            app:destination="@id/addReviewFragment" />
+        <action
+            android:id="@+id/action_detailFragment_self"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.example.onlineshoppingapp.ui.categoriesfragment.CategoriesFragment"
+        android:name="com.example.onlineshoppingapp.ui.category.CategoriesFragment"
         android:label="fragment_categories"
         tools:layout="@layout/fragment_categories" >
         <action
             android:id="@+id/action_categoriesFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_categoriesFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="com.example.onlineshoppingapp.ui.categoryfragment.CategoryFragment"
+        android:name="com.example.onlineshoppingapp.ui.category.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" >
         <action
@@ -44,5 +62,165 @@
         <argument
             android:name="categoryName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_categoryFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.onlineshoppingapp.ui.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_searchResultsFragment"
+            app:destination="@id/searchResultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.onlineshoppingapp.ui.account.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_createAccountFragment"
+            app:destination="@id/createAccountFragment"
+            app:popUpTo="@id/createAccountFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="com.example.onlineshoppingapp.ui.account.CreateAccountFragment"
+        android:label="fragment_create_account"
+        tools:layout="@layout/fragment_create_account" >
+        <action
+            android:id="@+id/action_createAccountFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchResultsFragment"
+        android:name="com.example.onlineshoppingapp.ui.search.SearchResultsFragment"
+        android:label="fragment_search_results"
+        tools:layout="@layout/fragment_search_results" >
+        <argument
+            android:name="searchQuery"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_searchResultsFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_searchResultsFragment_to_filterFragment"
+            app:destination="@id/filterFragment" />
+        <action
+            android:id="@+id/action_searchResultsFragment_to_filterFragment2"
+            app:destination="@id/filterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_completeOrderFragment"
+            app:destination="@id/completeOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.example.onlineshoppingapp.ui.homeFragment.ProductListFragment"
+        android:label="fragment_product_list"
+        tools:layout="@layout/fragment_product_list" >
+        <argument android:name="orderBy" />
+        <action
+            android:id="@+id/action_productListFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.example.onlineshoppingapp.ui.search.FilterFragment"
+        android:label="fragment_filter"
+        tools:layout="@layout/fragment_filter" >
+        <action
+            android:id="@+id/action_filterFragment_to_searchResultsFragment"
+            app:destination="@id/searchResultsFragment"
+            app:popUpTo="@id/searchResultsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/completeOrderFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.CompleteOrderFragment"
+        android:label="fragment_complete_order"
+        tools:layout="@layout/fragment_complete_order" >
+        <action
+            android:id="@+id/action_completeOrderFragment_to_cartFragment"
+            app:destination="@id/cartFragment"
+            app:popUpTo="@id/cartFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_completeOrderFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_completeOrderFragment_to_showMapFragment"
+            app:destination="@id/showMapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.onlineshoppingapp.ui.homeFragment.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/newAddressFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.NewAddressFragment"
+        android:label="fragment_new_address"
+        tools:layout="@layout/fragment_new_address" >
+        <action
+            android:id="@+id/action_newAddressFragment_to_completeOrderFragment"
+            app:destination="@id/completeOrderFragment"
+            app:popUpTo="@id/completeOrderFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="latLong"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_newAddressFragment"
+            app:destination="@id/newAddressFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/addReviewFragment"
+        android:name="com.example.onlineshoppingapp.ui.product.AddReviewFragment"
+        android:label="fragment_add_review"
+        tools:layout="@layout/fragment_add_review" >
+        <action
+            android:id="@+id/action_addReviewFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/detailFragment"
+            app:popUpToInclusive="true" />
+        <argument android:name="product_id"
+            app:argType="integer" />
+        <argument
+            android:name="rating"
+            app:argType="integer" />
+        <argument
+            android:name="review"
+            app:argType="string" />
+        <argument
+            android:name="review_id"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/showMapFragment"
+        android:name="com.example.onlineshoppingapp.ShowMapFragment"
+        android:label="fragment_show_map"
+        tools:layout="@layout/fragment_show_map" >
+        <argument
+            android:name="latLong"
+            app:argType="com.google.android.gms.maps.model.LatLng" />
     </fragment>
 </navigation>

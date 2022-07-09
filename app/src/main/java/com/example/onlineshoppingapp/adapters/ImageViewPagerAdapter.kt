@@ -36,7 +36,6 @@ class ImageViewPagerAdapter(private val imageList: List<Image>) :
     }
 
     override fun onBindViewHolder(holder: ViewPagerViewHolder, position: Int) {
-
         holder.setData(imageList[position].src)
     }
 
