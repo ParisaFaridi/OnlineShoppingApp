@@ -9,6 +9,8 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.onlineshoppingapp.ui.BaseFragment;
+import com.example.onlineshoppingapp.ui.product.review.AddReviewFragment;
+
 import dagger.hilt.android.flags.FragmentGetContextFix;
 import dagger.hilt.android.internal.lifecycle.DefaultViewModelFactories;
 import dagger.hilt.android.internal.managers.FragmentComponentManager;

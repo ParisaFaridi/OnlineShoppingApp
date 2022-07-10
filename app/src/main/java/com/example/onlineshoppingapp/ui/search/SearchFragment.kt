@@ -16,7 +16,6 @@ import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.DetailedItemAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSearchBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
-import com.example.onlineshoppingapp.ui.search.viewmodels.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job

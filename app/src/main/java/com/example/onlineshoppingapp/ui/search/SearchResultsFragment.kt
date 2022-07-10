@@ -13,7 +13,7 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.DetailedItemAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSearchResultsBinding
-import com.example.onlineshoppingapp.ui.search.viewmodels.FilterViewModel
+import com.example.onlineshoppingapp.ui.search.filter.FilterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

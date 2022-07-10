@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.order
+package com.example.onlineshoppingapp.ui.order.map
 
 import android.Manifest
 import android.annotation.SuppressLint

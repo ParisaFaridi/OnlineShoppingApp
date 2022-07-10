@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.homeFragment
+package com.example.onlineshoppingapp.ui.home
 
 import android.os.Bundle
 import android.os.Handler

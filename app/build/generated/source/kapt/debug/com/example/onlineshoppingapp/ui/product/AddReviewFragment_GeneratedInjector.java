@@ -1,5 +1,7 @@
 package com.example.onlineshoppingapp.ui.product;
 
+import com.example.onlineshoppingapp.ui.product.review.AddReviewFragment;
+
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.FragmentComponent;
 import dagger.hilt.codegen.OriginatingElement;

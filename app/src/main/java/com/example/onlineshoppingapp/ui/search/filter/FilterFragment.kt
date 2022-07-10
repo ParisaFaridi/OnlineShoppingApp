@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.search
+package com.example.onlineshoppingapp.ui.search.filter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.onlineshoppingapp.adapters.FilterTabLayoutAdapter
 import com.example.onlineshoppingapp.databinding.FragmentFilterBinding
-import com.example.onlineshoppingapp.ui.search.viewmodels.FilterViewModel
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 

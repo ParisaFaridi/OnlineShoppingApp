@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.onlineshoppingapp.ui.homeFragment.HomeFragment"
+        android:name="com.example.onlineshoppingapp.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.onlineshoppingapp.ui.product.DetailFragment"
+        android:name="com.example.onlineshoppingapp.ui.product.detail.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" >
         <argument android:name="productId"
@@ -118,7 +118,7 @@
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.example.onlineshoppingapp.ui.order.CartFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.cart.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" >
         <action
@@ -127,7 +127,7 @@
     </fragment>
     <fragment
         android:id="@+id/productListFragment"
-        android:name="com.example.onlineshoppingapp.ui.homeFragment.ProductListFragment"
+        android:name="com.example.onlineshoppingapp.ui.home.productlist.ProductListFragment"
         android:label="fragment_product_list"
         tools:layout="@layout/fragment_product_list" >
         <argument android:name="orderBy" />
@@ -137,7 +137,7 @@
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
-        android:name="com.example.onlineshoppingapp.ui.search.FilterFragment"
+        android:name="com.example.onlineshoppingapp.ui.search.filter.FilterFragment"
         android:label="fragment_filter"
         tools:layout="@layout/fragment_filter" >
         <action
@@ -148,7 +148,7 @@
     </fragment>
     <fragment
         android:id="@+id/completeOrderFragment"
-        android:name="com.example.onlineshoppingapp.ui.order.CompleteOrderFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.completeorder.CompleteOrderFragment"
         android:label="fragment_complete_order"
         tools:layout="@layout/fragment_complete_order" >
         <action
@@ -165,7 +165,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.example.onlineshoppingapp.ui.homeFragment.SettingFragment"
+        android:name="com.example.onlineshoppingapp.ui.home.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
     <fragment
@@ -184,7 +184,7 @@
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
-        android:name="com.example.onlineshoppingapp.ui.order.MapsFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.map.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" >
         <action
@@ -194,7 +194,7 @@
     </fragment>
     <fragment
         android:id="@+id/addReviewFragment"
-        android:name="com.example.onlineshoppingapp.ui.product.AddReviewFragment"
+        android:name="com.example.onlineshoppingapp.ui.product.review.AddReviewFragment"
         android:label="fragment_add_review"
         tools:layout="@layout/fragment_add_review" >
         <action
@@ -216,7 +216,7 @@
     </fragment>
     <fragment
         android:id="@+id/showMapFragment"
-        android:name="com.example.onlineshoppingapp.ShowMapFragment"
+        android:name="com.example.onlineshoppingapp.ui.order.map.ShowMapFragment"
         android:label="fragment_show_map"
         tools:layout="@layout/fragment_show_map" >
         <argument

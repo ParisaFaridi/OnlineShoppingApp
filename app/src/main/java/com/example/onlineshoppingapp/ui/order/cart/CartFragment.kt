@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.order
+package com.example.onlineshoppingapp.ui.order.cart
 
 import android.content.Context
 import android.os.Bundle
@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.adapters.CartAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCartBinding
-import com.example.onlineshoppingapp.ui.order.viewmodels.CartViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

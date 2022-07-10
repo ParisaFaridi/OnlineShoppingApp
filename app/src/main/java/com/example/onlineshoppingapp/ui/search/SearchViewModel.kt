@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.search.viewmodels
+package com.example.onlineshoppingapp.ui.search
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

@@ -11,7 +11,7 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.data.model.Address
 import com.example.onlineshoppingapp.databinding.FragmentNewAddressBinding
 import com.example.onlineshoppingapp.ui.BaseFragment
-import com.example.onlineshoppingapp.ui.order.viewmodels.CompleteOrderViewModel
+import com.example.onlineshoppingapp.ui.order.completeorder.CompleteOrderViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.homeFragment
+package com.example.onlineshoppingapp.ui.home
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -21,7 +21,6 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
     val newProducts = MutableLiveData<Resource<List<Product>>>()
     val mostViewedProducts = MutableLiveData<Resource<List<Product>>>()
     val onSaleProducts = MutableLiveData<Resource<List<Product>>>()
-    val productList = MutableLiveData<Resource<List<Product>>>()
 
     val sliderPics = MutableLiveData<Resource<Product>>()
     init {
@@ -35,7 +34,6 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
         else
             bestProducts.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
     }
-    fun getProducts(string: String,onSale:Boolean = false) = handleApiCalls(string,productList, perPage = 100, onSale = onSale)
 
     fun getOnSaleProducts() = handleApiCalls(getApplication<Application>().getString(R.string.date), onSaleProducts, onSale = true)
 

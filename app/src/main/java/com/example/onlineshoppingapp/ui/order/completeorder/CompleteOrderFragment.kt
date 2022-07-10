@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.order
+package com.example.onlineshoppingapp.ui.order.completeorder
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -16,7 +16,6 @@ import com.example.onlineshoppingapp.adapters.AddressAdapter
 import com.example.onlineshoppingapp.data.model.Address
 import com.example.onlineshoppingapp.databinding.FragmentCompleteOrderBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
-import com.example.onlineshoppingapp.ui.order.viewmodels.CompleteOrderViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar

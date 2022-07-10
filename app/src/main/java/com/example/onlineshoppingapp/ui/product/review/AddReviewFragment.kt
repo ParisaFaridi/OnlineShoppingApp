@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.product
+package com.example.onlineshoppingapp.ui.product.review
 
 import android.content.Context
 import android.os.Bundle
@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddReviewFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAddReviewBinding
-    private val detailViewModel: DetailViewModel by viewModels()
+    private val detailViewModel: ReviewViewModel by viewModels()
     private val args:AddReviewFragmentArgs by navArgs()
 
     override fun onCreateView(

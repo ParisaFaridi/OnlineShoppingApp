@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.order.viewmodels
+package com.example.onlineshoppingapp.ui.order.cart
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

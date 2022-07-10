@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.homeFragment
+package com.example.onlineshoppingapp.ui.home.productlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,7 +21,7 @@ class ProductListFragment : Fragment() {
 
     private val args:ProductListFragmentArgs by navArgs()
     lateinit var binding : FragmentProductListBinding
-    val viewModel :HomeViewModel by viewModels()
+    val viewModel : ProductListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

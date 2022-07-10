@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.search
+package com.example.onlineshoppingapp.ui.search.filter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.AttributeItemsAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSizeFilterBinding
 import com.example.onlineshoppingapp.ui.getErrorMessage
-import com.example.onlineshoppingapp.ui.search.viewmodels.FilterViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 

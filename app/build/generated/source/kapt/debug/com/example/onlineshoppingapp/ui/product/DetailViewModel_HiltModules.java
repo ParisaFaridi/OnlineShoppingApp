@@ -1,6 +1,9 @@
 package com.example.onlineshoppingapp.ui.product;
 
 import androidx.lifecycle.ViewModel;
+
+import com.example.onlineshoppingapp.ui.product.detail.DetailViewModel;
+
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
@@ -29,7 +32,7 @@ public final class DetailViewModel_HiltModules {
 
     @Binds
     @IntoMap
-    @StringKey("com.example.onlineshoppingapp.ui.product.DetailViewModel")
+    @StringKey("com.example.onlineshoppingapp.ui.product.detail.DetailViewModel")
     @HiltViewModelMap
     public abstract ViewModel binds(DetailViewModel vm);
   }
@@ -44,7 +47,7 @@ public final class DetailViewModel_HiltModules {
     @IntoSet
     @HiltViewModelMap.KeySet
     public static String provide() {
-      return "com.example.onlineshoppingapp.ui.product.DetailViewModel";
+      return "com.example.onlineshoppingapp.ui.product.detail.DetailViewModel";
     }
   }
 }

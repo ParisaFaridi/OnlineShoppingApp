@@ -3,6 +3,8 @@ package com.example.onlineshoppingapp.ui.product;
 
 import android.app.Application;
 import com.example.onlineshoppingapp.data.Repository;
+import com.example.onlineshoppingapp.ui.product.detail.DetailViewModel;
+
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import javax.inject.Provider;
