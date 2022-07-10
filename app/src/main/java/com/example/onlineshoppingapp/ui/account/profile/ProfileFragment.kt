@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.account
+package com.example.onlineshoppingapp.ui.account.profile
 
 import android.content.Context
 import android.os.Bundle
@@ -6,17 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.model.Customer
 import com.example.onlineshoppingapp.databinding.FragmentProfileBinding
+import com.example.onlineshoppingapp.ui.BaseFragment
+import com.example.onlineshoppingapp.ui.getErrorMessage
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
-class ProfileFragment : Fragment() {
+@AndroidEntryPoint
+class ProfileFragment : BaseFragment() {
 
     lateinit var binding : FragmentProfileBinding
-    private val signUpViewModel : CustomerViewModel by activityViewModels()
+    private val signUpViewModel : ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +52,8 @@ class ProfileFragment : Fragment() {
                         binding.tvEmail.text = response.data?.email
                     }
                     is Resource.Error -> {
-
+                        response.message?.let {  message ->
+                            response.code?.let { code -> showErrorSnack(message, code) } }
                     }
                 }
             }
@@ -64,12 +70,21 @@ class ProfileFragment : Fragment() {
         tvName.visibility = View.VISIBLE
         tvEmail.visibility = View.VISIBLE
         btnLogOut.visibility=View.VISIBLE
+        imageView4.visibility = View.VISIBLE
         lottie.visibility = View.GONE
     }
     private fun showProgressBar() = binding.apply {
         tvName.visibility = View.GONE
         tvEmail.visibility = View.GONE
+        imageView4.visibility = View.GONE
         lottie.visibility = View.VISIBLE
         lottie.playAnimation()
+    }
+    private fun showErrorSnack(message: String, code: Int) {
+        val snackBar = Snackbar.make(binding.tvName, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
+        snackBar.setAction(getString(R.string.ok_)) {
+            snackBar.dismiss()
+        }
+        snackBar.show()
     }
 }

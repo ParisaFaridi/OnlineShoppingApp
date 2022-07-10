@@ -34,15 +34,9 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
 
     suspend fun signUp(customer: Customer) = getSafeApiResponse(remoteDataSource.signUp(customer))
 
-    suspend fun getOrder(id:Int) = getSafeApiResponse(remoteDataSource.getOrder(id))
-
     suspend fun createOrder(order: Order) = getSafeApiResponse(remoteDataSource.createOrder(order))
 
     suspend fun getProductReviews(id:Int) = getSafeApiResponse(remoteDataSource.getProductReviews(id))
-
-    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>,shipping: Shipping?=null,
-                            status:String="pending",couponLines:List<Coupon>)= getSafeApiResponse(
-        remoteDataSource.updateOrder(orderId,listOf, shipping = shipping, status = status,couponLines))
 
     suspend fun createReview(review: Review) = getSafeApiResponse(remoteDataSource.createReview(review = review))
 
@@ -67,7 +61,7 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
 
     //local
     suspend fun insertAddress(address: Address)= localDataSource.insertAddress(address)
-    suspend fun getAddress(id:Int) = localDataSource.getAddress(id)
+
     fun getAllAddresses() = localDataSource.getAllAddresses()
 
     suspend fun insertCartProduct(cartProduct: CartProduct) =

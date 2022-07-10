@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.account
+package com.example.onlineshoppingapp.ui.account.create
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CustomerViewModel @Inject constructor(private val repository: Repository,app:Application):
+class CreateAccountViewModel @Inject constructor(private val repository: Repository, app:Application):
     AndroidViewModel(app){
 
     var customerLive = MutableLiveData<Resource<Customer>>()
@@ -24,16 +24,6 @@ class CustomerViewModel @Inject constructor(private val repository: Repository,a
         if (hasInternetConnection()) {
             viewModelScope.launch {
                 customerLive.postValue(repository.signUp(customer))
-            }
-        } else
-            customerLive.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
-    }
-
-    fun getCustomer(id:Int)  {
-        customerLive.postValue(Resource.Loading())
-        if (hasInternetConnection()) {
-            viewModelScope.launch {
-                customerLive.postValue(repository.getCustomer(id))
             }
         } else
             customerLive.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))

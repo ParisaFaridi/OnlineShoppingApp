@@ -80,7 +80,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.onlineshoppingapp.ui.account.ProfileFragment"
+        android:name="com.example.onlineshoppingapp.ui.account.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -91,7 +91,7 @@
     </fragment>
     <fragment
         android:id="@+id/createAccountFragment"
-        android:name="com.example.onlineshoppingapp.ui.account.CreateAccountFragment"
+        android:name="com.example.onlineshoppingapp.ui.account.create.CreateAccountFragment"
         android:label="fragment_create_account"
         tools:layout="@layout/fragment_create_account" >
         <action

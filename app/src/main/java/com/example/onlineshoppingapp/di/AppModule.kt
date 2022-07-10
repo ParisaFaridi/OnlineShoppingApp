@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.domain
+package com.example.onlineshoppingapp.di
 
 import android.content.Context
 import androidx.room.Room

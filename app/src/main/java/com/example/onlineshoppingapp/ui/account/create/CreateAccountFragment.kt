@@ -1,4 +1,4 @@
-package com.example.onlineshoppingapp.ui.account
+package com.example.onlineshoppingapp.ui.account.create
 
 import android.content.Context
 import android.os.Bundle
@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class CreateAccountFragment : BaseFragment() {
 
     lateinit var binding :FragmentCreateAccountBinding
-    private val signUpViewModel : CustomerViewModel by activityViewModels()
+    private val signUpViewModel : CreateAccountViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

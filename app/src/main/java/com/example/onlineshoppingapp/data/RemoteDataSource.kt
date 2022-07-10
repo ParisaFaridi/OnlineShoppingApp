@@ -29,8 +29,6 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     suspend fun getRelatedProducts(relatedIds: List<Int>)=apiService.getRelatedProducts(relatedIds= relatedIds)
 
-
-
     //customer
     suspend fun signUp(customer: Customer) = apiService.signUp(customer = customer)
 
@@ -38,14 +36,6 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     //order
     suspend fun createOrder(order: Order) = apiService.createOrder(order = order)
-
-    suspend fun getOrder(id: Int) = apiService.getOrder(id = id)
-
-    suspend fun updateOrder(orderId: Int, listOf: List<LineItem>, shipping: Shipping?,
-        status: String, couponLines: List<Coupon>) =
-        apiService.updateOrder(id = orderId, order = Order(id = orderId, lineItems = listOf,
-                shipping = shipping, status = status, couponLines = couponLines))
-
 
     //review
     suspend fun getProductReviews(id: Int) = apiService.getProductReviews(productId = id)

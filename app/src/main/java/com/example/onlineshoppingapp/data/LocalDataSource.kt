@@ -7,9 +7,10 @@ import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(private val shopDataBase: ShopDataBase) {
 
+    //address
     fun getAllAddresses() = shopDataBase.addressDao.getAllAddresses()
+
     suspend fun insertAddress(address: Address) = shopDataBase.addressDao.insert(address)
-    suspend fun getAddress(id: Int) = shopDataBase.addressDao.getAddress(id)
 
     //cartProduct
     suspend fun insertCartProduct(cartProduct: CartProduct) =
