@@ -14,8 +14,6 @@ data class Category(
     val id: Int?,
     @Json(name = "image")
     val image: Image?,
-    @Json(name = "_links")
-    val links: Links?,
     @Json(name = "menu_order")
     val menuOrder: Int?,
     @Json(name = "name")

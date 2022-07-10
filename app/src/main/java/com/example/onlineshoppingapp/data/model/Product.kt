@@ -41,8 +41,6 @@ data class Product(
     val defaultAttributes: List<Any>?,
     @Json(name = "description")
     val description: String?,
-    @Json(name = "dimensions")
-    val dimensions: Dimensions?,
     @Json(name = "download_expiry")
     val downloadExpiry: Int?,
     @Json(name = "download_limit")
@@ -61,8 +59,6 @@ data class Product(
     val id: Int?,
     @Json(name = "images")
     val images: List<Image>?,
-    @Json(name = "_links")
-    val links: Links?,
     @Json(name = "low_stock_amount")
     val lowStockAmount: Any?,
     @Json(name = "manage_stock")

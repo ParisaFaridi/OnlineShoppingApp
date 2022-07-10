@@ -9,8 +9,6 @@ data class AttributeTerm(
     val description: String,
     @Json(name = "id")
     val id: Int,
-    @Json(name = "_links")
-    val links: Links,
     @Json(name = "menu_order")
     val menuOrder: Int,
     @Json(name = "name")

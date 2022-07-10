@@ -36,8 +36,6 @@ data class Order(
     val id: Int=0,
     @Json(name = "line_items")
     val lineItems: List<LineItem>,
-    @Json(name = "_links")
-    val links: Links?= null,
     @Json(name = "meta_data")
     val metaData: List<Any>?= null,
     @Json(name = "number")

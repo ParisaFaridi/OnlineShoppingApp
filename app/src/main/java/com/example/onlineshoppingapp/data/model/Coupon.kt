@@ -40,8 +40,6 @@ data class Coupon(
     val individualUse: Boolean?=null,
     @Json(name = "limit_usage_to_x_items")
     val limitUsageToXItems: Any?=null,
-    @Json(name = "_links")
-    val links: Links?=null,
     @Json(name = "maximum_amount")
     val maximumAmount: String?=null,
     @Json(name = "meta_data")
