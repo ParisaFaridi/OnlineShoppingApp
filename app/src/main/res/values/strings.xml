@@ -91,6 +91,9 @@
     <string name="review_text">متن نظر</string>
     <string name="submit_review">ثبت دیدگاه</string>
     <string name="total_price">قیمت کل:</string>
+    <string name="address_submited">آدرس ثبت شد!</string>
+    <string name="repeated_coupon">کد تخفیف تکراری است</string>
+    <string name="coupon_submitted">کد با موفقیت اعمال شد</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

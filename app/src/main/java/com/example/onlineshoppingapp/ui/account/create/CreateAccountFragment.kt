@@ -33,6 +33,7 @@ class CreateAccountFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val customerId = activity?.getSharedPreferences(getString(R.string.user_info), Context.MODE_PRIVATE)?.
         getInt(getString(R.string.customer_id),0)
         if ( customerId!= 0)
@@ -44,21 +45,21 @@ class CreateAccountFragment : BaseFragment() {
                 return@setOnClickListener
             }
             signup()
-            signUpViewModel.customerLive.observe(viewLifecycleOwner){
-                when(it){
-                    is Resource.Loading ->{
-                        showProgressBar()
-                    }
-                    is Resource.Success ->{
-                        hideProgressBar()
-                        Toast.makeText(requireContext(),getString(R.string.successful_signup),Toast.LENGTH_LONG).show()
-                        saveInShare(it.data)
-                        findNavController().navigate(R.id.action_createAccountFragment_to_profileFragment)
-                    }
-                    is Resource.Error -> {
-                            it.message?.let {  message ->
-                                it.code?.let { code -> showErrorSnack(message, code) } }
-                    }
+        }
+        signUpViewModel.customerLive.observe(viewLifecycleOwner){
+            when(it){
+                is Resource.Loading ->{
+                    showProgressBar(binding.layout,binding.lottie)
+                }
+                is Resource.Success ->{
+                    hideProgressBar(binding.layout,binding.lottie)
+                    Toast.makeText(requireContext(),getString(R.string.successful_signup),Toast.LENGTH_LONG).show()
+                    saveInShare(it.data)
+                    findNavController().navigate(R.id.action_createAccountFragment_to_profileFragment)
+                }
+                is Resource.Error -> {
+                    it.message?.let {  message ->
+                        it.code?.let { code -> showErrorSnack(message, code) } }
                 }
             }
         }
@@ -70,25 +71,16 @@ class CreateAccountFragment : BaseFragment() {
         }
         snackBar.show()
     }
-
-    private fun hideProgressBar() = binding.apply {
-        layout.visibility = View.VISIBLE
-        lottie.visibility = View.GONE
-    }
-    private fun showProgressBar() = binding.apply {
-        layout.visibility = View.GONE
-        lottie.visibility = View.VISIBLE
-        lottie.playAnimation()
-    }
     private fun saveInShare(customer: Customer?) {
         val userInfoShared = activity?.getSharedPreferences(getString(R.string.user_info),Context.MODE_PRIVATE)
         val editor = userInfoShared?.edit()
-        customer?.id?.let { it -> editor?.putInt(getString(R.string.customer_id), it)?.apply() }
-        customer?.email?.let { it -> editor?.putString(getString(R.string.email_share),it)?.apply() }
-        customer?.firstName?.let{it -> editor?.putString(getString(R.string.first_name_share),it)?.apply()}
-        customer?.lastName?.let{it -> editor?.putString(getString(R.string.last_name_share),it)?.apply()}
+        customer?.apply {
+            id.let { editor?.putInt(getString(R.string.customer_id), it)?.apply() }
+            email?.let { it -> editor?.putString(getString(R.string.email_share),it)?.apply() }
+            firstName?.let{it -> editor?.putString(getString(R.string.first_name_share),it)?.apply()}
+            lastName?.let{it -> editor?.putString(getString(R.string.last_name_share),it)?.apply()}
+        }
     }
-
     private fun signup() =
         signUpViewModel.signUp(Customer(email = binding.etEmail.text.toString(),
             firstName = binding.etFirstName.text.toString(),
@@ -99,7 +91,6 @@ class CreateAccountFragment : BaseFragment() {
         return (binding.etFirstName.text.isNullOrEmpty() || binding.etLastName.text.isNullOrEmpty() ||
                 binding.etUserName.text.isNullOrEmpty() || binding.etEmail.text.isNullOrEmpty())
     }
-
     private fun checkForErrors() {
         setError(binding.etFirstName)
         setError(binding.etLastName)

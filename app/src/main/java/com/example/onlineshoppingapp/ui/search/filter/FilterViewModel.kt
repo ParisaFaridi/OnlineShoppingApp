@@ -15,7 +15,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FilterViewModel @Inject constructor(private val repository: Repository, app: Application) : AndroidViewModel(app)  {
+class FilterViewModel @Inject constructor(private val repository: Repository, app: Application):
+    AndroidViewModel(app)  {
 
     val colorFilters = MutableLiveData<Resource<List<AttributeTerm>>>()
     val sizeFilters = MutableLiveData<Resource<List<AttributeTerm>>>()
@@ -43,7 +44,9 @@ class FilterViewModel @Inject constructor(private val repository: Repository, ap
         searchResults.postValue(Resource.Loading())
         if (hasInternetConnection()) {
             viewModelScope.launch {
-                searchResults.postValue(repository.search(query,50, orderBy = orderBy, order = order,filtersIds,attributes))
+                searchResults.postValue(repository.search(
+                    query,50, orderBy = orderBy, order = order,filtersIds,attributes)
+                )
                 searchQuery = query
             }
         } else

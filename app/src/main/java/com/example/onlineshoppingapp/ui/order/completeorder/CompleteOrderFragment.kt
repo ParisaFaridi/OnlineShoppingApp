@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.onlineshoppingapp.R
@@ -15,6 +14,7 @@ import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.AddressAdapter
 import com.example.onlineshoppingapp.data.model.Address
 import com.example.onlineshoppingapp.databinding.FragmentCompleteOrderBinding
+import com.example.onlineshoppingapp.ui.BaseFragment
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -22,7 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CompleteOrderFragment : Fragment() {
+class CompleteOrderFragment : BaseFragment() {
 
     private lateinit var binding: FragmentCompleteOrderBinding
     private val viewModel: CompleteOrderViewModel by viewModels()
@@ -30,8 +30,7 @@ class CompleteOrderFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+        savedInstanceState: Bundle?): View {
         binding = FragmentCompleteOrderBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,9 +51,9 @@ class CompleteOrderFragment : Fragment() {
             if (it != null) {
                 addressAdapter = AddressAdapter(it as ArrayList<Address>) { address ->
                     val latLng = address.latLong.split(",")
-                    val action = CompleteOrderFragmentDirections.actionCompleteOrderFragmentToShowMapFragment(
-                        LatLng(latLng[0].toDouble(),latLng[1].toDouble())
-                    )
+                    val action = CompleteOrderFragmentDirections.
+                    actionCompleteOrderFragmentToShowMapFragment(
+                        LatLng(latLng[0].toDouble(),latLng[1].toDouble()))
                     findNavController().navigate(action)
                 }
                 binding.rvAddresses.adapter = addressAdapter
@@ -72,13 +71,11 @@ class CompleteOrderFragment : Fragment() {
             viewModel.order.observe(viewLifecycleOwner) { response ->
                 when (response) {
                     is Resource.Loading -> {
-                        binding.layout.visibility = View.GONE
-                        binding.lottie.visibility = View.VISIBLE
+                        showProgressBar(binding.layout,binding.lottie)
                     }
                     is Resource.Success -> {
                         response.data?.let {
-                            binding.layout.visibility = View.VISIBLE
-                            binding.lottie.visibility = View.GONE
+                            hideProgressBar(binding.layout,binding.lottie)
                             findNavController().navigate(R.id.action_completeOrderFragment_to_cartFragment)
                             showDialog()
                         }
@@ -93,19 +90,13 @@ class CompleteOrderFragment : Fragment() {
             viewModel.coupon.observe(viewLifecycleOwner) { response ->
                 when (response) {
                     is Resource.Loading -> {
-                        binding.layout.visibility = View.GONE
-                        binding.lottie.visibility = View.VISIBLE
+                        showProgressBar(binding.layout,binding.lottie)
                     }
                     is Resource.Success -> {
-                        binding.layout.visibility = View.VISIBLE
-                        binding.lottie.visibility = View.GONE
+                        hideProgressBar(binding.layout,binding.lottie)
                         response.data?.let {
-                            Toast.makeText(
-                                requireContext(),
-                                "کد با موفقیت اعمال شد",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
+                            Toast.makeText(requireContext(), getString(R.string.coupon_submitted),
+                                Toast.LENGTH_SHORT).show()
                             binding.tvTotalPrice.text = viewModel.total
                         }
                     }
@@ -118,7 +109,9 @@ class CompleteOrderFragment : Fragment() {
             }
             binding.btnAddCoupon.setOnClickListener {
                 if (binding.etCoupon.text.toString().isNotEmpty()) {
-                    viewModel.checkCoupon(binding.etCoupon.text.toString(),binding.tvTotalPrice.text.toString())
+                    viewModel.submitCoupon(
+                        binding.etCoupon.text.toString(),binding.tvTotalPrice.text.toString()
+                    )
                 }
             }
         }
@@ -132,13 +125,10 @@ class CompleteOrderFragment : Fragment() {
     private fun showErrorSnack(message: String, code: Int) {
         binding.layout.visibility = View.VISIBLE
         binding.lottie.visibility = View.GONE
-        val snackBar = Snackbar.make(
-            binding.layout,
-            getErrorMessage(message, code),
-            Snackbar.LENGTH_INDEFINITE
-        )
-        snackBar.setAction("باشه") {
-
+        val snackBar = Snackbar.make(binding.layout,
+            getErrorMessage(message, code), Snackbar.LENGTH_INDEFINITE)
+        snackBar.setAction(getString(R.string.ok_)){
+            snackBar.dismiss()
         }
         snackBar.show()
     }

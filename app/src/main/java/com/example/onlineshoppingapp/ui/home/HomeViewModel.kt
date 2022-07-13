@@ -21,8 +21,8 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
     val newProducts = MutableLiveData<Resource<List<Product>>>()
     val mostViewedProducts = MutableLiveData<Resource<List<Product>>>()
     val onSaleProducts = MutableLiveData<Resource<List<Product>>>()
-
     val sliderPics = MutableLiveData<Resource<Product>>()
+
     init {
         getPicForSliders()
     }
@@ -43,8 +43,9 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
 
     fun getMostViewedProducts() = handleApiCalls(getApplication<Application>().getString(R.string.popularity), mostViewedProducts)
 
-    private fun handleApiCalls(orderBy: String, productList: MutableLiveData<Resource<List<Product>>>,
-                               onSale:Boolean=false, perPage:Int= 10) = viewModelScope.launch {
+    private fun handleApiCalls(orderBy: String,
+        productList: MutableLiveData<Resource<List<Product>>>,
+        onSale:Boolean=false,perPage:Int= 10) = viewModelScope.launch {
             productList.postValue(Resource.Loading())
             if (hasInternetConnection()) {
                 viewModelScope.launch {
@@ -52,6 +53,5 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
                 }
             } else
                 productList.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
-
     }
 }

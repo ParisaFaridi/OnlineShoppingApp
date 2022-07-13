@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,13 +12,14 @@ import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.CategoryAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCategoriesBinding
+import com.example.onlineshoppingapp.ui.BaseFragment
 import com.example.onlineshoppingapp.ui.category.viewmodels.CategoriesViewModel
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CategoriesFragment : Fragment() {
+class CategoriesFragment : BaseFragment() {
 
     private val categoriesViewModel: CategoriesViewModel by viewModels()
     private lateinit var binding: FragmentCategoriesBinding
@@ -27,8 +27,7 @@ class CategoriesFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+        savedInstanceState: Bundle?): View {
         binding = FragmentCategoriesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,30 +35,22 @@ class CategoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOrientation()
-        activity?.title = getString(R.string.categories)
-        categoriesAdapter = CategoryAdapter { category ->
-            val action = category.id?.let { id ->
-                category.name?.let { name ->
-                    CategoriesFragmentDirections.actionCategoriesFragmentToCategoryFragment(id, name)
-                }
-            }
-            if (action != null) {
-                findNavController().navigate(action)
-            }
-        }
-        binding.rvCategories.adapter = categoriesAdapter
+        setAdapter()
 
+        binding.searchView.setOnClickListener {
+            findNavController().navigate(R.id.action_categoriesFragment_to_searchFragment)
+        }
         if (categoriesViewModel.categories.value == null)
             categoriesViewModel.getCategories()
 
         categoriesViewModel.categories.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    showProgressBar()
+                    showProgressBar(binding.rvCategories,binding.lottie)
                 }
                 is Resource.Success -> {
                     response.data?.let { data ->
-                        hideProgressBar()
+                        hideProgressBar(binding.rvCategories,binding.lottie)
                         categoriesAdapter.submitList(data)
                     }
                 }
@@ -70,9 +61,19 @@ class CategoriesFragment : Fragment() {
                 }
             }
         }
-        binding.searchView.setOnClickListener {
-            findNavController().navigate(R.id.action_categoriesFragment_to_searchFragment)
+    }
+
+    private fun setAdapter() {
+        categoriesAdapter = CategoryAdapter { category ->
+            val action = category.id?.let { id ->
+                category.name?.let { name ->
+                    CategoriesFragmentDirections.actionCategoriesFragmentToCategoryFragment(id, name)
+                }
+            }
+            if (action != null)
+                findNavController().navigate(action)
         }
+        binding.rvCategories.adapter = categoriesAdapter
     }
     private fun setOrientation() {
         val orientation = resources.configuration.orientation
@@ -81,15 +82,6 @@ class CategoriesFragment : Fragment() {
         } else {
             binding.rvCategories.layoutManager = GridLayoutManager(requireContext(), 2)
         }
-    }
-    private fun hideProgressBar() = binding.apply {
-        lottie.visibility = View.GONE
-        rvCategories.visibility = View.VISIBLE
-    }
-    private fun showProgressBar() = binding.lottie.apply {
-        setAnimation(R.raw.loading)
-        visibility = View.VISIBLE
-        playAnimation()
     }
     private fun showErrorSnack(message: String, code: Int) {
         val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)

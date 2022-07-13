@@ -44,10 +44,10 @@ class ProfileFragment : BaseFragment() {
             if (response != null) {
                 when (response) {
                     is Resource.Loading ->{
-                        showProgressBar()
+                        showProgressBar(binding.group!!,binding.lottie)
                     }
                     is Resource.Success -> {
-                        hideProgressBar()
+                        hideProgressBar(binding.group!!,binding.lottie)
                         binding.tvName.text = response.data?.let { setName(it) }
                         binding.tvEmail.text = response.data?.email
                     }
@@ -66,20 +66,6 @@ class ProfileFragment : BaseFragment() {
     }
     private fun setName(data: Customer) = "${data.firstName} ${data.lastName}"
 
-    private fun hideProgressBar() = binding.apply {
-        tvName.visibility = View.VISIBLE
-        tvEmail.visibility = View.VISIBLE
-        btnLogOut.visibility=View.VISIBLE
-        imageView4.visibility = View.VISIBLE
-        lottie.visibility = View.GONE
-    }
-    private fun showProgressBar() = binding.apply {
-        tvName.visibility = View.GONE
-        tvEmail.visibility = View.GONE
-        imageView4.visibility = View.GONE
-        lottie.visibility = View.VISIBLE
-        lottie.playAnimation()
-    }
     private fun showErrorSnack(message: String, code: Int) {
         val snackBar = Snackbar.make(binding.tvName, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
         snackBar.setAction(getString(R.string.ok_)) {

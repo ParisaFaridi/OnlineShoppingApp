@@ -6,16 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.adapters.CartAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCartBinding
+import com.example.onlineshoppingapp.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CartFragment : Fragment() {
+class CartFragment : BaseFragment() {
 
     private lateinit var binding: FragmentCartBinding
     private val viewModel: CartViewModel by viewModels()
@@ -31,23 +31,19 @@ class CartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getAllCartProducts()
-
-        val adapter = CartAdapter ({ quantity,id ->
-            viewModel.updateProductQuantity(id,quantity)
-        },{
-            viewModel.deleteProduct(it)
-        }
-        )
-        binding.rvCartProducts.adapter = adapter
+        setAdapter()
 
         viewModel.getAllCartProducts().observe(viewLifecycleOwner){
             if (it.isEmpty()){
-                showProgressBar()
-                binding.lottie.setAnimation(R.raw.empty_cart)
-                binding.lottie.playAnimation()
+                showProgressBar(binding.layout,binding.lottie)
                 binding.tv.visibility = View.VISIBLE
+                binding.lottie.apply {
+                    setAnimation(R.raw.empty_cart)
+                    playAnimation()
+                }
             }else{
-                hideProgressBar()
+                hideProgressBar(binding.layout,binding.lottie)
+                binding.tv.visibility = View.GONE
                 adapter.submitList(it)
             }
         }
@@ -63,19 +59,10 @@ class CartFragment : Fragment() {
                 findNavController().navigate(R.id.action_cartFragment_to_completeOrderFragment)
         }
     }
-
-    private fun hideProgressBar() = binding.apply{
-        layout.visibility = View.VISIBLE
-        lottie.visibility = View.GONE
-        tv.visibility = View.GONE
-    }
-    private fun showProgressBar() = binding.apply{
-        layout.visibility = View.GONE
-        tv.visibility = View.GONE
-        lottie.apply {
-            visibility = View.VISIBLE
-            setAnimation(R.raw.loading)
-            playAnimation()
-        }
+    private fun setAdapter() {
+        adapter = CartAdapter ({ quantity,id ->
+            viewModel.updateProductQuantity(id,quantity)},{ viewModel.deleteProduct(it) }
+        )
+        binding.rvCartProducts.adapter = adapter
     }
 }

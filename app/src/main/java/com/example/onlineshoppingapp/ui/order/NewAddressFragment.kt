@@ -70,7 +70,7 @@ class NewAddressFragment : BaseFragment() {
     }
     private fun showDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage("آدرس ثبت شد!")
+            .setMessage(getString(R.string.address_submited))
             .setNeutralButton(getString(R.string.ok_)) { _, _ -> }
             .show()
     }

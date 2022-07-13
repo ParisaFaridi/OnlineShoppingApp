@@ -14,33 +14,23 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductListViewModel @Inject constructor(
-    private val repository: Repository,
-    app: Application
-) :
-    AndroidViewModel(app) {
+class ProductListViewModel @Inject constructor(private val repository: Repository, app: Application)
+    : AndroidViewModel(app) {
 
     val productList = MutableLiveData<Resource<List<Product>>>()
 
-    fun getProducts(string: String, onSale: Boolean = false) =
-        handleApiCalls(string, productList, perPage = 100, onSale = onSale)
-
-    private fun handleApiCalls(
-        orderBy: String, productList: MutableLiveData<Resource<List<Product>>>,
-        onSale: Boolean = false, perPage: Int = 10
-    ) = viewModelScope.launch {
+    fun getProducts() = viewModelScope.launch {
         productList.postValue(Resource.Loading())
         if (hasInternetConnection()) {
             viewModelScope.launch {
-                productList.postValue(repository.getProducts(orderBy, onSale, perPage))
+                productList.postValue(
+                    repository.getProducts("title", false, 100)
+                )
             }
-        } else
+        }else
             productList.postValue(
                 Resource.Error(
-                    getApplication<Application>().getString(R.string.no_internet_error),
-                    code = 1
-                )
-            )
+                    getApplication<Application>().getString(R.string.no_internet_error), code = 1))
 
     }
 }

@@ -4,26 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.adapters.AttributeItemsAdapter
 import com.example.onlineshoppingapp.databinding.FragmentSizeFilterBinding
+import com.example.onlineshoppingapp.ui.BaseFragment
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SizeFilterFragment : Fragment() {
+class SizeFilterFragment : BaseFragment() {
 
     private val filterVm : FilterViewModel by activityViewModels()
     lateinit var binding : FragmentSizeFilterBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+        savedInstanceState: Bundle?): View {
         binding = FragmentSizeFilterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -40,38 +39,24 @@ class SizeFilterFragment : Fragment() {
         filterVm.sizeFilters.observe(viewLifecycleOwner){ response ->
             when (response) {
                 is Resource.Loading -> {
-                    showProgressBar()
+                    showProgressBar(binding.rvFilterItems,binding.lottie)
                 }
                 is Resource.Success -> { response.data?.let {
-                    hideProgressBar()
+                    hideProgressBar(binding.rvFilterItems,binding.lottie)
                     adapter.submitList(it)
                 }
                 }
                 is Resource.Error -> {
-                    response.message?.let { message -> response.code?.let { code -> showErrorSnack(message, code) }}
+                    response.message?.let { message ->
+                        response.code?.let { code -> showErrorSnack(message, code) }
+                    }
                 }
             }
         }
     }
-    private fun hideProgressBar() {
-        binding.apply {
-            lottie.visibility = View.GONE
-            rvFilterItems.visibility = View.VISIBLE
-        }
-    }
-
-    private fun showProgressBar() = binding.lottie.apply {
-        setAnimation(R.raw.loading)
-        visibility = View.VISIBLE
-        playAnimation()
-        binding.rvFilterItems.visibility = View.GONE
-    }
-
     private fun showErrorSnack(message: String, code: Int) {
         val snackBar = Snackbar.make(binding.layout, getErrorMessage(message,code), Snackbar.LENGTH_INDEFINITE)
-        snackBar.setAction(
-            getString(R.string.try_again)
-        ) {
+        snackBar.setAction(getString(R.string.try_again)) {
             filterVm.getFilters(4,filterVm.sizeFilters)
             binding.lottie.playAnimation()
         }

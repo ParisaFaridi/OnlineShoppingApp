@@ -22,11 +22,12 @@ class CompleteOrderViewModel @Inject constructor(
     val order = MutableLiveData<Resource<Order>>()
     val coupon = MutableLiveData<Resource<Coupon>>()
     var total = ""
-    var allCoupons = arrayListOf<Coupon>()
+    private var allCoupons = arrayListOf<Coupon>()
 
     init {
         getAllAddresses()
     }
+
     fun completeOrder(address: Address,firstName:String,lastName:String) {
         order.postValue(Resource.Loading())
         viewModelScope.launch {
@@ -41,12 +42,8 @@ class CompleteOrderViewModel @Inject constructor(
                     postcode = address.postcode
                 )
                 order.postValue(repository.createOrder(
-                        Order(
-                            shipping = shipping,
-                            status = getApplication<Application>().getString(R.string.completed),
-                            couponLines = getCouponLine(),
-                            lineItems = getLineItems()
-                        )
+                        Order(shipping = shipping, status = getApplication<Application>().getString(R.string.completed),
+                            couponLines = getCouponLine(), lineItems = getLineItems())
                 ))
                 emptyCart()
             } else
@@ -57,10 +54,8 @@ class CompleteOrderViewModel @Inject constructor(
         val lineItems = arrayListOf<LineItem>()
         val cartProducts = repository.getAllCartProducts().value
         if (cartProducts != null) {
-            for (product in cartProducts){
-                lineItems.add(LineItem(productId = product.id,
-                        quantity = product.quantity))
-            }
+            for (product in cartProducts)
+                lineItems.add(LineItem(productId = product.id, quantity = product.quantity))
         }
         return lineItems
     }
@@ -73,34 +68,36 @@ class CompleteOrderViewModel @Inject constructor(
             listOf(Coupon(code = coupon.value!!.data?.code!!))
         }
     }
-    fun checkCoupon(couponCode: String,oldTotal:String){
+    fun submitCoupon(couponCode: String, oldTotal:String){
         coupon.postValue(Resource.Loading())
         viewModelScope.launch {
             if (hasInternetConnection()) {
                 val mCoupons = repository.getCoupons().data
                 if (mCoupons != null) {
-                    for (i in mCoupons){
-                        if (i.code == couponCode) {
-                            if (allCoupons.contains(i)) {
-                                coupon.postValue(Resource.Error("کد تخفیف تکراری است"))
-                                break
-                            } else {
-                                coupon.postValue(Resource.Success(i))
-                                allCoupons.add(i)
-                                total =
-                                    (oldTotal.toDouble().minus(i.amount?.toDouble()!!)).toString()
-                                break
-                            }
-                        }
-                        coupon.postValue(Resource.Error(getApplication<Application>().getString(R.string.coupon_error)))
-                    }
+                    checkCoupon(mCoupons,couponCode,oldTotal)
                 }
-            } else {
-                order.postValue(
-                    Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
-            }
+            } else
+                order.postValue(Resource.Error(getApplication<Application>().getString(R.string.no_internet_error), code = 1))
         }
     }
+
+    private fun checkCoupon(mCoupons: List<Coupon>, couponCode: String, oldTotal: String) {
+        for (i in mCoupons){
+            if (i.code == couponCode) {
+                if (allCoupons.contains(i)) {
+                    coupon.postValue(Resource.Error(getApplication<Application>().getString(R.string.repeated_coupon)))
+                    break
+                } else {
+                    coupon.postValue(Resource.Success(i))
+                    allCoupons.add(i)
+                    total = (oldTotal.toDouble().minus(i.amount?.toDouble()!!)).toString()
+                    break
+                }
+            }
+            coupon.postValue(Resource.Error(getApplication<Application>().getString(R.string.coupon_error)))
+        }
+    }
+
     fun getAllAddresses(): LiveData<List<Address?>> {
         lateinit var addresses : LiveData<List<Address?>>
         viewModelScope.launch {
