@@ -43,7 +43,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
                 android:text="@string/new_address"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                tools:ignore="RtlHardcoded" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -103,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:hint="شهر">
+                android:hint="@string/city">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_city"

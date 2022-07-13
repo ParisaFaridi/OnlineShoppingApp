@@ -15,7 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".MainActivity" />
+        tools:context=".MainActivity"
+        tools:ignore="FragmentTagUsage" />
 
     <Button
         android:id="@+id/btn_confirm"
@@ -24,7 +25,7 @@
         android:layout_marginHorizontal="10dp"
         android:layout_weight="1"
         android:padding="10dp"
-        android:text="تائید"
+        android:text="@string/confirm"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
