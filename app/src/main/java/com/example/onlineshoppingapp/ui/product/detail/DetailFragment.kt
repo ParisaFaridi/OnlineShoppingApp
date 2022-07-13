@@ -65,12 +65,8 @@ class DetailFragment : Fragment() {
         }
         detailViewModel.product.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showProgressBar()
-                }
                 is Resource.Success -> {
                     response.data?.let {
-                        hideProgressBar()
                         setProductData(it)
                     }
                 }

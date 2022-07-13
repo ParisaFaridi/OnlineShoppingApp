@@ -2,7 +2,10 @@ package com.example.onlineshoppingapp.data
 
 import com.example.onlineshoppingapp.Resource
 import com.example.onlineshoppingapp.data.model.*
+import okhttp3.ResponseBody
 import retrofit2.Response
+import java.net.SocketTimeoutException
+import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 class Repository @Inject constructor(private val remoteDataSource: RemoteDataSource,private val localDataSource: LocalDataSource) {
@@ -54,6 +57,8 @@ class Repository @Inject constructor(private val remoteDataSource: RemoteDataSou
                 Resource.Success(response.body()!!)
             else
                 Resource.Error(message = response.message(), code = response.code())
+        }catch (e:SocketTimeoutException){
+            Resource.Error("خطا در برقراری ارتباظ با سرور")
         }catch (e:Exception){
             Resource.Error()
         }
