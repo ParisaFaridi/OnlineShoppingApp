@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide
 import com.example.onlineshoppingapp.R
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.databinding.ProductItemBinding
+import java.text.NumberFormat
+import java.util.*
 
 typealias ClickHandler = (Product) -> Unit
 
@@ -40,7 +42,7 @@ class ProductAdapter(private val clickHandler: ClickHandler):
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.binding.apply {
             product = getItem(position)
-            tvPrice.text = getItem(position).price
+            tvPrice.text = getFormattedPrice(position)
         }
         if (getItem(position).images?.firstOrNull()?.src == null){
             Glide.with(holder.binding.image.context).load(R.drawable.ic_baseline_error_24).centerInside()
@@ -53,4 +55,6 @@ class ProductAdapter(private val clickHandler: ClickHandler):
             clickHandler.invoke(getItem(position))
         }
     }
+    private fun getFormattedPrice(position: Int):String=
+        NumberFormat.getNumberInstance(Locale.US).format(getItem(position).price?.toLong()) + " تومان"
 }

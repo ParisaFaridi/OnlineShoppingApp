@@ -26,8 +26,7 @@ class HomeViewModel @Inject constructor(private val repository: Repository, app:
     init {
         getPicForSliders()
     }
-
-    private fun getPicForSliders() {
+    fun getPicForSliders() {
         sliderPics.postValue(Resource.Loading())
         if (hasInternetConnection())
             viewModelScope.launch { sliderPics.postValue(repository.getProductById(608)) }

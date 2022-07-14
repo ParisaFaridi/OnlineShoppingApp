@@ -49,9 +49,6 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerViews()
         setOnClickListeners()
-        if (viewModelHome.bestProducts.value == null) {
-            getLists()
-        }
         viewModelHome.sliderPics.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
@@ -63,7 +60,7 @@ class HomeFragment : BaseFragment() {
                             SliderAdapter(images as MutableList<Image>, binding.viewPager)
                         }!!
                         setUpViewPager()
-                        hideProgressBar(binding.layout,binding.lottie)
+                        viewModelHome.getOnSaleProducts()
                     }
                 }
                 is Resource.Error -> {
@@ -80,7 +77,7 @@ class HomeFragment : BaseFragment() {
                 }
                 is Resource.Success -> {
                     response.data?.let { data ->
-                        hideProgressBar(binding.layout,binding.lottie)
+                        viewModelHome.getBestProducts()
                         onSaleProductAdapter.submitList(data)
                     }
                 }
@@ -99,7 +96,7 @@ class HomeFragment : BaseFragment() {
                 is Resource.Success -> {
                     response.data?.let { data ->
                         bestProductsAdapter.submitList(data)
-                        hideProgressBar(binding.layout,binding.lottie)
+                        viewModelHome.getNewProducts()
                     }
                 }
                 is Resource.Error -> {
@@ -117,7 +114,7 @@ class HomeFragment : BaseFragment() {
                 is Resource.Success -> {
                     response.data?.let { data ->
                         newProductsAdapter.submitList(data)
-                        hideProgressBar(binding.layout,binding.lottie)
+                        viewModelHome.getMostViewedProducts()
                     }
                 }
                 is Resource.Error -> {
@@ -215,16 +212,10 @@ class HomeFragment : BaseFragment() {
         val snackBar = Snackbar.make(binding.layout,
             getErrorMessage(message, code), Snackbar.LENGTH_INDEFINITE)
         snackBar.setAction(getString(R.string.try_again)) {
-            getLists()
+            viewModelHome.getPicForSliders()
             binding.lottie.playAnimation()
         }
         snackBar.show()
-    }
-    private fun getLists() = viewModelHome.apply {
-        getNewProducts()
-        getMostViewedProducts()
-        getBestProducts()
-        getOnSaleProducts()
     }
     private fun setRecyclerViews() {
         bestProductsAdapter =

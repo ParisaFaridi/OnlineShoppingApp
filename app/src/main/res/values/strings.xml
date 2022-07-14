@@ -94,6 +94,7 @@
     <string name="address_submited">آدرس ثبت شد!</string>
     <string name="repeated_coupon">کد تخفیف تکراری است</string>
     <string name="coupon_submitted">کد با موفقیت اعمال شد</string>
+    <string name="review_deleted">نظر شما حذف شد!</string>
     <string-array name="sortBy">
         <item>مرتبط ترین</item>
         <item>جدید ترین</item>

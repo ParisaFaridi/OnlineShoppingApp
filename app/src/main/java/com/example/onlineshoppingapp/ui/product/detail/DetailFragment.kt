@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -20,6 +19,7 @@ import com.example.onlineshoppingapp.adapters.ReviewAdapter
 import com.example.onlineshoppingapp.data.model.Product
 import com.example.onlineshoppingapp.data.model.Review
 import com.example.onlineshoppingapp.databinding.FragmentDetailBinding
+import com.example.onlineshoppingapp.ui.BaseFragment
 import com.example.onlineshoppingapp.ui.getErrorMessage
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +27,7 @@ import java.text.NumberFormat
 import java.util.*
 
 @AndroidEntryPoint
-class DetailFragment : Fragment() {
+class DetailFragment : BaseFragment() {
 
     private val detailViewModel: DetailViewModel by viewModels()
     private lateinit var binding: FragmentDetailBinding
@@ -38,23 +38,24 @@ class DetailFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+        savedInstanceState: Bundle?): View {
         binding = FragmentDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.title = getString(R.string.online_store)
         if (detailViewModel.product.value == null)
             detailViewModel.getProduct(args.productId)
         val userInfoShared =
             activity?.getSharedPreferences(getString(R.string.user_info), Context.MODE_PRIVATE)
         binding.btnAddReview.setOnClickListener {
-            if (userInfoShared == null) {
-                Toast.makeText(requireContext(), "ابتدا ثبت نام کنید!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            if (userInfoShared != null) {
+                if (userInfoShared.getString(getString(R.string.first_name_share),"")=="") {
+                    Toast.makeText(requireContext(),
+                        getString(R.string.sign_up_first), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
             }
             val action = detailViewModel.product.value?.data?.id?.let { it1 ->
                 DetailFragmentDirections.actionDetailFragmentToAddReviewFragment(it1,0,"",0)
@@ -80,11 +81,11 @@ class DetailFragment : Fragment() {
         detailViewModel.reviews.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    showProgressBar()
+                    showProgressBar(binding.group,binding.lottie)
                 }
                 is Resource.Success -> {
                     response.data?.let {
-                        hideProgressBar()
+                        hideProgressBar(binding.group,binding.lottie)
                         setReviews(it)
                     }
                 }
@@ -98,11 +99,11 @@ class DetailFragment : Fragment() {
         detailViewModel.relatedProducts.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    showProgressBar()
+                    showProgressBar(binding.group,binding.lottie)
                 }
                 is Resource.Success -> {
                     response.data?.let { relatedProducts->
-                        hideProgressBar()
+                        hideProgressBar(binding.group,binding.lottie)
                         relatedAdapter = ProductAdapter {
                             it.id?.let { it1 -> goToDetailFragment(it1) }
                         }
@@ -124,18 +125,12 @@ class DetailFragment : Fragment() {
                 binding.tvProductNumber.text = decrementQuantityTv(binding.tvProductNumber)
         }
         binding.btnPlus.setOnClickListener {
-            if (binding.tvProductNumber.text == getString(R.string._10))
-                return@setOnClickListener
-            else
-                binding.tvProductNumber.text = incrementQuantityTv(binding.tvProductNumber)
+            binding.tvProductNumber.text = incrementQuantityTv(binding.tvProductNumber)
         }
         binding.btnAddToCart.setOnClickListener {
             detailViewModel.addToCart(binding.tvProductNumber.text.toString().toInt())
             Toast.makeText(
-                requireContext(),
-                getString(R.string.added_to_cart),
-                Toast.LENGTH_SHORT
-            ).show()
+                requireContext(), getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show()
         }
     }
     private fun goToDetailFragment(id: Int) {
@@ -154,14 +149,13 @@ class DetailFragment : Fragment() {
                 detailViewModel.deleteReview(review.id).observe(viewLifecycleOwner) { response ->
                     when (response) {
                         is Resource.Loading -> {
-                            showProgressBar()
+                            showProgressBar(binding.group,binding.lottie)
                         }
                         is Resource.Success -> {
                             response.data?.let {
-                                hideProgressBar()
-                                Toast.makeText(
-                                    requireContext(), "نظر شما حذف شد!", Toast.LENGTH_SHORT
-                                ).show()
+                                hideProgressBar(binding.group,binding.lottie)
+                                Toast.makeText(requireContext(),
+                                    getString(R.string.review_deleted), Toast.LENGTH_SHORT).show()
                             }
                         }
                         is Resource.Error -> {
@@ -203,39 +197,15 @@ class DetailFragment : Fragment() {
         return description.replace("</p>", "")
             .replace("<p>", "").replace("<br />", "\n")
     }
-
-    private fun hideProgressBar() {
-        binding.layout.visibility = View.VISIBLE
-        binding.divider.visibility = View.VISIBLE
-        binding.bottom.visibility = View.VISIBLE
-        binding.lottie.visibility = View.GONE
-    }
-
-    private fun showProgressBar() {
-        binding.lottie.setAnimation(R.raw.loading)
-        binding.lottie.visibility = View.VISIBLE
-        binding.layout.visibility = View.GONE
-        binding.divider.visibility = View.GONE
-        binding.bottom.visibility = View.GONE
-        binding.lottie.playAnimation()
-
-    }
-
     private fun showErrorSnack(message: String, code: Int) {
         val snackBar = Snackbar.make(
-            binding.layout,
-            getErrorMessage(message, code),
-            Snackbar.LENGTH_INDEFINITE
-        )
-        snackBar.setAction(
-            getString(R.string.try_again)
-        ) {
+            binding.layout, getErrorMessage(message, code), Snackbar.LENGTH_INDEFINITE)
+        snackBar.setAction(getString(R.string.try_again)) {
             detailViewModel.getProduct(args.productId)
             binding.lottie.playAnimation()
         }
         snackBar.show()
     }
-
     private fun setUpViewPager() {
         binding.viewPager.apply {
             adapter = imageViewPagerAdapter
