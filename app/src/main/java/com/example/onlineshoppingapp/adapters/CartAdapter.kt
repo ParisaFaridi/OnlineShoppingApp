@@ -43,7 +43,7 @@ class CartAdapter(private val clickHandler: QuantityClickHandler,private val del
         holder.binding.apply {
             cartProduct = getItem(position)
             tvPrice.text = getFormattedPrice(position)
-            tvTotalOfProduct.text = getItem(position).totalPrice
+            tvTotalOfProduct.text = getFormattedTotalPrice(position)
             Glide.with(holder.binding.image.context).load(getItem(position).image).centerCrop()
                 .into(holder.binding.image)
         }
@@ -71,5 +71,6 @@ class CartAdapter(private val clickHandler: QuantityClickHandler,private val del
     }
     private fun incrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() + 1).toString()
     private fun decrementQuantityTv(textView: TextView) = (textView.text.toString().toInt() - 1).toString()
-    private fun getFormattedPrice(position: Int) = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).price.toString().toLong()) + " تومان"
+    private fun getFormattedPrice(position: Int) = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).price.toLong()) + " تومان"
+    private fun getFormattedTotalPrice(position: Int) = NumberFormat.getNumberInstance(Locale.US).format(getItem(position).totalPrice.toLong())
 }

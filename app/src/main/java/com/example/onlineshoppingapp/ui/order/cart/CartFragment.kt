@@ -13,6 +13,8 @@ import com.example.onlineshoppingapp.adapters.CartAdapter
 import com.example.onlineshoppingapp.databinding.FragmentCartBinding
 import com.example.onlineshoppingapp.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.NumberFormat
+import java.util.*
 
 @AndroidEntryPoint
 class CartFragment : BaseFragment() {
@@ -49,7 +51,8 @@ class CartFragment : BaseFragment() {
         }
         viewModel.getTotalPrice().observe(viewLifecycleOwner){
             if (it != null)
-                binding.tvSumOfPrice.text = it.toString()
+                binding.tvSumOfPrice.text =
+                    NumberFormat.getNumberInstance(Locale.US).format(it.toLong())
         }
         val customerId = activity?.getSharedPreferences(getString(R.string.user_info),Context.MODE_PRIVATE)?.getInt(getString(R.string.customer_id),0)
         binding.btnSubmitOrder.setOnClickListener {
