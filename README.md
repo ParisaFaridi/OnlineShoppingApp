@@ -40,3 +40,4 @@ This app is using Woocommerce API
 - Hilt
 - Moshi
 - Glide
+- Google Maps
